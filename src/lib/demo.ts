@@ -54,7 +54,11 @@ export function demoFlights(query: SearchQuery): FlightOffer[] {
     return {
       id: 'demo-' + code + '-' + query.origin + query.destination + query.departureDate + (query.returnDate ?? '') + '-' + query.adults + '-' + query.cabin,
       airlineCode: code, airlineName: company.name, price: price * query.adults, currency: 'EUR', passengers: query.adults, cabin: query.cabin,
-      itineraries, baggage: { weight: [25, 30, 23, 23, 20, 0][i], unit: 'KG' }, mode: 'demo',
+      itineraries, baggage: { weight: [23, 30, 23, 23, 20, 0][i], unit: 'KG' }, mode: 'demo',
+      studentExample: {
+        extraKg: [10, 10, 0, 0, 0, 0][i], verificationRequired: true, registrationRequired: true,
+        addOn: { kg: 10, pricePerAdult: [95, 95, 85, 100, 95, 110][i], currency: 'EUR' },
+      },
     };
   });
 }

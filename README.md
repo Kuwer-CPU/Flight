@@ -1,6 +1,8 @@
 # Flyora
 
-A student-focused flight-search website built with Next.js, React and TypeScript. Travelers search routes and dates, compare ticket prices and included baggage, save a shortlist, inspect itineraries, and continue to an airline to book.
+A student-focused flight-search website built with Next.js, React and TypeScript. Travelers search routes and dates, compare standard baggage + student extras = eligible totals, see the cost with their bags, save a shortlist, inspect itineraries, and continue to an airline to book.
+
+Preview screenshots: [Homepage](docs/previews/homepage.png), [student comparison](docs/previews/comparison.png), and [mobile flight card](docs/previews/mobile-flight.png). These screenshots show the labeled demo mode, not verified airline offers.
 
 ## Run locally
 
@@ -61,7 +63,11 @@ The website does not yet earn affiliate revenue. Add approved affiliate deep lin
 
 Student-program links are in src/lib/airlines.ts. Current terms could not be retrieved from the cloud’s restricted network during development, so every listed program is visibly marked as needing review. Links themselves also need review before a commercial launch. No program is represented as a verified discount, guaranteed age eligibility or extra baggage allowance.
 
-Displayed baggage comes from the flight offer. The minimum known allowance across all travelers and segments is shown; pieces are never converted into an invented weight. Unverified student benefits are not added to flight fares or baggage. Recommendations compare price, total outbound/return travel time and confirmed baggage that meets the traveler’s needs.
+The homepage leads with a fictional Airline A/B example showing why a €610 fare with sufficient baggage can beat a €545 fare plus a €95 bag add-on. Search results put a comparison table above the flights and a prominent baggage equation on each card and itinerary dialog. Registration and student verification requirements are visible beside the allowance.
+
+Displayed standard baggage comes from the flight offer. The minimum known allowance across all travelers and segments is shown; pieces are never converted into an invented weight. Demo flights also have explicitly fictional student bonuses and bag add-on prices to demonstrate this comparison. Every numerical example is labeled as an illustration rather than actual airline policy. These inputs are only accepted for demo-mode offers; the comparison code discards them for both live and Amadeus sandbox offers. Actual student terms remain unverified, with eligible totals and student scores shown as pending.
+
+Student value is the default sort for student searches. It weights cost with the requested baggage at 40%, included baggage coverage at 45%, and combined outbound/return travel time at 15%. Cost and time are relative to the cheapest comparable cost and shortest journey in the full search; filters do not change the scores. Baggage coverage is capped at the traveler's request. Costs are per adult; paid packages are rounded up to meet the shortfall, and the original ticket fare is unchanged. The example add-on quotes cover the complete itinerary. Unknown allowances or necessary add-on prices, and mixed currencies, leave scores pending rather than inventing a cost. The interface includes an explanation of the calculation.
 
 Before advertising specific student savings, review the official airline terms for the relevant route, fare, age, registration and verification conditions, then extend the data model with source URLs and actual review dates. Student offers can require booking through a different channel from ordinary provider fares.
 
@@ -77,7 +83,7 @@ If a system Chromium is already installed, use its absolute path:
 
     PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e
 
-Browser tests cover search, sorting, baggage and stop filters, round-trip/one-way selection, adult counts, saved-flight persistence, mobile layout, booking handoffs, provider errors and empty states. Unit tests cover input validation, pricing and baggage comparisons, and the Amadeus adapter.
+Browser tests cover search, sorting, student comparisons and score explanations, baggage and stop filters, round-trip/one-way selection, adult counts, saved-flight persistence, mobile layout, accessibility, booking handoffs, provider errors and empty states. Unit tests cover input validation, pricing and baggage comparisons, student-value calculations, separation of fictional and live benefits, and the Amadeus adapter.
 
 ## Project map
 
@@ -88,6 +94,7 @@ Browser tests cover search, sorting, baggage and stop filters, round-trip/one-wa
 | src/lib/amadeus.ts | Server-side provider authentication and offer normalization |
 | src/lib/demo.ts | Deterministic sample offers, marked as preview data |
 | src/lib/search.ts | Validation, query serialization and recommendation sorting |
+| src/lib/student-value.ts | Eligible baggage, comparable costs and transparent student value scores |
 | src/lib/airports.ts | Supported airports and time zones; add more here |
 | src/lib/airlines.ts | Airline identities, official websites and student-program links |
 | public | Original local SVG artwork; fonts are served locally from an npm package |

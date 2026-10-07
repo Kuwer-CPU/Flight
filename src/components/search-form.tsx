@@ -41,9 +41,9 @@ export function SearchForm({ initial, compact = false }: { initial?: SearchQuery
       <button className="button button-search" type="submit"><Search size={18} /><span>Search flights</span><ArrowRight size={18} /></button>
     </div>
     <div className="search-bottom">
-      {query.student ? <><span className="profile-intro"><GraduationCap size={16} />A little about you</span><label>Age <input aria-label="Traveler age" type="number" min="16" max="99" required value={query.age} onChange={e => change('age', Number(e.target.value))} /></label></> : <span className="profile-intro">Find the flight that fits you</span>}
+      {query.student ? <><span className="profile-intro"><GraduationCap size={16} />Your student profile</span><label>Age <input aria-label="Traveler age" type="number" min="16" max="99" required value={query.age} onChange={e => change('age', Number(e.target.value))} /></label></> : <span className="profile-intro">Find the flight that fits you</span>}
       <label className="baggage-input"><Luggage size={15} />Checked baggage <select aria-label="Checked baggage needed" value={query.baggage} onChange={e => change('baggage', Number(e.target.value))}>{[0, 15, 20, 23, 25, 30, 35, 40, 45, 50, 60].map(n => <option key={n} value={n}>{n === 0 ? 'None' : n + ' kg'}</option>)}</select></label>
-      <span className="search-reassurance">Compare here. Book directly with the airline.</span>
+      <span className="search-reassurance">Compare student value. Book with the airline.</span>
     </div>
     {error && <p className="form-error" role="alert">{error}</p>}
   </form>;

@@ -1,0 +1,148 @@
+/* Student benefits are the main comparison surface, from the landing page to booking details. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.hero{display:grid;grid-template-columns:.95fr 1.05fr;gap:42px;padding:43px 42px 85px;min-height:620px;background:radial-gradient(ellipse at 15% 20%,#f0f4e8,transparent 65%),#e4eddc}
+.hero-copy{width:auto;align-self:center}
+.hero h1{font-size:70px;line-height:1.06;letter-spacing:-3.8px;margin-top:24px}
+.hero-copy>p{max-width:390px;font-size:14px;line-height:1.8}
+.hero-points{gap:13px;font-size:10px}
+.hero-link{font-size:13px;font-weight:600;margin-top:25px}
+.hero-caption{left:42px;right:42px;bottom:26px}
+.hero-student-comparison{position:relative;z-index:2;align-self:center;min-width:0}
+.comparison-caption{display:flex;align-items:center;gap:8px;font-size:8px;font-weight:650;letter-spacing:1px;margin-bottom:17px;flex-wrap:wrap}
+.example-pill{margin-left:auto;padding:5px 7px;border:1px solid #91a184;border-radius:4px;font-size:7px;letter-spacing:.6px}
+.comparison-scenario{display:flex;align-items:center;justify-content:space-between;padding:0 3px;margin-bottom:12px;font-size:13px}
+.hero-offer{border-radius:12px;background:#fff;padding:19px 21px;box-shadow:0 8px 22px #2444300b;border:1px solid #c7d6bd}
+.hero-offer-best{border:2px solid var(--forest)}
+.hero-offer-top{display:flex;align-items:center;gap:11px}
+.fictional-airline{display:grid;place-items:center;background:var(--forest);color:#fff;width:35px;height:35px;border-radius:8px;font-weight:650;font-size:18px;flex-shrink:0}
+.hero-offer h2{font-family:inherit;font-size:17px;font-weight:650;letter-spacing:-.4px}
+.hero-offer-top>div>span{font-size:10px;color:#52604b;display:block;margin-top:4px}
+.hero-offer-top>strong{margin-left:auto;font-size:28px;letter-spacing:-1px;line-height:1.1;text-align:right;font-weight:600}
+.hero-offer-top>strong>small{display:block;font-size:9px;letter-spacing:0;color:#52604b;margin-top:4px;font-weight:400}
+.hero-bag-equation{display:grid;grid-template-columns:1fr 18px 1fr 18px 1.2fr;gap:6px;margin-top:20px;align-items:center}
+.hero-bag-equation>div{min-width:0}
+.hero-bag-equation>div>span{font-size:10px;display:block;color:#52604b}
+.hero-bag-equation strong{font-size:30px;font-weight:600;letter-spacing:-1px;display:block;margin-top:5px}
+.hero-bag-equation small{font-size:12px;font-weight:450;letter-spacing:0}
+.hero-bag-equation>b{font-size:19px;font-weight:400;color:#52604b;text-align:center}
+.hero-bag-equation>div:last-child{background:var(--lime);border-radius:7px;padding:10px 12px}
+.hero-offer-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px dashed #b6c5ac;margin-top:15px;padding-top:13px;font-size:11px}
+.hero-offer-bottom>span{display:flex;align-items:center;gap:5px}
+.hero-offer-bottom strong{font-size:16px;letter-spacing:-.4px}
+.hero-offer-other{margin-top:12px;padding-top:15px;padding-bottom:15px}
+.hero-offer-other .fictional-airline{background:#e9ece5;color:var(--ink)}
+.hero-offer-other .hero-offer-top>strong{font-size:24px}
+.hero-other-detail{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:11px;margin-top:13px;color:#52604b}
+.hero-other-detail>strong{color:var(--ink)}
+.hero-offer-other .hero-offer-bottom{margin-top:10px;padding-top:10px}
+.comparison-takeaway{display:flex;align-items:center;gap:11px;margin-top:17px}
+.takeaway-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--forest);color:var(--lime);flex-shrink:0}
+.comparison-takeaway>p{flex:1;font-size:12px;line-height:1.6}
+.comparison-takeaway strong,.comparison-takeaway p>span{display:block}
+.comparison-takeaway p>span{font-size:10px;color:#4d5f46}
+.hero-example-note{font-size:9px;line-height:1.6;color:#4d5f46;margin-top:12px}
+.student-toggle{padding:8px 12px;border:1px solid #dce4ce;background:#f0f5e8;border-radius:6px;font-weight:600;font-size:12px}
+.search-bottom{background:#f3f6ed;border:1px solid #e0e7d7;border-radius:7px;padding:12px 14px;font-size:11px;margin-top:18px}
+.search-bottom .profile-intro{font-weight:600;font-size:11px;gap:7px;color:var(--ink)}
+.search-bottom input,.search-bottom select{background:#fff;border:1px solid #d7dfce;font-size:12px;height:32px;color:var(--ink)}
+.search-bottom label{font-size:11px}
+.student-profile{font-size:12px;padding:11px 14px;max-width:none}
+.student-overview{margin-bottom:25px;border:1px solid #cbd7bf;border-radius:12px;background:#fff;overflow:hidden}
+.student-overview-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:23px 24px 20px;background:#eff4e7}
+.student-overview-heading .eyebrow{font-size:8px;letter-spacing:1.1px}
+.student-overview-heading h2{font-size:25px;margin-top:11px;letter-spacing:-.8px}
+.student-overview-heading p{font-size:12px;line-height:1.7;margin-top:7px;color:#53614c}
+.baggage-target{display:flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;font-size:11px;background:var(--lime);padding:12px;border-radius:7px;flex-wrap:wrap;max-width:135px}
+.comparison-table-scroll{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+.comparison-table{width:100%;border-collapse:collapse;text-align:left;min-width:670px;font-size:11px}
+.comparison-table th,.comparison-table td{padding:14px 12px;border-bottom:1px solid #e3e8dc;vertical-align:middle}
+.comparison-table thead{font-size:9px;background:#f8faf5;color:#4f5f47}
+.comparison-table thead th{font-weight:550;white-space:nowrap}
+.comparison-table th:first-child{padding-left:24px}
+.comparison-table td:last-child{padding-right:24px}
+.comparison-table tbody th{font-weight:550;width:25%}
+.comparison-table tbody th button{display:flex;align-items:center;gap:5px;font-size:12px;text-align:left;padding:0;line-height:1.5;text-decoration:underline;text-decoration-color:#a7b69b;text-underline-offset:3px}
+.comparison-table tbody th>span,.comparison-table td>small{display:block;font-size:9px;color:#54604c;font-weight:400;line-height:1.6;margin-top:4px}
+.comparison-table td>strong{font-size:13px;font-weight:600;white-space:nowrap}
+.comparison-table .comparison-bonus{color:var(--forest);font-weight:650}
+.comparison-table tbody tr:first-child{background:#f8faf2}
+.comparison-table tbody tr:hover{background:#f0f4e9}
+.table-value-score{display:inline-block;border-radius:5px;padding:7px;background:#eaf0df;font-size:12px;font-weight:650;white-space:nowrap}
+.overview-footnote{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 23px;background:#fafbf7}
+.overview-footnote>p{display:flex;align-items:flex-start;gap:6px;font-size:10px;line-height:1.6;color:#53614c;max-width:520px}
+.overview-footnote svg{flex-shrink:0;margin-top:1px}
+.overview-footnote button{font-size:10px;flex-shrink:0}
+.student-baggage-panel{background:#f4f7ee;border:1px solid #d8e2cc;border-radius:9px;margin:0 0 22px;overflow:hidden}
+.student-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;border-bottom:1px solid #dce5d2}
+.student-panel-heading>span:first-child{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:650}
+.value-score{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.value-score>strong{font-size:23px;font-weight:700;letter-spacing:-.8px;line-height:1}
+.value-score>strong>small{font-size:11px;letter-spacing:0;font-weight:450;margin-left:2px}
+.value-score>span{font-size:8px;color:#4d5e42}
+.baggage-equation{display:grid;grid-template-columns:1fr 15px 1fr 15px 1.12fr;align-items:center;gap:6px;padding:15px}
+.baggage-equation>div{min-width:0}
+.baggage-equation>div>span{font-size:10px;display:block;font-weight:450;color:#4c5b43}
+.baggage-equation>div>strong{font-size:28px;line-height:1.2;font-weight:600;letter-spacing:-1px;display:block;margin-top:8px;overflow-wrap:anywhere}
+.baggage-equation strong>small{font-size:12px;letter-spacing:0;font-weight:450}
+.baggage-equation>div>small{font-size:9px;display:flex;align-items:center;gap:3px;line-height:1.6;color:#4c5b43;margin-top:5px}
+.baggage-equation .equation-symbol{text-align:center;font-size:20px;font-weight:400;color:#526448}
+.baggage-equation .student-extra>strong{color:var(--forest)}
+.baggage-equation .no-extra>strong{color:#526448}
+.baggage-equation .eligible-total{border-radius:6px;padding:11px 10px;background:#e6eddb}
+.baggage-equation .meets-needs{background:var(--lime)}
+.student-panel-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:9px;padding:10px 15px;border-top:1px solid #dce5d2;line-height:1.6}
+.student-panel-bottom>span{display:flex;align-items:flex-start;gap:5px;color:#4c5b43}
+.student-panel-bottom svg{flex-shrink:0;margin-top:1px}
+.student-panel-bottom>a{display:flex;align-items:center;gap:3px;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.example-policy-note{display:flex;align-items:flex-start;gap:5px;background:#fbfcf8;border-top:1px solid #dce5d2;padding:8px 15px;font-size:9px;line-height:1.6;color:#526448}
+.example-policy-note svg{flex-shrink:0;margin-top:1px}
+.flight-airline h3{font-size:16px;font-weight:600}
+.flight-price{justify-content:flex-start;padding-top:26px;background:#fcfdf9}
+.flight-price .comparable-cost{margin-top:23px;border-top:1px solid #dce3d1;padding-top:18px}
+.comparable-cost>span{font-size:10px!important;line-height:1.6;color:#506044}
+.comparable-cost>strong{font-size:25px;letter-spacing:-.8px;line-height:1.4}
+.comparable-cost>small{font-size:9px;line-height:1.7;display:block;color:#506044}
+.flight-price .comparable-cost>strong{font-size:25px;line-height:1.4}
+.flight-price .comparable-cost>span{margin-bottom:5px}
+.flight-price .button-select{margin-top:auto;padding-top:13px;padding-bottom:13px;min-height:45px}
+.flight-price .comparable-cost+.button-select{margin-top:22px}
+.flight-journeys{padding-top:3px}
+.flight-benefits{font-size:10px}
+.detail-student-comparison{margin-top:20px;margin-bottom:24px}
+.detail-student-comparison .student-baggage-panel{margin-bottom:0}
+.detail-student-comparison .comparable-cost{display:flex;align-items:center;gap:14px;padding:15px;background:#fbfcf8;border:1px solid #d8e2cc;border-top:0;border-radius:0 0 9px 9px}
+.detail-student-comparison .comparable-cost>small{margin-left:auto}
+.value-guide{font-size:13px;line-height:1.9}
+.value-guide>p{margin-bottom:18px;color:#4b5c45}
+.score-weights{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.score-weights>div{background:#edf3e5;border-radius:7px;padding:17px 10px;text-align:center}
+.score-weights strong{display:block;font-size:26px;line-height:1.5;font-weight:650}
+.score-weights span{font-size:10px}
+.guide-example{display:flex;gap:10px;border:1px solid #d5dfc8;background:#f4f7ed;padding:17px;border-radius:8px;font-size:12px}
+.guide-example svg{flex-shrink:0;margin-top:3px}
+.guide-example strong{display:block}
+@media(max-width:1100px){
+  .hero{gap:28px;padding:35px 30px 77px;min-height:620px}.hero h1{font-size:61px}.hero-copy>p{font-size:13px}.hero-points{flex-direction:column;gap:8px}.hero-caption{left:30px;right:30px}
+  .hero-offer{padding:16px}.hero-bag-equation{gap:4px}.hero-bag-equation>div:last-child{padding:9px}.hero-bag-equation>div>span{font-size:9px}.hero-offer-top>div>span{font-size:9px}.comparison-caption{font-size:7px}.example-pill{font-size:6px}
+  .baggage-equation{gap:4px;padding:12px}.baggage-equation>div>strong{font-size:24px}.baggage-equation>div>span{font-size:9px}.baggage-equation>div>small{font-size:8px}.baggage-equation .eligible-total{padding:9px 8px}.student-panel-heading{padding:11px 12px}.student-panel-heading>span:first-child{font-size:11px}.student-panel-bottom{padding:10px 12px;flex-wrap:wrap}.example-policy-note{padding:8px 12px}
+  .student-overview-heading{padding:20px}.student-overview-heading h2{font-size:23px}.overview-footnote{flex-wrap:wrap;padding:13px 20px}.comparison-table th:first-child{padding-left:20px}.comparison-table td:last-child{padding-right:20px}
+}
+@media(max-width:900px){
+  .hero{gap:22px;padding:30px 25px 70px;grid-template-columns:.9fr 1.1fr}.hero h1{font-size:50px;letter-spacing:-2.5px}.hero-copy>p{font-size:12px}.hero-points{font-size:9px}.hero-link{font-size:12px;gap:8px}.hero-caption{left:25px;right:25px}
+  .comparison-caption .example-pill{margin-left:0}.hero-offer-top{gap:8px}.hero-offer h2{font-size:15px}.fictional-airline{width:29px;height:29px;font-size:16px}.hero-offer-top>strong{font-size:25px}.hero-bag-equation strong{font-size:27px}.hero-offer-bottom{font-size:9px}.hero-offer-top>div>span{font-size:8px}.hero-example-note{font-size:8px}
+  .flight-card-main{display:block}.flight-card-content{padding:22px 22px 0}.flight-airline h3{font-size:16px}.flight-price{border-left:0;border-top:1px dashed #dce3d1;display:grid;grid-template-columns:1fr 1fr auto;align-items:center;text-align:left;gap:17px;padding:20px 22px}.flight-price .comparable-cost{border-top:0;border-left:1px solid #dce3d1;margin-top:0;padding:0 0 0 17px}.flight-price strong{font-size:29px}.flight-price .button-select,.flight-price .comparable-cost+.button-select{margin:0;padding:12px;font-size:11px}.flight-price .price-note{display:none}
+  .baggage-equation{padding:15px;gap:8px}.baggage-equation>div>strong{font-size:29px}.baggage-equation>div>span{font-size:10px}.baggage-equation>div>small{font-size:9px}.student-panel-heading>span:first-child{font-size:12px}.student-panel-heading{padding:13px 15px}.student-panel-bottom{padding:10px 15px}.example-policy-note{padding:8px 15px}
+  .student-overview-heading{align-items:flex-start}.student-overview-heading h2{font-size:23px}.student-overview-heading .eyebrow{font-size:7px;letter-spacing:.8px}.baggage-target{font-size:10px;max-width:110px;padding:10px}.student-overview-heading p{font-size:11px}
+}
+@media(max-width:700px){
+  .hero{display:block;min-height:0;padding:32px 25px 65px}.hero-copy{width:100%}.hero h1{font-size:54px;letter-spacing:-2.5px;line-height:1.07}.hero-copy>p{max-width:460px;font-size:13px;margin-top:20px}.hero-points{flex-direction:row;font-size:10px;margin-top:17px}.hero-link{display:inline-flex;margin-top:19px}.hero-student-comparison{max-width:470px;margin:32px auto 0}.comparison-caption{font-size:8px}.comparison-caption .example-pill{margin-left:auto;font-size:7px}.hero-offer{padding:18px}.hero-offer-top>div>span{font-size:10px}.hero-offer h2{font-size:17px}.hero-offer-top>strong{font-size:28px}.hero-bag-equation{gap:6px}.hero-bag-equation>div>span{font-size:10px}.hero-bag-equation strong{font-size:30px}.hero-offer-bottom{font-size:11px}.hero-example-note{font-size:9px}.hero-caption{bottom:22px;font-size:7px}.hero-caption span:last-child{display:none}.search-container{margin-top:-20px;width:calc(100% - 54px)}
+  .student-toggle{padding:8px}.search-bottom{gap:12px;padding:11px;font-size:11px}.search-bottom .profile-intro{display:flex;flex-basis:100%;font-size:11px}.search-bottom label{font-size:11px}.search-bottom input,.search-bottom select{font-size:12px;height:32px}.student-profile{font-size:11px;max-width:none}
+  .student-overview-heading h2{font-size:24px}.student-overview-heading .eyebrow{font-size:8px}.student-overview-heading{padding:20px}.overview-footnote{gap:8px}.overview-footnote>p{font-size:10px}
+  .flight-airline h3{font-size:16px}.flight-journey{gap:16px}.journey-end strong{font-size:24px}.journey-kind{display:block;font-size:7px}.flight-benefits{font-size:10px}.flight-price .button-select{font-size:11px}
+}
+@media(max-width:480px){
+  .hero{padding:27px 20px 62px}.hero h1{font-size:47px;letter-spacing:-2.5px}.hero-copy>p{font-size:12px;max-width:100%}.hero .eyebrow{font-size:7px;letter-spacing:1.3px}.hero-points{font-size:9px;gap:12px}.hero-points svg{width:15px}.hero-link{font-size:12px}.hero-student-comparison{margin-top:28px}.comparison-caption{font-size:7px;letter-spacing:.6px;gap:6px;margin-bottom:13px}.comparison-caption>svg{width:17px}.comparison-caption .example-pill{font-size:6px;padding:4px 5px;letter-spacing:.3px}.comparison-scenario{font-size:12px}.hero-offer{padding:15px}.hero-offer h2{font-size:16px}.hero-offer-top>div>span{font-size:8px}.hero-offer-top>strong{font-size:25px}.hero-offer-top>strong>small{font-size:8px}.hero-bag-equation{grid-template-columns:1fr 12px 1fr 12px 1.16fr;gap:4px;margin-top:15px}.hero-bag-equation>div>span{font-size:8px}.hero-bag-equation strong{font-size:27px}.hero-bag-equation small{font-size:10px}.hero-bag-equation>div:last-child{padding:10px 8px}.hero-bag-equation>b{font-size:17px}.hero-offer-bottom{font-size:9px;margin-top:13px;padding-top:11px}.hero-offer-bottom strong{font-size:15px}.hero-other-detail{font-size:10px}.hero-offer-other{padding:14px 15px}.hero-offer-other .hero-offer-top>strong{font-size:24px}.comparison-takeaway{gap:8px}.comparison-takeaway>svg{display:none}.comparison-takeaway>p{font-size:11px}.comparison-takeaway p>span{font-size:9px}.hero-caption{left:20px;right:20px}.search-container{width:calc(100% - 48px);margin-top:-20px}.student-toggle{font-size:9px!important;gap:5px!important;padding:7px}.student-toggle svg{display:none}.search-bottom{gap:10px;padding:10px}.search-bottom label{font-size:10px}.search-bottom .profile-intro{font-size:10px}.search-bottom input,.search-bottom select{font-size:11px}
+  .student-overview-heading{display:block;padding:18px}.student-overview-heading h2{font-size:24px;line-height:1.15}.student-overview-heading .eyebrow{font-size:7px;letter-spacing:.7px}.baggage-target{margin-top:13px;max-width:none;display:inline-flex;padding:8px 10px;font-size:11px}.student-overview-heading p{font-size:11px}.comparison-table-scroll:after{content:'Swipe to compare baggage and cost →';display:block;position:sticky;left:0;padding:10px 18px;font-size:10px;background:#eff4e7}.comparison-table{min-width:660px}.comparison-table th:first-child{padding-left:18px}.overview-footnote{padding:13px 18px}.overview-footnote button{font-size:11px}
+  .flight-card-content{padding:18px 15px 0}.flight-airline{margin-bottom:17px;gap:10px}.flight-airline h3{font-size:15px}.student-baggage-panel{margin-bottom:22px}.student-panel-heading{padding:12px 11px}.student-panel-heading>span:first-child{font-size:11px;gap:5px}.student-panel-heading>span:first-child>svg{width:15px}.value-score>strong{font-size:23px}.value-score>span{font-size:7px}.baggage-equation{grid-template-columns:1fr 11px 1fr 11px 1.15fr;gap:3px;padding:12px 10px}.baggage-equation>div>span{font-size:8px;line-height:1.5}.baggage-equation>div>strong{font-size:24px;letter-spacing:-.7px}.baggage-equation strong>small{font-size:10px}.baggage-equation>div>small{font-size:8px;line-height:1.6;gap:2px}.baggage-equation>div>small svg{display:none}.baggage-equation .eligible-total{padding:9px 7px}.baggage-equation .equation-symbol{font-size:16px}.student-panel-bottom{padding:10px 11px;font-size:9px;gap:7px}.example-policy-note{padding:8px 11px;font-size:8px}.flight-journey{gap:10px}.journey-kind{width:22px;flex-shrink:0}.journey-end{min-width:52px}.journey-end strong{font-size:22px}.journey-path>span{font-size:10px}.flight-benefits{font-size:9px;gap:10px}.flight-price{grid-template-columns:1fr 1fr;gap:16px 12px;padding:18px 15px}.flight-price .comparable-cost{padding-left:12px}.flight-price strong{font-size:28px}.flight-price .comparable-cost>strong{font-size:24px}.flight-price .comparable-cost>span{font-size:9px!important}.flight-price .comparable-cost>small{font-size:8px}.flight-price .button-select{grid-column:1/-1;font-size:12px;min-height:44px}.flight-price>div>span{font-size:9px}.flight-price>div>small{font-size:9px}
+  .detail-student-comparison .comparable-cost{flex-wrap:wrap;gap:5px 13px;padding:12px}.detail-student-comparison .comparable-cost>small{margin-left:0;flex-basis:100%;font-size:10px}.score-weights{gap:6px}.score-weights>div{padding:13px 5px}.score-weights strong{font-size:24px}.score-weights span{font-size:9px}.value-guide{font-size:12px}.guide-example{padding:13px;font-size:11px}
+}

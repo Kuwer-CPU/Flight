@@ -1,5 +1,8 @@
 import { airport } from './airports';
-import type { BaggageAllowance, FlightOffer, SearchQuery } from './types';
+import type { FlightOffer, SearchQuery } from './types';
+import { baggageKg } from './baggage';
+import { studentValueScores } from './student-value';
+export { baggageKg, baggageLabel } from './baggage';
 
 export class SearchValidationError extends Error {}
 export function today() { return new Date().toISOString().slice(0, 10); }
@@ -48,27 +51,18 @@ export function time(value: string) { return value.slice(11, 16); }
 export function dateLabel(value: string, long = false) {
   return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: long ? 'long' : 'short', timeZone: 'UTC' }).format(new Date(value.slice(0, 10) + 'T12:00:00Z'));
 }
-export function baggageKg(baggage: BaggageAllowance) {
-  if (baggage.weight === undefined) return undefined;
-  if (baggage.unit === 'LB') return Math.round(baggage.weight * 0.453592 * 10) / 10;
-  return baggage.unit === 'KG' ? baggage.weight : undefined;
-}
-export function baggageLabel(baggage: BaggageAllowance) {
-  const kg = baggageKg(baggage);
-  if (kg !== undefined) return kg === 0 ? 'No checked bag' : kg + ' kg checked bag';
-  if (baggage.pieces !== undefined) return baggage.pieces === 0 ? 'No checked bag' : baggage.pieces + ' checked bag' + (baggage.pieces > 1 ? 's' : '');
-  return 'Baggage not specified';
-}
-export type SortOrder = 'recommended' | 'cheapest' | 'fastest';
-export function sortedFlights(offers: FlightOffer[], sort: SortOrder, query: SearchQuery) {
+export type SortOrder = 'student-value' | 'recommended' | 'cheapest' | 'fastest';
+export function sortedFlights(offers: FlightOffer[], sort: SortOrder, query: SearchQuery, comparisonOffers = offers) {
   if (!offers.length) return [];
   const minimumPrice = Math.min(...offers.map(o => o.price));
   const totalDuration = (o: FlightOffer) => o.itineraries.reduce((sum, it) => sum + it.duration, 0);
   const shortest = Math.min(...offers.map(totalDuration));
+  const studentScores = sort === 'student-value' ? studentValueScores(comparisonOffers, query) : new Map<string, number>();
   const score = (o: FlightOffer) => {
     const kg = baggageKg(o.baggage);
     const baggageMatch = query.baggage > 0 && kg !== undefined && kg >= query.baggage ? 0.15 : 0;
     return (minimumPrice / o.price) * 0.55 + (shortest / totalDuration(o)) * 0.30 + baggageMatch;
   };
-  return [...offers].sort((a, b) => sort === 'cheapest' ? a.price - b.price : sort === 'fastest' ? totalDuration(a) - totalDuration(b) : score(b) - score(a));
+  return [...offers].sort((a, b) => sort === 'cheapest' ? a.price - b.price : sort === 'fastest' ? totalDuration(a) - totalDuration(b) : sort === 'student-value' ?
+    (studentScores.get(b.id) ?? -1) - (studentScores.get(a.id) ?? -1) || score(b) - score(a) : score(b) - score(a));
 }

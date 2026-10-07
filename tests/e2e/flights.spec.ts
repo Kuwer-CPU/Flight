@@ -4,7 +4,7 @@ test('searches round trips, compares bags, sorts flights and hands off to the ai
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: /Big dreams/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Same flight/ })).toBeVisible();
   await expect(page.getByRole('main').getByText('Preview mode', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Search flights', exact: true }).click();
   await expect(page).toHaveURL(/\/flights\?/);

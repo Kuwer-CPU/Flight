@@ -50,6 +50,13 @@ export interface FlightOffer {
   itineraries: Itinerary[];
   baggage: BaggageAllowance;
   mode: DataMode;
+  /** Fictional comparison inputs, accepted only for visibly labeled demo offers. */
+  studentExample?: {
+    extraKg: number;
+    verificationRequired: boolean;
+    registrationRequired: boolean;
+    addOn?: { kg: number; pricePerAdult: number; currency: string };
+  };
 }
 export interface SearchResponse {
   offers: FlightOffer[];

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="800" viewBox="0 0 900 800" fill="none">
+<defs>
+<linearGradient id="sky" x1="450" y1="0" x2="450" y2="800" gradientUnits="userSpaceOnUse"><stop stop-color="#DAECE6"/><stop offset="1" stop-color="#EEF3E9"/></linearGradient>
+<linearGradient id="globe" x1="255" y1="184" x2="668" y2="623" gradientUnits="userSpaceOnUse"><stop stop-color="#BCD7C6"/><stop offset=".7" stop-color="#82AD97"/><stop offset="1" stop-color="#659080"/></linearGradient>
+<linearGradient id="plane" x1="343" y1="367" x2="671" y2="287" gradientUnits="userSpaceOnUse"><stop stop-color="#F3F1E5"/><stop offset=".48" stop-color="white"/><stop offset="1" stop-color="#D9E5DF"/></linearGradient>
+<radialGradient id="light"><stop stop-color="#EAF3D1" stop-opacity=".7"/><stop offset="1" stop-color="#EAF3D1" stop-opacity="0"/></radialGradient>
+<filter id="shadow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="16"/></filter>
+<filter id="card-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="16" stdDeviation="15" flood-color="#154439" flood-opacity=".12"/></filter>
+<clipPath id="sphere"><circle cx="496" cy="357" r="205"/></clipPath>
+</defs>
+<ellipse cx="489" cy="680" rx="265" ry="31" fill="#436C55" opacity=".09" filter="url(#shadow)"/>
+<circle cx="494" cy="356" r="299" fill="url(#light)"/>
+<circle cx="496" cy="357" r="245" stroke="#ACC6B6" stroke-opacity=".5"/>
+<circle cx="496" cy="357" r="282" stroke="#BFD1C2" stroke-opacity=".55" stroke-dasharray="2 11"/>
+<circle cx="496" cy="357" r="205" fill="url(#globe)"/>
+<g clip-path="url(#sphere)">
+<path d="M328 231L361 238 374 216 410 228 437 255 453 282 465 289 449 308 422 306 412 328 391 326 380 348 352 341 339 364 320 339 311 303 279 295 281 259Z" fill="#D8E5CA"/>
+<path d="M426 312L463 306 489 329 514 338 535 361 522 385 505 401 490 438 465 472 445 485 431 459 419 430 417 401 395 378 399 345Z" fill="#D8E5CA"/>
+<path d="M516 192L548 179 576 203 607 210 624 201 665 227 691 267 687 299 653 306 640 283 617 308 598 302 571 332 550 309 529 307 520 283 504 263 519 248 503 224Z" fill="#D8E5CA"/>
+<path d="M579 350L600 358 612 381 623 402 611 414 598 397 589 377Z" fill="#D8E5CA"/>
+<path d="M616 455L652 434 681 449 696 471 688 498 658 516 628 502 609 478Z" fill="#D8E5CA"/>
+<path d="M292 357H701M496 152V562M314 267C441 306 583 303 678 267M314 447C441 408 583 411 678 447" stroke="#416F5E" stroke-opacity=".14"/>
+<ellipse cx="496" cy="357" rx="103" ry="205" stroke="#416F5E" stroke-opacity=".14"/>
+<ellipse cx="496" cy="357" rx="169" ry="205" stroke="#416F5E" stroke-opacity=".14"/>
+<circle cx="368" cy="243" r="235" fill="white" opacity=".06"/>
+</g>
+<path d="M353 248Q565 40 773 290" stroke="#486956" stroke-width="2" stroke-dasharray="5 7" opacity=".7"/>
+<circle cx="355" cy="249" r="7" fill="#F5F5EB" stroke="#234D3C" stroke-width="3"/>
+<circle cx="774" cy="291" r="7" fill="#F5F5EB" stroke="#234D3C" stroke-width="3"/>
+<g transform="rotate(-18 495 326)" filter="url(#card-shadow)">
+<path d="M282 343L369 315 442 296 526 218 565 216 526 288 665 260Q703 252 719 269Q731 285 694 300L530 342 533 392 509 403 487 356 397 380 383 371 354 389 333 390 345 356 282 353Z" fill="url(#plane)"/>
+<path d="M443 295L526 218 565 216 526 288Z" fill="#E0E7E0"/>
+<path d="M530 342L533 392 509 403 487 356Z" fill="#DEE6DC"/>
+<path d="M282 343L308 309 336 311 338 325 369 315 345 355 282 353Z" fill="#21533E"/>
+<path d="M396 342L662 278" stroke="#B9D0BD" stroke-width="3"/>
+<path d="M652 267L665 263Q685 259 697 268L679 276Z" fill="#184B43"/>
+<g fill="#376C63"><ellipse cx="626" cy="280" rx="3" ry="4"/><ellipse cx="614" cy="283" rx="3" ry="4"/><ellipse cx="602" cy="286" rx="3" ry="4"/><ellipse cx="590" cy="289" rx="3" ry="4"/><ellipse cx="578" cy="292" rx="3" ry="4"/><ellipse cx="566" cy="295" rx="3" ry="4"/><ellipse cx="554" cy="298" rx="3" ry="4"/><ellipse cx="542" cy="301" rx="3" ry="4"/><ellipse cx="530" cy="304" rx="3" ry="4"/><ellipse cx="518" cy="307" rx="3" ry="4"/><ellipse cx="506" cy="310" rx="3" ry="4"/><ellipse cx="494" cy="313" rx="3" ry="4"/></g>
+<path d="M474 291L515 274 530 282 526 293 488 305Z" fill="#9FBDB2"/>
+<path d="M460 359L481 351 491 366 478 374Z" fill="#9FBDB2"/>
+</g>
+<g opacity=".82" fill="#F6F7EF">
+<path d="M127 428C127 408 144 396 163 403C162 373 197 354 221 375C236 349 279 362 281 391C306 382 330 403 321 428Z"/>
+<path d="M620 544C620 529 636 514 653 522C654 495 684 481 705 503C724 486 753 496 757 521C778 516 796 531 794 545Z"/>
+<path d="M686 151C686 140 701 130 713 136C718 114 746 112 758 134C778 128 790 139 788 152Z"/>
+</g>
+<g filter="url(#card-shadow)" transform="translate(196 486) rotate(-8)">
+<rect width="233" height="131" rx="15" fill="#FAFAEF"/>
+<path d="M0 90H233" stroke="#CFD8C5" stroke-dasharray="4 4"/>
+<text x="21" y="29" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#66816D">YOUR NEXT CHAPTER</text>
+<text x="21" y="66" font-family="Arial,sans-serif" font-size="27" font-weight="700" fill="#183E2D">CDG</text>
+<text x="149" y="66" font-family="Arial,sans-serif" font-size="27" font-weight="700" fill="#183E2D">DEL</text>
+<path d="M89 56H131M124 50L131 56 124 62" stroke="#183E2D" stroke-width="2"/>
+<text x="21" y="113" font-family="Arial,sans-serif" font-size="11" fill="#66816D">STUDENT TRAVELER</text>
+<g stroke="#183E2D" stroke-width="2"><path d="M178 102V117M184 102V117M189 102V117M194 102V117M201 102V117M205 102V117M210 102V117"/></g>
+</g>
+<g transform="translate(658 391) rotate(13)"><circle r="65" fill="#DBEB87"/><circle r="54" stroke="#2F5433" stroke-opacity=".45"/><text text-anchor="middle" y="-12" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#2F5433" letter-spacing="1.5">PACK YOUR</text><text text-anchor="middle" y="11" font-family="Georgia,serif" font-size="24" font-style="italic" fill="#2F5433">whole life.</text><path d="M-8 26H8M0 20V32" stroke="#2F5433" stroke-width="2"/></g>
+<path d="M252 198V220M241 209H263M772 418V432M765 425H779M524 644V658M517 651H531" stroke="#668C70" stroke-width="2"/>
+</svg>

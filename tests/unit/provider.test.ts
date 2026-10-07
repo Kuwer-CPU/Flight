@@ -44,6 +44,18 @@ describe('provider normalization', () => {
   });
 });
 describe('Amadeus integration', () => {
+  it.each([['GRU', 'CPT'], ['JFK', 'HND'], ['SYD', 'SIN']])('sends worldwide airport codes for %s → %s and preserves a provider empty result', async (origin, destination) => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'provider-token', expires_in: 1800 }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ data: [] }), { status: 200 }));
+    vi.stubGlobal('fetch', fetchMock);
+    const { searchFlights } = await import('../../src/lib/amadeus');
+    const result = await searchFlights({ ...defaults(), origin, destination });
+    const request = new URL(fetchMock.mock.calls[1][0] as string);
+    expect(request.searchParams.get('originLocationCode')).toBe(origin);
+    expect(request.searchParams.get('destinationLocationCode')).toBe(destination);
+    expect(result).toMatchObject({ mode: 'test', offers: [] });
+  });
   it('authenticates server-side, sends the search parameters, and reuses cached results', async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'provider-token', expires_in: 1800 }), { status: 200 }))

@@ -46,7 +46,7 @@ test('one-way and multiple traveler searches preserve the route and group fare',
   await expect(page.getByLabel('Return date', { exact: true })).toHaveCount(0);
   await page.getByLabel('Number of adult travelers').selectOption('3');
   await page.getByRole('button', { name: 'Swap departure and arrival' }).click();
-  await expect(page.getByLabel('Departure airport')).toHaveValue('DEL');
+  await expect(page.getByLabel('Departure airport')).toHaveValue('Delhi (DEL)');
   await page.getByRole('button', { name: 'Search flights', exact: true }).click();
   await expect(page).toHaveURL(/adults=3/);
   await expect(page.locator('.flight-journey')).toHaveCount(6);

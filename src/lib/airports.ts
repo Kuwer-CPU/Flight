@@ -1,43 +1,46 @@
+import catalog from '@/data/airports.json';
+import metadata from '@/data/airport-catalog.json';
 import type { Airport } from './types';
 
-export const airports: Airport[] = [
-  { code: 'CDG', city: 'Paris', name: 'Charles de Gaulle', country: 'France', timezone: 'Europe/Paris', lat: 49.01, lon: 2.55 },
-  { code: 'NCE', city: 'Nice', name: "Côte d’Azur", country: 'France', timezone: 'Europe/Paris', lat: 43.66, lon: 7.22 },
-  { code: 'LHR', city: 'London', name: 'Heathrow', country: 'United Kingdom', timezone: 'Europe/London', lat: 51.47, lon: -0.45 },
-  { code: 'MAN', city: 'Manchester', name: 'Manchester Airport', country: 'United Kingdom', timezone: 'Europe/London', lat: 53.35, lon: -2.27 },
-  { code: 'FRA', city: 'Frankfurt', name: 'Frankfurt Airport', country: 'Germany', timezone: 'Europe/Berlin', lat: 50.04, lon: 8.56 },
-  { code: 'MUC', city: 'Munich', name: 'Munich Airport', country: 'Germany', timezone: 'Europe/Berlin', lat: 48.35, lon: 11.79 },
-  { code: 'BER', city: 'Berlin', name: 'Brandenburg', country: 'Germany', timezone: 'Europe/Berlin', lat: 52.36, lon: 13.50 },
-  { code: 'AMS', city: 'Amsterdam', name: 'Schiphol', country: 'Netherlands', timezone: 'Europe/Amsterdam', lat: 52.31, lon: 4.77 },
-  { code: 'MAD', city: 'Madrid', name: 'Barajas', country: 'Spain', timezone: 'Europe/Madrid', lat: 40.49, lon: -3.57 },
-  { code: 'BCN', city: 'Barcelona', name: 'El Prat', country: 'Spain', timezone: 'Europe/Madrid', lat: 41.30, lon: 2.08 },
-  { code: 'FCO', city: 'Rome', name: 'Fiumicino', country: 'Italy', timezone: 'Europe/Rome', lat: 41.80, lon: 12.25 },
-  { code: 'ZRH', city: 'Zurich', name: 'Zurich Airport', country: 'Switzerland', timezone: 'Europe/Zurich', lat: 47.46, lon: 8.55 },
-  { code: 'DUB', city: 'Dublin', name: 'Dublin Airport', country: 'Ireland', timezone: 'Europe/Dublin', lat: 53.43, lon: -6.25 },
-  { code: 'DEL', city: 'Delhi', name: 'Indira Gandhi International', country: 'India', timezone: 'Asia/Kolkata', lat: 28.56, lon: 77.10 },
-  { code: 'BOM', city: 'Mumbai', name: 'Chhatrapati Shivaji Maharaj', country: 'India', timezone: 'Asia/Kolkata', lat: 19.09, lon: 72.87 },
-  { code: 'BLR', city: 'Bengaluru', name: 'Kempegowda', country: 'India', timezone: 'Asia/Kolkata', lat: 13.20, lon: 77.70 },
-  { code: 'HYD', city: 'Hyderabad', name: 'Rajiv Gandhi International', country: 'India', timezone: 'Asia/Kolkata', lat: 17.24, lon: 78.43 },
-  { code: 'MAA', city: 'Chennai', name: 'Chennai International', country: 'India', timezone: 'Asia/Kolkata', lat: 12.99, lon: 80.17 },
-  { code: 'CCU', city: 'Kolkata', name: 'Netaji Subhas Chandra Bose', country: 'India', timezone: 'Asia/Kolkata', lat: 22.65, lon: 88.45 },
-  { code: 'DXB', city: 'Dubai', name: 'Dubai International', country: 'United Arab Emirates', timezone: 'Asia/Dubai', lat: 25.25, lon: 55.36 },
-  { code: 'AUH', city: 'Abu Dhabi', name: 'Zayed International', country: 'United Arab Emirates', timezone: 'Asia/Dubai', lat: 24.43, lon: 54.65 },
-  { code: 'DOH', city: 'Doha', name: 'Hamad International', country: 'Qatar', timezone: 'Asia/Qatar', lat: 25.27, lon: 51.61 },
-  { code: 'IST', city: 'Istanbul', name: 'Istanbul Airport', country: 'Türkiye', timezone: 'Europe/Istanbul', lat: 41.28, lon: 28.75 },
-  { code: 'SIN', city: 'Singapore', name: 'Changi', country: 'Singapore', timezone: 'Asia/Singapore', lat: 1.36, lon: 103.99 },
-  { code: 'HKG', city: 'Hong Kong', name: 'Hong Kong International', country: 'Hong Kong', timezone: 'Asia/Hong_Kong', lat: 22.31, lon: 113.92 },
-  { code: 'BKK', city: 'Bangkok', name: 'Suvarnabhumi', country: 'Thailand', timezone: 'Asia/Bangkok', lat: 13.69, lon: 100.75 },
-  { code: 'KUL', city: 'Kuala Lumpur', name: 'Kuala Lumpur International', country: 'Malaysia', timezone: 'Asia/Kuala_Lumpur', lat: 2.75, lon: 101.71 },
-  { code: 'NRT', city: 'Tokyo', name: 'Narita', country: 'Japan', timezone: 'Asia/Tokyo', lat: 35.77, lon: 140.39 },
-  { code: 'ICN', city: 'Seoul', name: 'Incheon', country: 'South Korea', timezone: 'Asia/Seoul', lat: 37.46, lon: 126.44 },
-  { code: 'JFK', city: 'New York', name: 'John F. Kennedy', country: 'United States', timezone: 'America/New_York', lat: 40.64, lon: -73.78 },
-  { code: 'LAX', city: 'Los Angeles', name: 'Los Angeles International', country: 'United States', timezone: 'America/Los_Angeles', lat: 33.94, lon: -118.41 },
-  { code: 'YYZ', city: 'Toronto', name: 'Pearson', country: 'Canada', timezone: 'America/Toronto', lat: 43.68, lon: -79.63 },
-  { code: 'SYD', city: 'Sydney', name: 'Kingsford Smith', country: 'Australia', timezone: 'Australia/Sydney', lat: -33.95, lon: 151.18 },
-  { code: 'MEL', city: 'Melbourne', name: 'Tullamarine', country: 'Australia', timezone: 'Australia/Melbourne', lat: -37.67, lon: 144.84 },
-  { code: 'DAC', city: 'Dhaka', name: 'Hazrat Shahjalal', country: 'Bangladesh', timezone: 'Asia/Dhaka', lat: 23.84, lon: 90.40 },
-  { code: 'KTM', city: 'Kathmandu', name: 'Tribhuvan', country: 'Nepal', timezone: 'Asia/Kathmandu', lat: 27.70, lon: 85.36 },
-  { code: 'CMB', city: 'Colombo', name: 'Bandaranaike', country: 'Sri Lanka', timezone: 'Asia/Colombo', lat: 7.18, lon: 79.88 },
-];
-export function airport(code: string) { return airports.find(a => a.code === code); }
+export const airports: Airport[] = catalog;
+export const airportCount = metadata.airportCount;
+export const countryCount = metadata.countryCount;
+const byCode = new Map(airports.map(a => [a.code, a]));
+export function airport(code: string) { return byCode.get(code.toUpperCase()); }
 export function city(code: string) { return airport(code)?.city ?? code; }
+export function airportLabel(a?: Airport) { return a ? `${a.city} (${a.code})` : ''; }
+
+function normalize(text: string) {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+}
+const countryAliases: Record<string, string[]> = {
+  US: ['USA', 'United States of America'], GB: ['UK', 'United Kingdom', 'Britain', 'England', 'Scotland', 'Wales'],
+  AE: ['UAE'], KR: ['South Korea'], KP: ['North Korea'], VN: ['Vietnam'], CZ: ['Czech Republic'],
+  TR: ['Turkey', 'Turkiye'], MO: ['Macau'], CD: ['DRC', 'DR Congo', 'Congo Kinshasa'],
+};
+const popularCodes = ['JFK', 'LHR', 'DXB', 'SIN', 'CDG', 'HND', 'SYD', 'DEL', 'LAX', 'YYZ', 'GRU', 'CPT', 'NBO', 'ICN', 'SCL'];
+const popularity = new Map(popularCodes.map((code, index) => [code, index]));
+const indexed = airports.map(a => ({
+  a, city: normalize(a.city), name: normalize(a.name), code: a.code.toLowerCase(),
+  country: normalize(a.country), countryCode: a.countryCode?.toLowerCase(),
+  text: normalize([a.code, a.city, a.name, a.country, a.countryCode, a.aliases, countryAliases[a.countryCode ?? '']?.join(' ')].join(' ')),
+}));
+const countries = new Map(airports.map(a => [a.countryCode, [a.country, a.countryCode ?? '', ...(countryAliases[a.countryCode ?? ''] ?? [])].map(normalize)]));
+
+/** Exact IATA and city matches first; large, scheduled airports before smaller matches. */
+export function searchAirports(text: string, limit = 8): Airport[] {
+  const query = normalize(text);
+  const maximum = Math.max(1, Math.min(30, limit));
+  if (!query) return popularCodes.map(code => airport(code)!).filter(Boolean).slice(0, maximum);
+  const words = query.split(' ');
+  const matchingCountries = new Set([...countries].filter(([, names]) => names.includes(query)).map(([code]) => code));
+  return indexed.filter(entry => entry.code === query || (matchingCountries.size ? matchingCountries.has(entry.a.countryCode) : words.every(word => entry.text.includes(word)))).map(entry => {
+    const rank = entry.code === query ? 0 : entry.city === query ? 1 : entry.code.startsWith(query) ? 2 :
+      entry.city.startsWith(query) ? 3 : entry.name.startsWith(query) ? 4 : entry.city.includes(query) ? 5 :
+      entry.country === query || entry.countryCode === query ? 6 : 7;
+    return { ...entry, rank };
+  }).sort((a, b) => a.rank - b.rank || (Number(b.a.scheduled) - Number(a.a.scheduled)) ||
+    (b.a.size ?? 0) - (a.a.size ?? 0) || (popularity.get(a.a.code) ?? 100) - (popularity.get(b.a.code) ?? 100) ||
+    a.a.city.localeCompare(b.a.city) || a.a.code.localeCompare(b.a.code))
+    .slice(0, maximum).map(entry => entry.a);
+}

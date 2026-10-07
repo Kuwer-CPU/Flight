@@ -1,10 +1,11 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, ArrowLeftRight, PlaneTakeoff, PlaneLanding, CalendarDays, Users, GraduationCap, Luggage, Search } from 'lucide-react';
-import { airports } from '@/lib/airports';
+import { ArrowRight, ArrowLeftRight, CalendarDays, Users, GraduationCap, Luggage, Search, Globe2 } from 'lucide-react';
+import { airportCount, countryCount } from '@/lib/airports';
 import { defaults, flightSearchUrl, futureDate, parseSearch, searchParams, today } from '@/lib/search';
 import type { SearchQuery } from '@/lib/types';
+import { AirportSearch } from './airport-search';
 
 export function SearchForm({ initial, compact = false }: { initial?: SearchQuery; compact?: boolean }) {
   const [query, setQuery] = useState<SearchQuery>(initial ?? defaults);
@@ -32,9 +33,9 @@ export function SearchForm({ initial, compact = false }: { initial?: SearchQuery
       <label className="student-toggle"><GraduationCap size={18} /><span>Student traveler</span><input type="checkbox" checked={query.student} onChange={e => change('student', e.target.checked)} /><span className="toggle-track" aria-hidden="true" /></label>
     </div>
     <div className="search-fields">
-      <label className="search-field airport-field"><span className="field-label"><PlaneTakeoff size={15} />From</span><select aria-label="Departure airport" value={query.origin} onChange={e => change('origin', e.target.value)}>{airports.map(a => <option key={a.code} value={a.code}>{a.city} ({a.code})</option>)}</select><span className="field-hint">{airports.find(a => a.code === query.origin)?.name}</span></label>
+      <AirportSearch direction="departure" value={query.origin} onChange={code => change('origin', code)} />
       <button type="button" className="swap-button" aria-label="Swap departure and arrival" onClick={() => setQuery(old => ({ ...old, origin: old.destination, destination: old.origin }))}><ArrowLeftRight size={17} /></button>
-      <label className="search-field airport-field"><span className="field-label"><PlaneLanding size={15} />To</span><select aria-label="Arrival airport" value={query.destination} onChange={e => change('destination', e.target.value)}>{airports.map(a => <option key={a.code} value={a.code}>{a.city} ({a.code})</option>)}</select><span className="field-hint">{airports.find(a => a.code === query.destination)?.name}</span></label>
+      <AirportSearch direction="arrival" value={query.destination} onChange={code => change('destination', code)} />
       <label className="search-field date-field"><span className="field-label"><CalendarDays size={15} />Departure</span><input aria-label="Departure date" type="date" required min={today()} max={futureDate(365)} value={query.departureDate} onChange={e => change('departureDate', e.target.value)} /><span className="field-hint">Start your next chapter</span></label>
       {roundTrip && <label className="search-field date-field"><span className="field-label"><CalendarDays size={15} />Return</span><input aria-label="Return date" type="date" required min={query.departureDate} max={futureDate(365)} value={query.returnDate ?? query.departureDate} onChange={e => change('returnDate', e.target.value)} /><span className="field-hint">Home is a round trip away</span></label>}
       <label className="search-field traveler-field"><span className="field-label"><Users size={15} />Travelers</span><select aria-label="Number of adult travelers" value={query.adults} onChange={e => change('adults', Number(e.target.value))}>{[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => <option key={n} value={n}>{n} adult{n > 1 ? 's' : ''}</option>)}</select><select className="cabin-select" aria-label="Cabin class" value={query.cabin} onChange={e => change('cabin', e.target.value as SearchQuery['cabin'])}><option value="ECONOMY">Economy</option><option value="PREMIUM_ECONOMY">Premium economy</option><option value="BUSINESS">Business</option></select></label>
@@ -45,6 +46,7 @@ export function SearchForm({ initial, compact = false }: { initial?: SearchQuery
       <label className="baggage-input"><Luggage size={15} />Checked baggage <select aria-label="Checked baggage needed" value={query.baggage} onChange={e => change('baggage', Number(e.target.value))}>{[0, 15, 20, 23, 25, 30, 35, 40, 45, 50, 60].map(n => <option key={n} value={n}>{n === 0 ? 'None' : n + ' kg'}</option>)}</select></label>
       <span className="search-reassurance">Compare student value. Book with the airline.</span>
     </div>
+    {!compact && <div className="global-search-note"><Globe2 size={14} /><span>{airportCount.toLocaleString('en-GB')} airports across {countryCount} countries and territories. Search any city, airport, country or code.</span></div>}
     {error && <p className="form-error" role="alert">{error}</p>}
   </form>;
 }

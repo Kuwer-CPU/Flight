@@ -1,0 +1,26 @@
+{
+  "generatedOn": "2026-10-07",
+  "airportCount": 5332,
+  "countryCount": 235,
+  "derivedTimezones": 220,
+  "sources": [
+    {
+      "url": "https://github.com/davidmegginson/ourairports-data",
+      "file": "airports.csv",
+      "sha256": "5787fb95f8409ca8bf1f53cc383ca859a5e2befad391aa63bf09d160b8969c45",
+      "license": "Unlicense"
+    },
+    {
+      "url": "https://github.com/davidmegginson/ourairports-data",
+      "file": "countries.csv",
+      "sha256": "2a9dbee691125b0cdb8ceb5fe227c48c903f99c488963b8e53e2ab366521c639",
+      "license": "Unlicense"
+    },
+    {
+      "url": "https://github.com/mwgg/Airports",
+      "file": "airports.json",
+      "sha256": "a7754cbe722ea21f0f9ab1ef07f4f07ee1e85b9cc99191ebde0b49fabb3c149a",
+      "license": "MIT"
+    }
+  ]
+}

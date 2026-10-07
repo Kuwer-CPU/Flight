@@ -2,7 +2,7 @@
 
 A student-focused flight-search website built with Next.js, React and TypeScript. Travelers search routes and dates, compare standard baggage + student extras = eligible totals, see the cost with their bags, save a shortlist, inspect itineraries, and continue to an airline to book.
 
-Preview screenshots: [Homepage](docs/previews/homepage.png), [student comparison](docs/previews/comparison.png), and [mobile flight card](docs/previews/mobile-flight.png). These screenshots show the labeled demo mode, not verified airline offers.
+Preview screenshots: [Homepage](docs/previews/homepage.png), [student comparison](docs/previews/comparison.png), and [mobile flight card](docs/previews/mobile-flight.png). Also see [worldwide airport search](docs/previews/worldwide-search.png) and [global destinations](docs/previews/worldwide-destinations.png). These screenshots show the labeled demo mode, not verified airline offers.
 
 ## Run locally
 
@@ -30,6 +30,14 @@ Any Node.js hosting platform can also use:
     npm start
 
 Set PORT if your hosting platform requires it. This app needs a Next.js/Node runtime because flight credentials stay on the server; do not host it as a plain static export.
+
+## Worldwide airport search
+
+The From and To fields search 5,332 airports across 235 countries and territories. Enter a city, airport name, country, or three-letter IATA code, then choose an airport suggestion. Keyboard users can use arrow keys and Enter; a complete airport code can be selected directly with Enter. Replacing a selected name clears its airport code so an unfinished edit cannot silently submit the old route.
+
+The airport catalog covers every inhabited continent. Example searches include New York–Tokyo, São Paulo–Cape Town, Sydney–Singapore, Toronto–Mexico City and Nairobi–London. It is bundled with the application, so airport lookup works without a provider account or a separate locations API. Airport and timezone data sources, licenses and refresh instructions are documented in [docs/airport-data.md](docs/airport-data.md).
+
+This enables worldwide route inputs; actual flight availability is determined by the flight provider. An airport being in the catalog is not a guarantee that a particular airline serves it. Preview routes use visibly labeled generated flights. Live search requires Amadeus credentials and production access; its coverage does not include every airline, fare or route worldwide.
 
 ## Connect live flight search
 
@@ -83,7 +91,7 @@ If a system Chromium is already installed, use its absolute path:
 
     PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e
 
-Browser tests cover search, sorting, student comparisons and score explanations, baggage and stop filters, round-trip/one-way selection, adult counts, saved-flight persistence, mobile layout, accessibility, booking handoffs, provider errors and empty states. Unit tests cover input validation, pricing and baggage comparisons, student-value calculations, separation of fictional and live benefits, and the Amadeus adapter.
+Browser tests cover worldwide city/code/country search, keyboard and touch airport selection, search validation, sorting, student comparisons and score explanations, baggage and stop filters, round-trip/one-way selection, adult counts, saved-flight persistence, mobile layout, accessibility, booking handoffs, provider errors and empty states. Unit tests cover input validation, pricing and baggage comparisons, student-value calculations, separation of fictional and live benefits, and the Amadeus adapter.
 
 ## Project map
 
@@ -95,7 +103,9 @@ Browser tests cover search, sorting, student comparisons and score explanations,
 | src/lib/demo.ts | Deterministic sample offers, marked as preview data |
 | src/lib/search.ts | Validation, query serialization and recommendation sorting |
 | src/lib/student-value.ts | Eligible baggage, comparable costs and transparent student value scores |
-| src/lib/airports.ts | Supported airports and time zones; add more here |
+| src/lib/airports.ts | Worldwide airport lookup and city, name, country and IATA search |
+| src/data/airports.json | Sourced worldwide airport catalog with coordinates and time zones |
+| scripts/build-airport-catalog.mjs | Reproducible airport catalog generation from upstream downloads |
 | src/lib/airlines.ts | Airline identities, official websites and student-program links |
 | public | Original local SVG artwork; fonts are served locally from an npm package |
 | tests | Unit and browser checks |

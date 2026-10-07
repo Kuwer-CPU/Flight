@@ -19,6 +19,10 @@ export interface Airport {
   timezone: string;
   lat: number;
   lon: number;
+  countryCode?: string;
+  size?: number;
+  scheduled?: boolean;
+  aliases?: string;
 }
 export interface BaggageAllowance {
   weight?: number;

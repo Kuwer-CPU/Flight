@@ -1,5 +1,7 @@
 # Connect real flight search
 
+This guide covers the default Amadeus feed. For airline and agency seller prices and quote-specific booking links, see [seller-price-comparison.md](seller-price-comparison.md).
+
 Flyora already calls Amadeus Flight Offers Search on its server. Real searches use the selected airports, dates, adult count and cabin, and return the provider's group fare, itineraries and reported checked baggage. Prices are currently requested in EUR. Live search is the default; missing credentials and provider errors never fall back to fictional flights.
 
 ## Get credentials
@@ -16,6 +18,7 @@ Create `.env.local` in the same folder as `package.json`; copying `.env.example`
 
 ```env
 FLIGHT_DATA_MODE=live
+FLIGHT_PROVIDER=amadeus
 AMADEUS_ENVIRONMENT=production
 AMADEUS_API_KEY=your_production_api_key
 AMADEUS_API_SECRET=your_production_api_secret

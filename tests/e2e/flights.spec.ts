@@ -19,7 +19,7 @@ test('searches round trips, compares bags, sorts flights and hands off to the ai
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   await expect(dialog.getByText(/This sample ticket cannot be booked/)).toBeVisible();
-  await expect(dialog.getByRole('link', { name: /Continue to Air France/ })).toHaveAttribute('href', 'https://www.airfrance.com/');
+  await expect(dialog.getByRole('link', { name: /Search on Air France/ })).toHaveAttribute('href', 'https://www.airfrance.com/');
   await expect(dialog.locator('.itinerary')).toHaveCount(2);
   await page.keyboard.press('Escape');
   await expect(dialog).not.toBeVisible();

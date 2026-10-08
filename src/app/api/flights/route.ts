@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parseSearch, SearchValidationError } from '@/lib/search';
-import { searchFlights, FlightProviderError } from '@/lib/amadeus';
+import { searchFlights } from '@/lib/flight-search';
+import { FlightProviderError } from '@/lib/amadeus';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

@@ -3,7 +3,7 @@ export type DataMode = 'demo' | 'test' | 'live';
 /** Safe public configuration summary; credential presence is not a provider connection check. */
 export interface FlightConnection {
   mode: DataMode;
-  provider: 'amadeus';
+  provider: 'amadeus' | 'skyscanner';
   environment: 'test' | 'production';
   status: 'demo' | 'missing-credentials' | 'invalid-configuration' | 'configured';
   configured: boolean;
@@ -52,6 +52,19 @@ export interface Itinerary {
   duration: number;
   segments: FlightSegment[];
 }
+/** A price and checkout link returned for this complete itinerary and passenger group. */
+export interface BookingOffer {
+  id: string;
+  sellerId: string;
+  sellerName: string;
+  sellerType: 'airline' | 'agency' | 'unknown';
+  price: number;
+  currency: string;
+  bookingUrl: string;
+  retrievedAt: string;
+  /** Present only when the provider explicitly identifies a self-transfer. */
+  selfTransfer?: boolean;
+}
 export interface FlightOffer {
   id: string;
   airlineCode: string;
@@ -63,6 +76,8 @@ export interface FlightOffer {
   itineraries: Itinerary[];
   baggage: BaggageAllowance;
   mode: DataMode;
+  provider?: 'amadeus' | 'skyscanner';
+  bookingOffers?: BookingOffer[];
   /** Fictional comparison inputs, accepted only for visibly labeled demo offers. */
   studentExample?: {
     extraKg: number;
@@ -75,4 +90,5 @@ export interface SearchResponse {
   offers: FlightOffer[];
   mode: DataMode;
   searchedAt: string;
+  coverage?: { complete: boolean; source: 'skyscanner'; message: string };
 }

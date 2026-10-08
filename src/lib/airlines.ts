@@ -40,4 +40,4 @@ export const airlines: Airline[] = [
   { code: 'U2', name: 'easyJet', shortName: 'easyJet', color: '#ee681b', website: 'https://www.easyjet.com/' },
 ];
 export function airline(code: string) { return airlines.find(a => a.code === code); }
-export function bookingUrl(code: string) { return airline(code)?.website ?? 'https://www.google.com/travel/flights'; }
+export function bookingUrl(code: string) { return airline(code)?.website ?? '/#search'; }

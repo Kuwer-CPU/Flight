@@ -1,6 +1,6 @@
 # Flyora
 
-A student-focused flight-search website built with Next.js, React and TypeScript. Travelers search routes and dates, compare standard baggage + student extras = eligible totals, see the cost with their bags, save a shortlist, inspect itineraries, and continue to an airline to book.
+A student-focused flight-search website built with Next.js, React and TypeScript. Travelers search routes worldwide, compare baggage and student benefits, inspect returned airline/travel-agency quotes for the same flight, save a shortlist and continue to the chosen seller’s booking link. Real price-feed access and verified student terms are launch prerequisites.
 
 Preview screenshots: [Homepage](docs/previews/homepage.png), [student comparison](docs/previews/comparison.png), and [mobile flight card](docs/previews/mobile-flight.png). Also see [worldwide airport search](docs/previews/worldwide-search.png) and [global destinations](docs/previews/worldwide-destinations.png). These screenshots show the labeled demo mode, not verified airline offers.
 
@@ -18,8 +18,8 @@ Open the address printed by Next.js. Flight search now defaults to Amadeus produ
 1. Push these application files to your Flight repository.
 2. Import the repository in Vercel. Select Next.js as the framework; use Node.js 24, the default repository root, install command npm ci and build command npm run build.
 3. Add NEXT_PUBLIC_SITE_URL with your deployed HTTPS origin, without a trailing slash. This sets canonical metadata and the sitemap.
-4. Add `FLIGHT_DATA_MODE=live`, `AMADEUS_ENVIRONMENT=production` and your matching server-side Amadeus credentials to enable real searches. Set `FLIGHT_DATA_MODE=demo` only if you intentionally want a labeled demonstration.
-5. Deploy. Test a route search and the airline booking handoff on your deployed domain.
+4. Choose your approved feed. For Amadeus fares, add `FLIGHT_DATA_MODE=live`, `FLIGHT_PROVIDER=amadeus`, `AMADEUS_ENVIRONMENT=production` and matching server-side credentials. For airline/agency price comparison, follow the partner settings and contract validation in [seller-price-comparison.md](docs/seller-price-comparison.md). Set `FLIGHT_DATA_MODE=demo` only for a labeled demonstration.
+5. Deploy. Test actual searches and each returned seller handoff on your deployed domain before opening it to customers.
 
 The website has not been deployed by this coding task. Deployment to a hosting account is a separate action.
 
@@ -37,9 +37,11 @@ The From and To fields search 5,332 airports across 235 countries and territorie
 
 The airport catalog covers every inhabited continent. Example searches include New York–Tokyo, São Paulo–Cape Town, Sydney–Singapore, Toronto–Mexico City and Nairobi–London. It is bundled with the application, so airport lookup works without a provider account or a separate locations API. Airport and timezone data sources, licenses and refresh instructions are documented in [docs/airport-data.md](docs/airport-data.md).
 
-This enables worldwide route inputs; actual flight availability is determined by the flight provider. An airport being in the catalog is not a guarantee that a particular airline serves it. Preview routes use visibly labeled generated flights. Live search requires Amadeus credentials and production access; its coverage does not include every airline, fare or route worldwide.
+This enables worldwide route inputs; actual flight availability is determined by the flight provider. An airport being in the catalog is not a guarantee that a particular airline serves it. Preview routes use visibly labeled generated flights. Live search requires the selected provider's approved credentials and production access; coverage does not include every airline, fare or route worldwide.
 
 ## Connect live flight search
+
+For airline/OTA seller comparison, see [docs/seller-price-comparison.md](docs/seller-price-comparison.md). An approved partner feed is required; an ordinary Amadeus fare is not the airline website’s confirmed selling price. Before launch, complete [docs/launch-checklist.md](docs/launch-checklist.md).
 
 Step-by-step account, local setup, hosting and troubleshooting instructions: [docs/live-flight-search.md](docs/live-flight-search.md).
 
@@ -50,6 +52,7 @@ The .env.example file documents these settings:
 | Variable | Purpose |
 | --- | --- |
 | FLIGHT_DATA_MODE | live by default; demo only for intentional fictional previews |
+| FLIGHT_PROVIDER | amadeus by default; skyscanner for the optional multi-seller partner feed |
 | AMADEUS_ENVIRONMENT | production by default; test for matching sandbox credentials |
 | AMADEUS_API_KEY | Server-side Amadeus client ID |
 | AMADEUS_API_SECRET | Server-side Amadeus client secret |
@@ -65,9 +68,9 @@ Real provider access has not been exercised because credentials are not availabl
 
 ## Booking model
 
-This version uses an airline handoff: “Continue to airline” opens the airline’s website, where the traveler searches the itinerary, confirms eligibility and fare conditions, pays, and receives the ticket. It does not reserve an offer or prefill an airline cart, issue tickets, or process payments. Displayed offers can change before purchase.
+When a partner feed returns priced seller links, flight details compare those airline and travel-agency quotes and link to the chosen offer. The headline price is the lowest accepted returned seller quote. Coverage may be incomplete and no universal lowest-price claim is made. Without a quote-specific link, a known airline’s website is offered only as a clearly labeled search handoff; its price is unconfirmed. Unknown airlines with no booking link return to Flyora search. This version does not reserve offers, issue tickets or process payments. Final fares and conditions are confirmed by the seller.
 
-The website does not yet earn affiliate revenue. Add approved affiliate deep links in src/lib/airlines.ts after joining a booking partner’s program. On-site ticket issuance would require a separate booking-provider integration, passenger collection, payment flow, order storage and booking lifecycle support; there is no simulated checkout or fake purchase confirmation.
+The website does not yet earn affiliate revenue. Join permitted affiliate programs and follow their tracking and disclosure requirements. Do not modify provider quote links without permission under the partner contract. On-site ticket issuance would require a separate booking-provider integration, passenger collection, payment flow, order storage and booking lifecycle support; there is no simulated checkout or fake purchase confirmation.
 
 ## Student baggage and fares
 
@@ -93,7 +96,7 @@ If a system Chromium is already installed, use its absolute path:
 
     PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e
 
-Browser tests cover worldwide city/code/country search, keyboard and touch airport selection, search validation, sorting, student comparisons and score explanations, baggage and stop filters, round-trip/one-way selection, adult counts, saved-flight persistence, mobile layout, accessibility, booking handoffs, provider errors and empty states. Unit tests cover input validation, pricing and baggage comparisons, student-value calculations, separation of fictional and live benefits, and the Amadeus adapter.
+Browser tests cover worldwide city/code/country search, keyboard and touch airport selection, search validation, sorting, student comparisons and score explanations, baggage and stop filters, round-trip/one-way selection, adult counts, saved-flight persistence, mobile layout, accessibility, booking handoffs, provider errors and empty states. Unit tests cover input validation, pricing and baggage comparisons, student-value calculations, separation of fictional and live benefits, and the Amadeus and optional seller-feed adapters.
 
 ## Project map
 
@@ -101,7 +104,10 @@ Browser tests cover worldwide city/code/country search, keyboard and touch airpo
 | --- | --- |
 | src/app | Pages, metadata and server-side search/status endpoints |
 | src/components | Search form, results, booking details, saved flights and layout |
-| src/lib/amadeus.ts | Server-side provider authentication and offer normalization |
+| src/lib/amadeus.ts | Server-side Amadeus authentication and offer normalization |
+| src/lib/skyscanner.ts | Optional partner API polling and multi-seller quote normalization |
+| src/lib/booking-offers.ts | Safe quote links and seller comparison validation |
+| docs/launch-checklist.md | Business, data, student terms and production launch prerequisites |
 | src/lib/demo.ts | Deterministic sample offers, marked as preview data |
 | src/lib/search.ts | Validation, query serialization and recommendation sorting |
 | src/lib/student-value.ts | Eligible baggage, comparable costs and transparent student value scores |

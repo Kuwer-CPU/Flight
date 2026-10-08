@@ -19,7 +19,7 @@ test('student comparison is prominent, explains its score and persists in the it
   await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'View Qatar Airways itinerary', exact: true }).click();
   await expect(page.getByRole('dialog').getByLabel('Student baggage comparison for Qatar Airways')).toBeVisible();
-  await expect(page.getByRole('dialog').getByRole('link', { name: /Continue to Qatar Airways/ })).toHaveAttribute('href', 'https://www.qatarairways.com/');
+  await expect(page.getByRole('dialog').getByRole('link', { name: /Search on Qatar Airways/ })).toHaveAttribute('href', 'https://www.qatarairways.com/');
 });
 
 test('live flights never display fictional extras or scores, even if a response includes example fields', async ({ page, request }) => {

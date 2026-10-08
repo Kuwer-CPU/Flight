@@ -95,8 +95,8 @@ test('simulated live results preserve provider fares and baggage and hand bookin
   await expect(dialog.locator('.booking-summary')).toContainText('€1,598');
   await expect(dialog.locator('.booking-note')).toContainText('The airline confirms availability, final price and payment.');
   await expect(dialog.locator('.booking-note')).not.toContainText('sample');
-  await expect(dialog.getByRole('link', { name: /Continue to Qatar Airways/ })).toHaveAttribute('href', 'https://www.qatarairways.com/');
-  await expect(dialog.getByRole('link', { name: /Continue to Qatar Airways/ })).toHaveAttribute('target', '_blank');
+  await expect(dialog.getByRole('link', { name: /Search on Qatar Airways/ })).toHaveAttribute('href', 'https://www.qatarairways.com/');
+  await expect(dialog.getByRole('link', { name: /Search on Qatar Airways/ })).toHaveAttribute('target', '_blank');
   await expect(dialog.getByText(/No student discount or extra allowance has been added/)).toBeVisible();
 });
 

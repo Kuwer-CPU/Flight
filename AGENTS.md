@@ -14,7 +14,7 @@ Flyora is a flight-search and booking-handoff website, with student baggage and 
 
 Use the existing checkout. Cloud tasks are isolated; do not create worktrees unless the user requests one.
 
-Keep sample flights and Amadeus sandbox responses visibly labeled. Never substitute them for failed live searches or simulate ticket issuance. Booking currently completes on external airline websites.
+Keep sample flights and Amadeus sandbox responses visibly labeled. Never substitute them for failed live searches or simulate ticket issuance. Booking currently completes on external airline or travel-agency websites.
 
 Never put credentials in source or NEXT_PUBLIC variables. Student program terms are unverified: do not invent review dates, discounts, age eligibility or actual airline additional baggage. Fictional student-benefit illustrations are allowed in demo mode only, must be clearly labeled as examples rather than airline terms, and must never enter live or sandbox comparisons.
 

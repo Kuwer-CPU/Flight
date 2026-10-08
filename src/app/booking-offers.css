@@ -1,0 +1,34 @@
+.seller-price-summary{margin:16px 0 21px;padding:13px 15px;border:1px solid var(--line);border-radius:9px;background:#f7f9f2}
+.seller-summary-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:11px;font-weight:600}
+.seller-summary-heading>span{display:flex;align-items:center;gap:7px}
+.seller-summary-heading>small{font-size:10px;font-weight:400;color:#566350;white-space:nowrap}
+.seller-price-summary ul{list-style:none;padding:0;margin:9px 0 0;display:grid;gap:8px}
+.seller-price-summary li{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px}
+.seller-price-summary li>span{display:flex;align-items:center;flex-wrap:wrap;gap:7px;min-width:0;overflow-wrap:anywhere}
+.seller-price-summary li strong{white-space:nowrap;font-size:13px}
+.seller-price-summary li small{font-size:9px;padding:3px 6px;background:#e5edcf;border-radius:4px;font-weight:500;color:#2d5035}
+.seller-price-summary>p{font-size:10px;margin-top:9px;color:#566350;line-height:1.5}
+.seller-price-summary .seller-summary-terms{border-top:1px solid var(--line);padding-top:9px}
+.flight-card:has(.seller-price-summary) .flight-price>div:first-child>strong{font-size:clamp(23px,2.3vw,30px);letter-spacing:-1.3px}
+.booking-offers{margin:27px 0 18px;min-width:0}
+.booking-offers-heading .eyebrow{font-size:9px;letter-spacing:1.5px}
+.booking-offers-heading h3{font-size:27px;margin:8px 0}
+.booking-offers-heading p{font-size:12px;color:#566350;line-height:1.6;max-width:620px}
+.booking-table-scroll{overflow-x:auto;margin-top:17px;border:1px solid var(--line);border-radius:10px}
+.booking-price-table{border-collapse:collapse;width:100%;text-align:left;font-size:12px;min-width:600px}
+.booking-price-table thead{background:#eff3e6}
+.booking-price-table th,.booking-price-table td{padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.booking-price-table thead th{font-size:10px;font-weight:600;color:#4f5d4a}
+.booking-price-table tbody th{font-weight:500;width:30%;max-width:200px}
+.booking-price-table tbody tr:last-child th,.booking-price-table tbody tr:last-child td{border-bottom:0}
+.booking-price-table .lowest-booking-price{background:#f8faef}
+.booking-seller-name{display:block;font-weight:600;overflow-wrap:anywhere}
+.booking-price-table td:nth-child(2),.booking-price-table td:nth-child(3){white-space:nowrap}
+.booking-price-table small{display:block;font-size:10px;font-weight:400;color:#566350;margin-top:5px}
+.booking-price-table .seller-transfer-warning{color:#70471e;background:#fff4db;padding:5px 6px;border-radius:4px;line-height:1.5}
+.lowest-price-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;border-radius:4px;color:#2d5035;background:#e5edcf;padding:4px 5px;margin-top:8px;white-space:nowrap}
+.seller-booking-link{gap:7px;padding:11px 13px;min-height:40px}
+.booking-offers-note{font-size:11px;color:#566350;line-height:1.7;margin-top:13px}
+.provider-coverage-note{display:flex;align-items:flex-start;gap:8px;padding:12px 14px;margin:13px 0 19px;border:1px solid #dfddb9;border-radius:8px;background:#f9f8e9;color:#595b3e;font-size:12px;line-height:1.6}
+.provider-coverage-note svg{flex-shrink:0;margin-top:2px}
+@media(max-width:600px){.seller-price-summary{padding:12px}.booking-offers-heading h3{font-size:23px}.booking-price-table{min-width:560px}.booking-price-table th,.booking-price-table td{padding:13px 10px}.booking-offers{margin-top:23px}}

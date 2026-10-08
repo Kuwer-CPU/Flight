@@ -44,7 +44,7 @@ export function searchParams(query: SearchQuery) {
 }
 export function flightSearchUrl(query: SearchQuery) { return '/flights?' + searchParams(query).toString(); }
 export function money(value: number, currency = 'EUR') {
-  return new Intl.NumberFormat('en-GB', { style: 'currency', currency, maximumFractionDigits: 0 }).format(value);
+  return new Intl.NumberFormat('en-GB', { style: 'currency', currency, ...(Number.isInteger(value) ? { maximumFractionDigits: 0 } : {}) }).format(value);
 }
 export function duration(minutes: number) { return Math.floor(minutes / 60) + 'h ' + (minutes % 60 ? minutes % 60 + 'm' : ''); }
 export function time(value: string) { return value.slice(11, 16); }

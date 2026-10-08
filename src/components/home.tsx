@@ -29,7 +29,7 @@ export function Home({ initialQuery, connection }: { initialQuery: SearchQuery; 
     <section id="how-it-works" className="how-section"><div className="container"><div className="how-heading"><div className="eyebrow">LESS PLANNING. MORE LIVING.</div><h2>From “what if”<br />to <em>wheels up.</em></h2><p>Three steps to your next chapter.<br />We keep the flight part simple.</p></div><div className="how-steps">{[
       { n: '01', icon: Search, title: 'Tell us where.', text: 'Add your route, dates and baggage needs. Flying for university or heading home? Start here.' },
       { n: '02', icon: Sparkles, title: 'Compare your advantage.', text: 'See baggage side by side and compare costs for your luggage needs. Check which benefits require student verification.' },
-      { n: '03', icon: Plane, title: 'Make it happen.', text: 'Continue to the airline to confirm your fare, claim eligible student benefits and book securely.' },
+      { n: '03', icon: Plane, title: 'Make it happen.', text: 'Compare returned seller prices, then continue to your chosen airline or booking provider. Confirm student eligibility before booking.' },
     ].map(step => <article key={step.n}><div className="step-top"><span>{step.n}</span><step.icon size={24} /></div><h3>{step.title}</h3><p>{step.text}</p></article>)}</div></div></section>
     <section className="final-cta container"><div className="cta-decoration"><Heart size={27} /><span>HOME IS A FEELING.<br />SOMETIMES, IT’S A FLIGHT.</span></div><h2>Take your dreams.<br /><em>We’ll find the flight.</em></h2><a className="button" href="#search">Find my next chapter<ArrowUpRight size={18} /></a><div className="cta-reassurance"><BadgeCheck size={16} />No booking fees from Flyora.</div></section>
   </>;

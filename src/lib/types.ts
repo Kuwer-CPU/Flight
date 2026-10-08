@@ -1,5 +1,14 @@
 export type Cabin = 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS';
 export type DataMode = 'demo' | 'test' | 'live';
+/** Safe public configuration summary; credential presence is not a provider connection check. */
+export interface FlightConnection {
+  mode: DataMode;
+  provider: 'amadeus';
+  environment: 'test' | 'production';
+  status: 'demo' | 'missing-credentials' | 'invalid-configuration' | 'configured';
+  configured: boolean;
+  message: string;
+}
 export interface SearchQuery {
   origin: string;
   destination: string;

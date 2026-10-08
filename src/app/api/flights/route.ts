@@ -18,8 +18,8 @@ export async function GET(request: NextRequest) {
     const query = parseSearch(request.nextUrl.searchParams);
     return NextResponse.json(await searchFlights(query), { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
-    if (error instanceof SearchValidationError) return NextResponse.json({ error: error.message }, { status: 400 });
-    if (error instanceof FlightProviderError) return NextResponse.json({ error: error.message }, { status: error.status });
-    return NextResponse.json({ error: 'Flight search is unavailable. Please try again.' }, { status: 500 });
+    if (error instanceof SearchValidationError) return NextResponse.json({ error: error.message }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
+    if (error instanceof FlightProviderError) return NextResponse.json({ error: error.message }, { status: error.status, headers: { 'Cache-Control': 'no-store', ...(error.status === 429 ? { 'Retry-After': '60' } : {}) } });
+    return NextResponse.json({ error: 'Flight search is unavailable. Please try again.' }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
   }
 }

@@ -11,14 +11,14 @@ Requires Node.js 22 or later. Node.js 24 is used in the cloud environment.
     npm ci
     npm run dev
 
-Open the address printed by Next.js. The default mode is a clearly labeled preview with generated sample flights. No API key, database or paid service is needed to try it.
+Open the address printed by Next.js. Flight search now defaults to Amadeus production. Create `.env.local` from `.env.example` and add the matching production credentials as described in [Connect real flight search](docs/live-flight-search.md). Without credentials, the site loads but search reports that it is not connected. To intentionally explore fictional sample flights without an account, set `FLIGHT_DATA_MODE=demo` in `.env.local` and restart.
 
 ## Launch on Vercel
 
 1. Push these application files to your Flight repository.
 2. Import the repository in Vercel. Select Next.js as the framework; use Node.js 24, the default repository root, install command npm ci and build command npm run build.
 3. Add NEXT_PUBLIC_SITE_URL with your deployed HTTPS origin, without a trailing slash. This sets canonical metadata and the sitemap.
-4. Leave FLIGHT_DATA_MODE=demo to publish a labeled demonstration, or connect production flight data as described below.
+4. Add `FLIGHT_DATA_MODE=live`, `AMADEUS_ENVIRONMENT=production` and your matching server-side Amadeus credentials to enable real searches. Set `FLIGHT_DATA_MODE=demo` only if you intentionally want a labeled demonstration.
 5. Deploy. Test a route search and the airline booking handoff on your deployed domain.
 
 The website has not been deployed by this coding task. Deployment to a hosting account is a separate action.
@@ -41,14 +41,16 @@ This enables worldwide route inputs; actual flight availability is determined by
 
 ## Connect live flight search
 
+Step-by-step account, local setup, hosting and troubleshooting instructions: [docs/live-flight-search.md](docs/live-flight-search.md).
+
 Create an Amadeus for Developers account and a Flight Offers Search application. Enter credentials securely in your hosting provider’s environment settings, or in an ignored .env.local file for development. Never put credentials in source files or NEXT_PUBLIC variables.
 
 The .env.example file documents these settings:
 
 | Variable | Purpose |
 | --- | --- |
-| FLIGHT_DATA_MODE | demo for sample flights; live to enable the provider |
-| AMADEUS_ENVIRONMENT | test for sandbox data; production for production data |
+| FLIGHT_DATA_MODE | live by default; demo only for intentional fictional previews |
+| AMADEUS_ENVIRONMENT | production by default; test for matching sandbox credentials |
 | AMADEUS_API_KEY | Server-side Amadeus client ID |
 | AMADEUS_API_SECRET | Server-side Amadeus client secret |
 | NEXT_PUBLIC_SITE_URL | Your public HTTPS site origin |
@@ -57,9 +59,9 @@ For sandbox testing, use FLIGHT_DATA_MODE=live and AMADEUS_ENVIRONMENT=test with
 
 For real fares, obtain Amadeus production access, use production credentials, and set AMADEUS_ENVIRONMENT=production and FLIGHT_DATA_MODE=live. Restart or redeploy after changing variables. Amadeus Self-Service coverage does not include every airline, route, special student fare or booking channel.
 
-The server requests an OAuth token, then Flight Offers Search. Tokens and search results are cached briefly in memory; keys never reach the browser. Missing credentials and provider failures produce explicit errors instead of substituting sample results. Allow HTTPS egress to test.api.amadeus.com and api.amadeus.com when using a restricted cloud environment.
+The server requests an OAuth token, then Flight Offers Search. Tokens and search results are cached briefly in memory; keys never reach the browser. Missing credentials, invalid settings and provider failures produce explicit errors instead of substituting sample results. `/api/status` exposes safe configuration status without any credentials; `configured` means values are present, not that authentication was verified. Successful live results show their retrieval timestamp. Malformed rows are isolated, and baggage stays unknown unless every traveler and segment is covered. Allow HTTPS egress to test.api.amadeus.com and api.amadeus.com when using a restricted cloud environment.
 
-Real provider access could not be exercised during development because credentials were not available. The adapter is tested against mocked provider responses, including authentication failures, caching and baggage normalization.
+Real provider access has not been exercised because credentials are not available. The adapter is tested against mocked provider responses, including production/test hosts, missing and invalid settings, authentication and rate-limit failures, caching, malformed responses and baggage normalization. Browser tests simulate production offers to verify their display; they do not establish provider access.
 
 ## Booking model
 

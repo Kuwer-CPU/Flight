@@ -2,12 +2,12 @@ import { ArrowDownRight, ArrowRight, ArrowUpRight, BadgeCheck, GraduationCap, He
 import { airlines } from '@/lib/airlines';
 import { flightSearchUrl } from '@/lib/search';
 import { airportCount, countryCount } from '@/lib/airports';
-import type { DataMode, SearchQuery } from '@/lib/types';
+import type { FlightConnection, SearchQuery } from '@/lib/types';
 import { SearchForm } from './search-form';
-import { ModeNotice } from './ui';
+import { ConnectionNotice } from './ui';
 import { HomeStudentComparison } from './student-comparison';
 
-export function Home({ initialQuery, mode }: { initialQuery: SearchQuery; mode: DataMode }) {
+export function Home({ initialQuery, connection }: { initialQuery: SearchQuery; connection: FlightConnection }) {
   const routes = [
     { origin: 'JFK', destination: 'HND', from: 'New York', to: 'Tokyo', country: 'JAPAN', image: '/tokyo.svg', alt: 'Illustration of a Tokyo skyline with Mount Fuji', tag: 'A whole new chapter' },
     { origin: 'GRU', destination: 'CPT', from: 'São Paulo', to: 'Cape Town', country: 'SOUTH AFRICA', image: '/cape-town.svg', alt: 'Illustration of Table Mountain above Cape Town', tag: 'Take your curiosity further' },
@@ -22,7 +22,7 @@ export function Home({ initialQuery, mode }: { initialQuery: SearchQuery; mode: 
       <HomeStudentComparison />
       <div className="hero-caption"><span>01 / A STUDENT ID CAN CHANGE THE MATH</span><span>STUDENT JOURNEYS. WORLDWIDE. ↗</span></div>
     </section>
-    <div className="container search-container"><SearchForm initial={initialQuery} /><div className="home-mode"><ModeNotice mode={mode} compact /></div></div>
+    <div className="container search-container"><SearchForm initial={initialQuery} /><div className="home-mode"><ConnectionNotice connection={connection} /></div></div>
     <section className="airline-strip container" aria-label="Discover flights and student programs"><p>Your journey.<br /><strong>A world of airlines.</strong></p><div>{['QR', 'EK', 'LH', 'SQ', 'AI'].map(code => { const a = airlines.find(a => a.code === code)!; return <span className={'airline-wordmark wordmark-' + code} key={code}>{code === 'QR' && <Plane size={23} />}{a.shortName}{code === 'SQ' && <span className="airline-bird">〰</span>}</span>; })}</div><a href="/student-perks" aria-label="Explore airline student programs"><ArrowUpRight size={22} /></a></section>
     <section className="perks-section container"><div className="perks-intro"><div className="eyebrow">A STUDENT ID CAN GO A LONG WAY</div><h2>Your ticket should<br />work <em>harder for you.</em></h2><p>A €545 fare can become €640 with the bags you need. Compare standard baggage, student extras and your total cost before choosing a flight.</p><a className="text-link" href="/student-perks">Explore student perks<ArrowUpRight size={17} /></a></div><div className="perk-cards"><article className="perk-card"><span className="perk-icon"><Luggage size={25} /></span><h3>Pack your whole life.</h3><p>See standard baggage + student extra = your eligible total. Check whether it fits the luggage you actually need.</p><span className="perk-caption">MORE ROOM FOR WHAT MATTERS</span></article><article className="perk-card"><span className="perk-icon"><Ticket size={25} /></span><h3>Find your kind of fare.</h3><p>Compare the cost with your bags, see how student value is ranked, and check the registration and verification steps.</p><span className="perk-caption">A BETTER VIEW OF YOUR TICKET</span></article></div></section>
     <section id="destinations" className="destinations-section worldwide-destinations container"><div className="section-heading"><div><div className="eyebrow">STUDENT JOURNEYS HAVE NO BORDERS</div><h2>Your next chapter, <em>anywhere.</em></h2><p className="worldwide-points"><Globe2 size={15} />{airportCount.toLocaleString('en-GB')} airports · {countryCount} countries and territories</p></div><a className="text-link" href="#search">Find your destination<ArrowUpRight size={17} /></a></div><div className="destination-grid">{routes.map(route => <a className="destination-card" key={route.to} href={flightSearchUrl({ ...initialQuery, origin: route.origin, destination: route.destination })}><div className="destination-image"><img src={route.image} alt={route.alt} width="600" height="390" loading="lazy" /><span className="destination-country">{route.country}</span><span className="destination-arrow"><ArrowUpRight size={23} /></span></div><div className="destination-copy"><span>{route.tag}</span><h3>{route.from}<ArrowRight size={18} />{route.to}</h3><p>Explore flights<span>Let’s go<ArrowRight size={14} /></span></p></div></a>)}</div></section>

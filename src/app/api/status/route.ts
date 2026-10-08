@@ -1,4 +1,4 @@
 import { NextResponse } from 'next/server';
-import { dataMode } from '@/lib/amadeus';
+import { getFlightConfig } from '@/lib/flight-config';
 export const dynamic = 'force-dynamic';
-export function GET() { return NextResponse.json({ mode: dataMode() }, { headers: { 'Cache-Control': 'no-store' } }); }
+export function GET() { return NextResponse.json(getFlightConfig(), { headers: { 'Cache-Control': 'no-store' } }); }

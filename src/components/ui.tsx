@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { X, Plane, ArrowUpRight } from 'lucide-react';
 import type { Airline } from '@/lib/airlines';
-import type { DataMode } from '@/lib/types';
+import type { DataMode, FlightConnection } from '@/lib/types';
 
 export function Brand({ light = false }: { light?: boolean }) {
   return <a href="/" className={'brand' + (light ? ' brand-light' : '')} aria-label="Flyora home"><span className="brand-icon"><Plane size={22} strokeWidth={2.4} /></span>flyora<span className="brand-dot">.</span></a>;
@@ -13,6 +13,12 @@ export function AirlineMark({ airline, name, code, size = 'normal' }: { airline?
 export function ModeNotice({ mode, compact = false }: { mode: DataMode; compact?: boolean }) {
   if (mode === 'live') return <span className="live-label"><span />Live flight prices</span>;
   return <div className={'mode-notice' + (compact ? ' mode-compact' : '')}><span className="mode-dot" /><span><strong>{mode === 'demo' ? 'Preview mode' : 'Provider sandbox'}</strong>{compact ? ' · sample fares' : mode === 'demo' ? ' — explore the experience with sample flights. These fares cannot be booked.' : ' — these are test fares, not production tickets.'}</span></div>;
+}
+export function ConnectionNotice({ connection }: { connection: FlightConnection }) {
+  if (connection.status === 'demo') return <ModeNotice mode="demo" compact />;
+  if (connection.status === 'missing-credentials' || connection.status === 'invalid-configuration') return <div className="mode-notice connection-notice" role="status"><span className="mode-dot" /><span><strong>Flight search is not connected yet.</strong> Prices will appear once the service is connected.</span></div>;
+  if (connection.mode === 'test') return <ModeNotice mode="test" compact />;
+  return <span className="live-label"><span />Live flight search · prices checked when you search</span>;
 }
 export function Modal({ children, title, onClose, wide = false }: { children: React.ReactNode; title: string; onClose: () => void; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);

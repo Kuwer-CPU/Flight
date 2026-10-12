@@ -6,8 +6,8 @@ Flyora can be installed, built and used for student planning without a paid flig
 
 | Work | What is prepared |
 | --- | --- |
-| Product experience | Student travel homepage, worldwide route-planning form and links to four planning tools |
-| Primary flight-search integration | Fixed Travelpayouts module source, initialization/failure states, retained search surface across SPA navigation and customer privacy/affiliate notices |
+| Product experience | Student travel homepage, route inspiration, a direct flight-search action and four planning tools |
+| Primary flight-search integration | One Travelpayouts search interface, Shadow DOM-aware initialization/failure states, retained search surface across SPA navigation, separate local student/baggage notes and customer privacy/affiliate notices |
 | Student benefits | Structured directory, official-source links, honest policy-review states and eligibility fields; initial terms remain unverified |
 | Travel budget | Manual 2–4 option calculator, validated costs, exact-cent totals, pending unknown bag charges and an explicitly hypothetical example |
 | Miles Wallet | Validated manual loyalty records, browser-local persistence, expiry reminders and cash-versus-miles calculation |
@@ -18,7 +18,9 @@ Flyora can be installed, built and used for student planning without a paid flig
 | Business readiness | Contact configuration, privacy and booking boundaries, preview indexing controls and saved-data clear controls |
 | External review preparation | [Provider brief](provider-application.md), [student policy review procedure](student-policy-review.md) and an unverified airline worksheet; no account applications submitted by this work |
 
-The SDK and the intended deployed URL could not be inspected from this cloud environment: the CONNECT proxy returned HTTP 403. Module browser tests use an intercepted fixture. A passing fixture, local response check or build does not establish real third-party rendering, current fares, affiliate attribution or deployed behavior.
+The public SDK asset and intended deployed page returned HTTP 200 through the inherited proxy. Official help/developer pages remained blocked with CONNECT HTTP 403, so no supported custom-form submission contract was verified. The primary flow therefore uses the partner's single search interface and makes no guessed prefill or internal-event submissions.
+
+Five mocked Shadow DOM regressions passed. A separate limited local check replayed only public JavaScript assets fetched with verified TLS and initialized the actual SDK's visible search fields. Browser-owned font and API calls remained blocked; no city lookup, live fare or booking handoff was verified. This check does not show that the newly modified code is deployed. Builds, configuration and fixtures remain separate from real production fare and booking verification.
 
 ## Configure Vercel, then redeploy
 

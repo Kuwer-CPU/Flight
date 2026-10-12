@@ -37,7 +37,7 @@ Set `TRAVELPAYOUTS_AFFILIATE_LINKS=true` only if the partner agreement permits t
 
 Before a public commercial launch, also supply the actual `FLYORA_BUSINESS_NAME` and a working `FLYORA_CONTACT_EMAIL`. These details are optional for builds. Keep indexing disabled until the real partner, privacy, business and booking checks have passed. Public metadata, contact details and integration security headers require a rebuild/redeploy after configuration changes.
 
-The URL above is the intended Vercel origin. This coding environment could not inspect the deployed site or retrieve the real module because the CONNECT proxy returned HTTP 403. Local mocked tests do not establish that the deployed widget, current prices, booking links or affiliate attribution work.
+The deployed page and public SDK asset returned HTTP 200 through the inherited proxy during this review. Official help/developer pages remained blocked with CONNECT HTTP 403, so no supported custom-form submission contract was verified. A limited local initialization check replayed public JavaScript assets retrieved with TLS verification and rendered the actual SDK's search fields; browser-owned API requests remained blocked. This does not verify live prices, booking handoffs, affiliate attribution or deployment of the newly modified code.
 
 See [deployment instructions](docs/deployment.md), [Travelpayouts setup](docs/travelpayouts-setup.md) and the [Flyora 2.0 guide](docs/flyora-v2.md).
 
@@ -45,8 +45,8 @@ See [deployment instructions](docs/deployment.md), [Travelpayouts setup](docs/tr
 
 | Page | Behavior |
 | --- | --- |
-| `/` | Student travel homepage, worldwide route planning and links to the four tools |
-| `/flights` | Primary Travelpayouts search module; externally handled results and booking |
+| `/` | Student travel homepage, route inspiration, a direct flight-search link and links to the four tools |
+| `/flights` | One Travelpayouts search interface, with separate local student/baggage planning notes and externally handled results and booking |
 | `/student-benefits` | Searchable airline directory with policy-review status, official sources and eligibility fields |
 | `/travel-calculator` | Compare 2–4 manually entered ticket, baggage, transfer, insurance and other costs in one currency |
 | `/miles-wallet` | Browser-local manual loyalty balances, entered expiry dates and a cash-versus-miles value calculator |
@@ -57,11 +57,13 @@ Student policy leads remain unverified. The directory displays “Confirm with a
 
 Wallet balances and checklist progress are manual records saved in this browser. There is no airline login, automatic balance sync, redemption purchase, cloud account or cross-device backup. The calculator does not persist entries. Browser storage can be cleared using each tool's controls or the browser's site-data settings.
 
-## Worldwide route planning
+## Worldwide flight search and local planning
 
-The bundled catalog supports searching 5,332 airports across 235 countries and territories by city, airport name, country or IATA code. This enables worldwide route inputs; it does not guarantee provider coverage of every route, airline, seller or fare. See [airport sources and refresh instructions](docs/airport-data.md).
+The retained native API search uses a bundled catalog of 5,332 airports across 235 countries and territories, searchable by city, airport name, country or IATA code. Airport inclusion does not guarantee provider coverage of every route, airline, seller or fare. See [airport sources and refresh instructions](docs/airport-data.md).
 
-The Flyora form is a planning summary. No verified module-prefill contract is implemented: check route, dates, traveler count and cabin in the partner interface. Student eligibility and baggage must be confirmed for the fare and booking channel actually chosen.
+In primary Travelpayouts mode, homepage actions and destination inspiration cards open `/flights` without itinerary-prefill query parameters. Enter route, dates, traveler count and cabin in the single partner search interface. Flyora does not invoke undocumented SDK configuration or events to submit a separate form.
+
+Below search, optional student age, needed checked kilograms and a seller's quoted included kilograms produce a local baggage-shortfall estimate. They do not submit an itinerary, change partner fares or establish student eligibility. Links lead to Student Benefits, Travel Calculator, Miles Wallet and Travel Checklist. The native Flyora search form remains available only in explicit API mode.
 
 ## Optional API experience
 

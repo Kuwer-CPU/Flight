@@ -6,7 +6,7 @@ Flyora combines worldwide flight search with four student travel tools. Its prim
 
 | Feature | Implemented behavior | Boundary |
 | --- | --- | --- |
-| Flight search | Worldwide Flyora route-planning form plus the Travelpayouts module on `/flights` | Route/cabin/passenger prefill is unverified and not assumed; check selections in the partner UI |
+| Flight search | A direct homepage action opens the single Travelpayouts search interface on `/flights`; separate student/baggage notes and four tool links follow it | Enter route, dates, cabin and travelers in the partner UI. Flyora does not use an undocumented custom-form submission or prefill contract |
 | Student benefits | Search and filter a structured airline directory; show official-source links, review state, baggage, discount, verification, age and booking-channel fields | Initial policy leads remain unverified, unknown facts are displayed as “Confirm with airline,” and review dates are not invented |
 | Travel calculator | Compare 2–4 manually entered quotes: ticket, standard checked kg, additional kg, quoted bag charge, transfer, insurance and other expenses | All prices use one selected EUR/INR/GBP/USD currency; no FX conversion, provider fetching or automatic student adjustment |
 | Miles Wallet | Manually record loyalty program, balance, optional expiry and notes; estimate cash-versus-miles value with award taxes/fees | Browser-local records, no airline authentication, automatic sync or guaranteed redemption availability |
@@ -15,6 +15,8 @@ Flyora combines worldwide flight search with four student travel tools. Its prim
 The calculator starts with empty prices. Additional baggage must be entered explicitly, using 0 if none is required. A required but unknown bag charge leaves the option pending and unable to win the comparison. Optional transfer, insurance and other blank costs count as 0 with visible guidance. Monetary inputs are validated and rounded to integer cents before addition. Changing currency clears prices rather than converting or silently reusing them.
 
 The optional calculator illustration compares 480 + 110 = 590 with a 530 option including the needed baggage. It is labeled hypothetical and claims no actual airline/student benefit or bookable fare. The student directory does not apply benefits to either the partner search or a manually entered cost.
+
+Primary-mode homepage destination cards are route inspiration: they open `/flights` without route-prefill queries. Optional student age, checked baggage needed and a manually entered confirmed included allowance below the search produce only a local kilogram shortfall. They are separate from the partner search and never alter its itinerary or fare. The native Flyora route form is retained only in explicit API mode.
 
 ## Browser storage and privacy
 
@@ -51,7 +53,7 @@ Supply the real `FLYORA_BUSINESS_NAME` and working `FLYORA_CONTACT_EMAIL` before
 
 ## Module loading and failure behavior
 
-The script transport loads the fixed SDK source with a validated numeric White Label ID. It is not an iframe and has no manual “Load partner search” button. Visible structural search controls are required before hiding the initialization state; a script load event alone is not treated as a working search. Load failure or a UI initialization timeout gives a full-page **Reload flight search** action. The page never substitutes fabricated flight cards.
+The script transport loads the fixed SDK source with a validated numeric White Label ID. It is not an iframe and has no manual “Load partner search” button. The public SDK attaches an open Shadow DOM root to its search host. Flyora discovers and observes that root as well as the ordinary container, and waits for visible search fields before hiding the initialization notice. A script load event or a retry button alone is insufficient. A 20-second initialization timeout gives a full-page **Reload flight search** action; observation continues so a late usable interface can recover. The page never substitutes fabricated flight cards.
 
 The optional approved URL/iframe mode uses a separate controlled frame and requires a customer load action. Its iframe restrictions and no-referrer boundary differ from the primary page-context SDK. Consult [Travelpayouts setup](travelpayouts-setup.md) for the current implementation details and reviewed CSP origins; do not replace the official module with arbitrary pasted scripts or loosen CSP to all domains.
 
@@ -59,7 +61,11 @@ The optional approved URL/iframe mode uses a separate controlled frame and requi
 
 Unit tests exercise configuration, manual financial math, invalid saved data, policy-display guards and checklist behavior. Browser tests exercise the native API demo and local tools. The primary-module tests intercept the SDK request with a fixture so mounting, navigation, accessible controls and failure/reload behavior can be tested without contacting a real provider.
 
-The coding environment's CONNECT proxy returned HTTP 403 for both the real SDK and `https://flight-ten-steel.vercel.app`. Consequently, the actual deployed page, third-party module rendering, current fares, available sellers, booking links, attribution and current partner terms were not verified. A fixture that looks like search controls does not establish any of those facts.
+The public SDK asset and deployed page were retrieved successfully with HTTP 200 through the inherited proxy. Inspection identified the open Shadow DOM host and specific resource categories; the corresponding readiness and CSP fixes were made. The inspected public White Label configuration had blank route fields and no hard-coded NCE origin. The SDK may restore browser/URL or geolocation defaults, but the source of any particular preselected airport was not confirmed.
+
+Official help/developer pages returned CONNECT HTTP 403. No supported custom-form submission contract was verified, and Flyora does not use internal `TPWL_CONFIGURATION` or event hooks as an integration contract. Direct Chromium access encountered the proxy CA error `net::ERR_CERT_AUTHORITY_INVALID`; certificate checks were not disabled. Five Shadow DOM fixture cases passed, including late attachment, hidden controls and retry-only failure.
+
+A separate local initialization check replayed only public JavaScript assets retrieved by Node with TLS verification. Browser API requests stayed browser-owned and untouched. The actual SDK created one visible search form in its open Shadow DOM, with origin, destination, departure, return and passenger controls; Flyora's phase reached `rendered`, with no separate Flyora search form or page errors. Browser-owned font and API requests remained blocked with `net::ERR_TUNNEL_CONNECTION_FAILED`. This verifies that limited initialization and readiness behavior, not city lookup, live fares, seller coverage, bookings, attribution or the deployment of this updated code.
 
 Use `npm run launch:check` for offline configuration/evidence review and `npm run check:deployment -- https://flight-ten-steel.vercel.app --expect-integration=travelpayouts` for read-only public-response checks where network access permits. `/api/integration-status` reports the safe selected integration state; `/api/status` describes the separate API provider and is checked only in API mode. The response checker never executes the SDK, performs flight searches or enters payment details. Passing either command is not certification of provider approval, legal compliance, ticket availability or student eligibility.
 

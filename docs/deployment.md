@@ -53,11 +53,11 @@ The configured origin is used in canonical metadata and sitemap behavior. The se
 
 ## Confirm the deployed experience
 
-The coding cloud's CONNECT proxy returned HTTP 403 for both the real SDK and `https://flight-ten-steel.vercel.app`. Consequently, this work did not inspect the real deployed page, actual SDK, fares or booking links. Use your ordinary browser and an environment with permitted access for these checks:
+The public SDK and `https://flight-ten-steel.vercel.app` returned HTTP 200 through the inherited proxy during the current review. Official help/developer pages remained blocked with CONNECT HTTP 403. Direct Chromium access encountered `net::ERR_CERT_AUTHORITY_INVALID` from the proxy CA, with TLS checks kept enabled. A limited local check replayed public JavaScript assets retrieved with verified TLS and initialized the actual SDK's search fields, while browser-owned APIs remained blocked. None of these checks verifies actual fares, booking links or deployment of the updated code. Use your ordinary browser and an environment with valid certificate trust for these checks:
 
-1. Open the intended deployment and check homepage navigation and all four tool pages on desktop/mobile.
-2. Open `/flights`. Confirm the actual Travelpayouts search controls appear, with the intended account/module and no CSP or initialization errors.
-3. Check route, dates, cabin and the full traveler count inside the partner UI. Flyora does not assume a verified prefill contract.
+1. Open the intended deployment and check homepage navigation and all four tool pages on desktop/mobile. In primary mode, homepage search actions and destination inspiration cards should open `/flights` without itinerary-prefill queries.
+2. Open `/flights`. Confirm there is one Travelpayouts search interface, with the intended account/module and no CSP or initialization errors. Its fields render in an open Shadow DOM root; a script download or error retry button alone is not readiness.
+3. Enter or check route, dates, cabin and the full traveler count inside the partner UI. Flyora uses no undocumented custom-form submission or prefill contract. Optional student age and baggage notes below search are local planning inputs, separate from that itinerary.
 4. Try actual searches and confirm seller handoffs, currency, taxes, fees, baggage conditions, student eligibility and final payable price without purchasing a ticket.
 5. Verify privacy/affiliate notices and the current third-party cookie/tracking behavior. A script loaded in page context differs from an isolated iframe.
 6. Test the working contact inbox, HTTPS origin, public metadata and preview indexing state.

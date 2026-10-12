@@ -8,7 +8,7 @@ The owner supplied this White Label module and its required containers:
 <script type="module" src="https://tpwidg.com/wl_web/main.js?wl_id=23277"></script>
 ```
 
-Flyora now uses that specific approved source as its default customer flight-search integration. White Label ID `23277` is public configuration, not an API secret. The code uses Next.js `Script`, with `type="module"`, `strategy="afterInteractive"` and `crossOrigin="anonymous"`; matching the framework preload and module CORS mode avoids a duplicate download. It does not render arbitrary pasted HTML or JavaScript. The real module, additional resource hosts, returned offers and booking behavior have not been exercised in this restricted environment. Browser tests use a clearly labeled mock SDK, without invented fares.
+Flyora uses that owner-provided source as its default customer flight-search integration. White Label ID `23277` is public configuration, not an API secret or proof of account/domain approval. The code uses Next.js `Script`, with `type="module"`, `strategy="afterInteractive"` and `crossOrigin="anonymous"`; matching the framework preload and module CORS mode avoids a duplicate download. It does not render arbitrary pasted HTML or JavaScript. The public SDK and deployed page were retrieved with HTTP 200 through the inherited proxy. A limited local check initialized the actual SDK using public JavaScript assets fetched with verified TLS, while browser-owned API requests remained blocked. Actual city lookup, fares, booking and attribution have not been verified. Five additional browser regressions use a clearly labeled mock SDK, without invented fares.
 
 ## Default settings
 
@@ -32,9 +32,17 @@ The root layout mounts one `FlightSearchSurface` inside `<main>`. On the first `
 
 When the traveler opens Miles Wallet or another student tool, the surface hides only its own wrapper and retains the SDK containers and contents. The normal route content remains visible. Returning to `/flights` shows the same DOM and script state. Flyora neither removes/rebuilds the vendor's child nodes nor calls an undocumented reinitialization API. Full page reload is the clean restart after a failed initialization.
 
-A script load event alone is not a success signal. A structural observer checks for visible search controls in `tpwl-search`; it reads no prices, booking data or vendor labels. Until that UI appears, the page keeps its bootstrap notice. A script error or 20-second rendering timeout shows **Flight search could not load.** and a **Reload flight search** button. Rendered controls do not prove that fares, account access or bookings work; those still need production verification.
+A script load event alone is not a success signal. The SDK attaches an open Shadow DOM root to `tpwl-search`. Flyora discovers that root using an attachment poll and observes its content alongside ordinary container mutations; it does not patch `attachShadow` or modify vendor-owned nodes. Visible search fields are required before hiding the bootstrap notice. An error/retry button alone is not a usable search field. It reads no prices, booking data or vendor labels.
 
-The local Flyora form and route summary remain a planning aid. This integration appends no guessed route/date/passenger/student parameters and invokes no guessed API. Travelers must enter or check their itinerary inside the White Label. Unverified student benefits never alter the partner's fare.
+A script error or 20-second rendering timeout shows **Flight search could not load.** and a **Reload flight search** button. Root discovery continues after the timeout so a later usable interface can recover. Rendered controls do not prove that fares, account access or bookings work; those still need production verification.
+
+## One flight-search interface
+
+In primary mode, Flyora's homepage search actions and destination inspiration cards open `/flights` without itinerary-prefill queries. There is one itinerary search form: the Travelpayouts interface. Travelers enter or check origin, destination, dates, cabin and passenger count there.
+
+Official help/developer pages remained blocked with CONNECT HTTP 403, so a supported custom-form submission contract was not verified. Flyora does not use internal `TPWL_CONFIGURATION`, undocumented events or a second form to submit searches. The inspected public White Label configuration had blank route fields and no NCE literal in the downloaded entry/main chunks. The SDK may restore browser/URL or geolocation defaults, but the source of any particular preselected airport was not established. Check the displayed route before submitting.
+
+Separate local student planning below search accepts optional age, needed checked baggage and the seller's confirmed included kilograms. Its shortfall estimate does not submit a route, change partner prices or confirm a student offer. Four links lead to Student Benefits, Travel Calculator, Miles Wallet and Travel Checklist. The native Flyora route form is retained only for explicitly selected API mode.
 
 ## Privacy, affiliate disclosure and CSP
 
@@ -42,7 +50,16 @@ Unlike the optional cross-origin iframe boundary, this module runs in Flyora's p
 
 The page discloses that eligible partner bookings may earn Flyora a commission and that booking/result ordering is handled by the partner. No commission, free ticket or extra-cost claim is guaranteed. `TRAVELPAYOUTS_AFFILIATE_LINKS=true` adds `sponsored` to an optional iframe-interface outbound link only after owner confirmation; it does not modify the module's booking links or suppress the disclosure.
 
-The safe configuration exposes the fixed `scriptOrigin` `https://tpwidg.com`. Root CSP should permit the supplied module and only separately reviewed dependency origins. This environment could not discover the live SDK's other script, style, image, frame or connection destinations. Do not guess API endpoints or replace narrow policy with arbitrary wildcards. Use deployment browser diagnostics and current provider documentation to review any required additional origins.
+The safe configuration exposes the fixed `scriptOrigin` `https://tpwidg.com`. SDK inspection informed these category-specific default CSP allowances:
+
+| Resource category | Permitted origins |
+| --- | --- |
+| SDK assets | `https://tpwidg.com` |
+| Connections | `https://api.apistp.com`, `https://autocomplete.apistp.com`, `https://tickets-api.apistp.com`, `https://www.apistp.com` |
+| Images | `https://img.avs.io` |
+| Font stylesheets | `https://fonts.googleapis.com` |
+
+These are exact origins, with no wildcard. Analytics hosts such as `avsplow` are not allowed by default. Allowing a destination in CSP does not establish that the network permits it or that the corresponding request succeeds. Actual font binaries, polling, result and booking destinations still need verification in a browser with permitted access and valid certificate trust. Do not guess those hosts or disable TLS checks. Any extra `TRAVELPAYOUTS_RESOURCE_ORIGINS` entry requires review of the actual requested resource and partner terms before redeployment; it broadens resource permissions and should not be used as a catch-all repair.
 
 `getFlightIntegration()` returns `{ integration: 'api' }` for explicit API mode, or safe partner fields including `status`, `transport`, `affiliateLinks`, and either `whiteLabelId`/`scriptUrl`/`scriptOrigin` or `frameUrl`/`frameOrigin`. Raw widget code, provider keys and credential-looking iframe query parameters are not emitted. `configured` means the local integration settings are valid, not that live fares have been verified.
 
@@ -66,12 +83,15 @@ Public-domain HTTPS validation rejects URL user credentials, credential query na
 | Check | Expected outcome |
 | --- | --- |
 | First flight-page visit | One module request, one search container, one tickets container, no duplicate SDK instance |
-| Module/UI distinction | An empty or failed module load does not remove the bootstrap notice or claim live fares work |
+| Module/UI distinction | Visible actual search fields inside the Shadow DOM remove bootstrap; an empty module, hidden field or retry-only screen does not claim readiness |
 | SPA navigation | Other student pages remain visible; returning to Flights retains the same partner UI and initialization count |
 | Itinerary | Correct route, dates, adult count and cabin are checked inside the actual partner interface |
+| Local planning boundary | Student/baggage notes do not submit or prefill the partner search; primary homepage cards contain no itinerary-prefill queries |
 | Search and handoff | Real offers and permitted booking links belong to the owner-provided White Label; final price/fees/conditions are confirmed there |
 | Student benefits | No unverified allowance, discount or fictional comparison is applied to partner results |
 | Privacy/CSP | Actual cookies, tracking and dependency origins match reviewed provider terms and deployed policy |
 | Error recovery | Blocked script/dependency or initialization timeout gives a clear reload action, without a fake fare or API fallback |
 
-Record actual deployment/provider verification separately from mocked tests. No application, paid booking or account creation is performed by this code preparation.
+The limited real-asset initialization test retrieved public JavaScript with Node's TLS validation enabled and replayed only those assets to the local browser. The actual SDK rendered one visible open-Shadow-DOM search form, with origin, destination, departure, return and passenger controls, no separate Flyora search form and no page errors. Browser-owned requests to font/API services remained untouched and failed with `net::ERR_TUNNEL_CONNECTION_FAILED`. Direct Chromium access had encountered the proxy CA error `net::ERR_CERT_AUTHORITY_INVALID`; certificate validation was not bypassed.
+
+This establishes local SDK initialization and readiness detection under that constrained test, not live route autocomplete, fares, bookings, attribution or deployment of this release. Record actual deployment/provider verification separately from that limited check and from the five mocked regressions. No paid booking or account creation is performed by this code preparation.

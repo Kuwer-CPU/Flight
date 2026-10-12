@@ -1,5 +1,7 @@
 # Flyora 2.0 change report
 
+This records the initial 2.0 release. The later [single-flight-search correction](single-flight-search.md) removes its duplicate planning/search forms and updates SDK readiness and CSP.
+
 The existing Next.js App Router/TypeScript application is preserved. Flyora retains its search form, worldwide airport directory, global cream/green/lime design, saved flights, flight itinerary/details, baggage breakdown, student-value comparisons and independent Amadeus/Skyscanner adapters.
 
 ## Delivered behavior

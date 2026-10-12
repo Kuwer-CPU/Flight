@@ -1,6 +1,6 @@
 import type { NextConfig } from 'next';
 import { getFlightIntegration } from './src/lib/flight-integration';
-import { partnerResourceOrigins } from './src/lib/partner-resource-origins';
+import { partnerResourceOrigins, TRAVELPAYOUTS_RESOURCES } from './src/lib/partner-resource-origins';
 
 const config: NextConfig = {
   allowedDevOrigins: ['127.0.0.1'],
@@ -13,12 +13,16 @@ const config: NextConfig = {
     const widgetOrigins = integration.integration === 'travelpayouts' && integration.status === 'configured' && integration.transport === 'script'
       ? [integration.scriptOrigin!, ...partnerResourceOrigins(process.env.TRAVELPAYOUTS_RESOURCE_ORIGINS)] : [];
     const widgetSources = widgetOrigins.length ? ' ' + [...new Set(widgetOrigins)].join(' ') : '';
+    const sdk = widgetOrigins.length > 0;
+    const connectSources = widgetSources + (sdk ? ' ' + TRAVELPAYOUTS_RESOURCES.connect.join(' ') : '');
+    const styleSources = widgetSources + (sdk ? ' ' + TRAVELPAYOUTS_RESOURCES.style.join(' ') : '');
+    const imageSources = widgetSources + (sdk ? ' ' + TRAVELPAYOUTS_RESOURCES.image.join(' ') : '');
     const frames = [...new Set([...widgetOrigins, ...(frameOrigin ? [frameOrigin] : [])])];
     const csp = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline'" + (development ? " 'unsafe-eval'" : '') + widgetSources,
-      "style-src 'self' 'unsafe-inline'" + widgetSources, "img-src 'self' data:" + widgetSources, "font-src 'self'" + widgetSources,
-      "connect-src 'self'" + (development ? ' ws: wss:' : '') + widgetSources,
+      "style-src 'self' 'unsafe-inline'" + styleSources, "img-src 'self' data:" + imageSources, "font-src 'self'" + widgetSources,
+      "connect-src 'self'" + (development ? ' ws: wss:' : '') + connectSources,
       "object-src 'none'", "base-uri 'self'", "form-action 'self'" + widgetSources, "frame-ancestors 'none'",
       'frame-src ' + (frames.length ? frames.join(' ') : "'none'"),
     ].join('; ');

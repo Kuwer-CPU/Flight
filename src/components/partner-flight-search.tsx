@@ -1,51 +1,39 @@
 'use client';
-import { useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, Calculator, GraduationCap, Plane, ShieldCheck } from 'lucide-react';
-import { city } from '@/lib/airports';
-import { dateLabel, defaults, parseSearch } from '@/lib/search';
+import { ArrowRight, ArrowUpRight, Calculator, CheckSquare, GraduationCap, Plane, ShieldCheck, Wallet } from 'lucide-react';
 import type { TravelpayoutsIntegration } from '@/lib/flight-integration';
-import { SearchForm } from './search-form';
+import { StudentTravelPlanning } from './student-travel-planning';
 import { ToolPage } from './tool-page';
 import { TravelpayoutsWidget } from './travelpayouts-widget';
 
 export function PartnerFlightSearch({ config, active = true }: { config: TravelpayoutsIntegration; active?: boolean }) {
-  const params = useSearchParams();
-  const paramsKey = params.toString();
-  const parsed = useMemo(() => {
-    try { return { query: paramsKey ? parseSearch(new URLSearchParams(paramsKey)) : defaults(), error: '' }; }
-    catch (error) { return { query: defaults(), error: error instanceof Error ? error.message : 'Check your journey details.' }; }
-  }, [paramsKey]);
-  const [loadedFor, setLoadedFor] = useState<string | null>(null);
+  const [frameLoaded, setFrameLoaded] = useState(false);
   const script = config.status === 'configured' && config.transport === 'script' && !!config.scriptUrl;
   const frame = config.status === 'configured' && config.transport === 'iframe' && !!config.frameUrl;
   const available = script || frame;
-  const loaded = frame && loadedFor === paramsKey && !parsed.error;
   const relation = 'noopener noreferrer' + (config.affiliateLinks ? ' sponsored' : '');
+  const tools = [
+    { href: '/student-benefits', icon: GraduationCap, title: 'Student benefits', description: 'Check official airline programs, age limits and eligibility before counting on a benefit.', action: 'Explore programs' },
+    { href: '/travel-calculator', icon: Calculator, title: 'Travel calculator', description: 'Compare your entered ticket quotes, baggage charges and other travel costs.', action: 'Compare journey costs' },
+    { href: '/miles-wallet', icon: Wallet, title: 'Miles Wallet', description: 'Keep your manually entered loyalty balances and estimate cash versus miles.', action: 'Open your wallet' },
+    { href: '/travel-checklist', icon: CheckSquare, title: 'Travel checklist', description: 'Prepare your documents, student registration, bags and arrival reminders.', action: 'Plan your journey' },
+  ];
 
-  return <div className="partner-flight-search"><ToolPage eyebrow="FLIGHT SEARCH" title="Find your next flight." description="Plan your journey and check student benefits before you book.">
-    <SearchForm key={paramsKey} initial={parsed.query} compact />
-    {parsed.error && <p className="tool-notice partner-query-error" role="alert">{parsed.error}</p>}
-    {paramsKey && !parsed.error && <section className="partner-journey tool-panel" aria-label="Your search plan">
-      <div><span className="tool-label">YOUR SEARCH PLAN</span><h2>{city(parsed.query.origin)} <ArrowRight size={21} aria-hidden="true" /> {city(parsed.query.destination)}</h2>
-      <p>{dateLabel(parsed.query.departureDate)}{parsed.query.returnDate ? ' – ' + dateLabel(parsed.query.returnDate) : ' · One way'} · {parsed.query.adults} adult{parsed.query.adults > 1 ? 's' : ''} · {parsed.query.cabin.toLowerCase().replaceAll('_', ' ')}</p></div>
-      <span className="partner-journey-bags">{parsed.query.baggage} kg luggage to plan for</span>
-    </section>}
+  return <div className="partner-flight-search"><ToolPage eyebrow="FLIGHT SEARCH" title="Find your next flight." description="Search flights here, then plan your student benefits and full journey cost below.">
     {available ? <section className="partner-interface tool-panel" aria-labelledby="partner-search-title">
-      <div className="partner-interface-heading"><span className="partner-search-icon"><Plane size={25} aria-hidden="true" /></span><div><h2 id="partner-search-title">Search with a travel partner</h2><p>Use the partner’s flight-search interface and confirm its current fares and booking conditions.</p></div></div>
-      <p className="tool-notice">Your Flyora selections are a planning summary. Enter or check your route, dates, travelers and cabin inside the partner search; they are not automatically filled in. Student benefits are checked separately and are not automatically applied to partner fares.</p>
-      <p className="partner-privacy"><ShieldCheck size={18} aria-hidden="true" />{script ? 'Flight search loads a third-party partner script on this page. It may use cookies and access page context. The partner’s privacy and booking terms apply.' : 'Loading search connects your browser to another website, which may use cookies. Its privacy and booking terms apply.'}</p>
-      <p className="partner-affiliate">Partner search may contain affiliate tracking. Eligible bookings may earn Flyora a commission. Booking and result ordering are handled by the partner.</p>
-      {frame && <div className="partner-search-actions">{!loaded && <button type="button" className="button" disabled={!!parsed.error} onClick={() => setLoadedFor(paramsKey)}>Load partner search<ArrowRight size={17} aria-hidden="true" /></button>}
-        {!parsed.error && <a className="text-link" href={config.frameUrl} target="_blank" rel={relation} referrerPolicy="no-referrer">Open search in a new tab<ArrowUpRight size={16} aria-hidden="true" /></a>}
+      <div className="partner-interface-heading"><span className="partner-search-icon"><Plane size={25} aria-hidden="true" /></span><div><h2 id="partner-search-title">Search flights with Travelpayouts</h2><p>Enter your departure, destination, dates and travelers in the search below. Confirm your final itinerary and conditions with the booking seller.</p></div></div>
+      <p className="partner-privacy"><ShieldCheck size={18} aria-hidden="true" />{script ? 'Partner search may use cookies and access page context. The partner’s privacy and booking terms apply.' : 'Loading search connects your browser to the partner website, which may use cookies. Its privacy and booking terms apply.'}</p>
+      <p className="partner-affiliate">Eligible partner bookings may earn Flyora a commission. Results and booking redirects are provided by the partner. Student benefits are checked separately.</p>
+      {frame && <div className="partner-search-actions">{!frameLoaded && <button type="button" className="button" onClick={() => setFrameLoaded(true)}>Load partner search<ArrowRight size={17} aria-hidden="true" /></button>}
+        <a className="text-link" href={config.frameUrl} target="_blank" rel={relation} referrerPolicy="no-referrer">Open search in a new tab<ArrowUpRight size={16} aria-hidden="true" /></a>
       </div>}
       {script && <TravelpayoutsWidget config={config} active={active} />}
-      {loaded && <div className="partner-frame-container"><iframe src={config.frameUrl} title="Partner flight search" loading="lazy" referrerPolicy="no-referrer" sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox" /><p>If search does not appear here, open the partner site in a new tab. Check the selected itinerary and final price there before booking.</p></div>}
-    </section> : <section className="partner-placeholder tool-panel" aria-labelledby="partner-search-title"><span className="partner-search-icon"><Plane size={28} aria-hidden="true" /></span><h2 id="partner-search-title">Flight search is coming soon.</h2><p>You can explore student airline programs and compare your travel costs while we prepare flight search.</p><p className="muted">No fares or booking offers are available on this page yet.</p></section>}
-    <section className="partner-planning-tools" aria-labelledby="partner-tools-title"><h2 id="partner-tools-title">Make the most of your student journey.</h2><div className="tool-grid">
-      <Link className="partner-tool tool-panel" href="/student-benefits"><GraduationCap size={25} aria-hidden="true" /><h3>Student benefits</h3><p>Check official airline programs and the terms that may apply to your journey.</p><span>Explore programs<ArrowRight size={16} aria-hidden="true" /></span></Link>
-      <Link className="partner-tool tool-panel" href="/travel-calculator"><Calculator size={25} aria-hidden="true" /><h3>Travel calculator</h3><p>Compare your own ticket quotes, baggage charges and other travel costs.</p><span>Plan your budget<ArrowRight size={16} aria-hidden="true" /></span></Link>
-    </div></section>
+      {frame && frameLoaded && <div className="partner-frame-container"><iframe src={config.frameUrl} title="Partner flight search" loading="lazy" referrerPolicy="no-referrer" sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox" /><p>If search does not appear here, open the partner site in a new tab. Check the selected itinerary and final price there before booking.</p></div>}
+    </section> : <section className="partner-placeholder tool-panel" aria-labelledby="partner-search-title"><span className="partner-search-icon"><Plane size={28} aria-hidden="true" /></span><h2 id="partner-search-title">Flight search is unavailable.</h2><p>You can explore official student airline programs and plan your travel costs while search is unavailable.</p><p className="muted">No flight prices or booking offers have been confirmed here.</p></section>}
+    <section className="partner-planning-tools" aria-labelledby="partner-tools-title"><div className="partner-planning-heading"><span className="eyebrow">YOUR STUDENT TRAVEL TOOLKIT</span><h2 id="partner-tools-title">Plan beyond the ticket.</h2><p>Keep student eligibility and baggage planning separate from your flight search. Airline benefits depend on the specific fare and booking channel.</p></div>
+      <StudentTravelPlanning />
+      <div className="tool-grid">{tools.map(tool => <Link className="partner-tool tool-panel" href={tool.href} key={tool.href}><tool.icon size={25} aria-hidden="true" /><h3>{tool.title}</h3><p>{tool.description}</p><span>{tool.action}<ArrowRight size={16} aria-hidden="true" /></span></Link>)}</div>
+    </section>
   </ToolPage></div>;
 }

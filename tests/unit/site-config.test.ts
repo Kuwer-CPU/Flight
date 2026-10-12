@@ -75,6 +75,13 @@ describe('search indexing opt-in', () => {
     vi.stubEnv('FLYORA_ALLOW_INDEXING', 'true');
     expect(canIndexSite(production)).toBe(true);
   });
+  it('uses the primary partner configuration without requiring unused API credentials', () => {
+    vi.stubEnv('FLYORA_ALLOW_INDEXING', 'true');
+    const missingApi: FlightConnection = { ...production, provider: 'amadeus', status: 'missing-credentials', configured: false };
+    expect(canIndexSite(missingApi, getSiteConfig(), { integration: 'travelpayouts', status: 'configured' })).toBe(true);
+    expect(canIndexSite(production, getSiteConfig(), { integration: 'travelpayouts', status: 'disabled' })).toBe(false);
+    expect(canIndexSite(production, getSiteConfig(), { integration: 'travelpayouts', status: 'invalid-configuration' })).toBe(false);
+  });
   it.each(['false', '1', 'TRUE', 'yes'])('does not infer consent from %s', flag => {
     vi.stubEnv('FLYORA_ALLOW_INDEXING', flag);
     expect(canIndexSite(production)).toBe(false);

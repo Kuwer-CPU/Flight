@@ -1,14 +1,15 @@
 'use client';
+import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { X, Plane, ArrowUpRight } from 'lucide-react';
 import type { Airline } from '@/lib/airlines';
 import type { DataMode, FlightConnection } from '@/lib/types';
 
 export function Brand({ light = false }: { light?: boolean }) {
-  return <a href="/" className={'brand' + (light ? ' brand-light' : '')} aria-label="Flyora home"><span className="brand-icon"><Plane size={22} strokeWidth={2.4} /></span>flyora<span className="brand-dot">.</span></a>;
+  return <Link href="/" className={'brand' + (light ? ' brand-light' : '')} aria-label="Flyora home"><span className="brand-icon"><Plane size={22} strokeWidth={2.4} /></span>flyora<span className="brand-dot">.</span></Link>;
 }
 export function AirlineMark({ airline, name, code, size = 'normal' }: { airline?: Airline; name?: string; code?: string; size?: 'normal' | 'small' }) {
-  return <span className={'airline-mark airline-' + size} style={{ color: 'color-mix(in srgb, ' + (airline?.color ?? '#275854') + ' 70%, #183329)', backgroundColor: (airline?.color ?? '#275854') + '0d' }} aria-hidden="true">{airline?.code ?? code ?? name?.slice(0, 2)}<Plane size={size === 'small' ? 12 : 16} /></span>;
+  return <span className={'airline-mark airline-' + size} style={{ color: 'color-mix(in srgb, ' + (airline?.color ?? '#275854') + ' 50%, #183329)', backgroundColor: (airline?.color ?? '#275854') + '0d' }} aria-hidden="true">{airline?.code ?? code ?? name?.slice(0, 2)}<Plane size={size === 'small' ? 12 : 16} /></span>;
 }
 export function ModeNotice({ mode, compact = false }: { mode: DataMode; compact?: boolean }) {
   if (mode === 'live') return <span className="live-label"><span />Live flight prices</span>;
@@ -23,7 +24,7 @@ export function ConnectionNotice({ connection }: { connection: FlightConnection 
 export function Modal({ children, title, onClose, wide = false }: { children: React.ReactNode; title: string; onClose: () => void; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
   const closeRef = useRef(onClose);
-  closeRef.current = onClose;
+  useEffect(() => { closeRef.current = onClose; }, [onClose]);
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
     const dialog = ref.current;

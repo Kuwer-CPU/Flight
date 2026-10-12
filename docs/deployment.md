@@ -1,83 +1,100 @@
-# Prepare and preview Flyora without a paid account
+# Deploy and preview Flyora 2.0
 
-The repository can be installed, built, tested and previewed locally without a hosting account, domain purchase or flight-provider credentials. This verifies the application with labeled demo fares. A public deployment and real flight pricing are separate steps.
+Use a host running Next.js 16 with Node.js 24 and server route handlers. A static-only host cannot run the retained API endpoints. Flyora builds without Amadeus credentials; its primary search is Travelpayouts White Label 23277 and its planning tools run without a flight-provider account.
 
-## Run the production demo on your computer
+## Run locally
 
-Install Node.js 24, extract the code, then open a terminal in the folder containing `package.json`.
+Install Node.js 24. Extract the repository and open a terminal in the folder containing `package.json`:
 
 ```bash
 npm ci
+cp .env.example .env.local
+npm run dev
 ```
 
-Create `.env.local` in that folder with:
+On Windows, copy the example file using your file manager. Open the localhost address printed by Next.js. Keep the terminal running; Ctrl+C stops it. Changes to the local environment require a restart and do not change the deployed website.
 
-```env
-FLIGHT_DATA_MODE=demo
-FLIGHT_PROVIDER=amadeus
-AMADEUS_ENVIRONMENT=production
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
-
-Leave provider keys and secrets unset. Then run:
+To run a production build locally:
 
 ```bash
-npm test
 npm run build
 npm run typecheck
 npm start
 ```
 
-Open `http://localhost:3000` and leave the terminal running. The demo contains fictional fares and explicitly labeled student-benefit examples. It does not issue tickets or take payments. Press Ctrl+C to stop the server.
+The default partner experience requests third-party JavaScript when `/flights` is first visited. Actual prices appear only if the real approved module successfully renders and returns results. A local code build does not grant partner access or establish domain permissions.
 
-With the website still running, a second terminal can check its HTTP responses:
+## Exact Vercel setup
 
-```bash
-node scripts/check-deployment.mjs http://localhost:3000 --expect-mode=demo
+1. Import `Kuwer-CPU/Flight` in your Vercel account and select Next.js. Use the repository root, Node.js 24, install command `npm ci` and build command `npm run build`.
+2. Open **Project → Settings → Environment Variables** and add the primary settings below for the deployment environment.
+3. Remove `TRAVELPAYOUTS_WHITE_LABEL_URL` and `TRAVELPAYOUTS_WIDGET_CODE`, or leave both unset. The primary module uses the SDK and White Label ID instead of an iframe source.
+4. Add the real operator and working support inbox before public commercial launch. Keep indexing disabled during preview.
+5. Redeploy the latest source after changing settings. Saving a variable or editing a local `.env.local` file does not update an existing Vercel build.
+
+```env
+NEXT_PUBLIC_SITE_URL=https://flight-ten-steel.vercel.app
+FLIGHT_SEARCH_INTEGRATION=travelpayouts
+TRAVELPAYOUTS_WHITE_LABEL_ID=23277
+TRAVELPAYOUTS_EMBED_ENABLED=true
+TRAVELPAYOUTS_AFFILIATE_LINKS=true
+FLYORA_ALLOW_INDEXING=false
 ```
 
-This checks the home, flight-search, student-perks, privacy, terms and contact pages; `robots.txt` and `sitemap.xml`; the public `/api/status` response; and the application's baseline security headers, including `Referrer-Policy: no-referrer` and CSP frame restrictions. With `--expect-mode=demo`, it also checks that demo pages are marked `noindex`, crawling is blocked and sitemap page URLs are omitted. It never requests `/api/flights`, contacts a flight provider, opens a seller checkout or enters payment details. A passing check describes those responses only. Provider configuration reported as `configured` means credentials are present, not that authentication succeeded.
+Use `TRAVELPAYOUTS_AFFILIATE_LINKS=true` only if permitted by the current partner agreement; otherwise use `false`. Confirm that the intended account is authorized for White Label 23277, your public domain and markets. No Amadeus key or secret is needed for this setup or the build. Public ID 23277 is not a credential or proof of account ownership.
 
-## Repeat browser checks
+| Additional setting | Requirement |
+| --- | --- |
+| `FLYORA_BUSINESS_NAME` | Actual public operator name; optional for build, required before commercial launch |
+| `FLYORA_CONTACT_EMAIL` | Working public support/privacy inbox; optional for build, required before commercial launch |
+| `FLYORA_ALLOW_INDEXING` | Leave false for preview; opt in only after real launch review |
 
-Install the browser once:
+The configured origin is used in canonical metadata and sitemap behavior. The selected integration also affects build-time CSP, so rebuild/redeploy when either changes. Configure Production and Preview scope for the environment being tested. Vercel supplies `NODE_ENV` and the listening port; cloud proxy and browser-test settings are not deployment variables.
+
+## Confirm the deployed experience
+
+The coding cloud's CONNECT proxy returned HTTP 403 for both the real SDK and `https://flight-ten-steel.vercel.app`. Consequently, this work did not inspect the real deployed page, actual SDK, fares or booking links. Use your ordinary browser and an environment with permitted access for these checks:
+
+1. Open the intended deployment and check homepage navigation and all four tool pages on desktop/mobile.
+2. Open `/flights`. Confirm the actual Travelpayouts search controls appear, with the intended account/module and no CSP or initialization errors.
+3. Check route, dates, cabin and the full traveler count inside the partner UI. Flyora does not assume a verified prefill contract.
+4. Try actual searches and confirm seller handoffs, currency, taxes, fees, baggage conditions, student eligibility and final payable price without purchasing a ticket.
+5. Verify privacy/affiliate notices and the current third-party cookie/tracking behavior. A script loaded in page context differs from an isolated iframe.
+6. Test the working contact inbox, HTTPS origin, public metadata and preview indexing state.
+
+A read-only terminal check is also available:
 
 ```bash
-npx playwright install chromium
+npm run check:deployment -- https://flight-ten-steel.vercel.app --expect-integration=travelpayouts
 ```
 
-Use the production demo server for these checks. In a second terminal, run:
+It inspects public pages, all four tools, indexing, headers and safe `/api/integration-status` configuration without executing the SDK, requesting flight offers or authenticating a provider. It checks the separate `/api/status` only when the selected integration is API mode; `--expect-integration=api` asserts that expectation. It follows no redirects and sends no cookies or authentication tokens. Login-protected preview URLs need an accessible preview or a local check; do not paste private tokens into the command. A passing response check does not verify module rendering, actual fares or commercial approval.
+
+## Local API demo for retained-flow tests
+
+The native API flow remains explicitly available. For a labeled local demonstration with fictional fares, put these values in `.env.local` and leave provider keys absent:
+
+```env
+FLIGHT_SEARCH_INTEGRATION=api
+FLIGHT_DATA_MODE=demo
+FLIGHT_PROVIDER=amadeus
+AMADEUS_ENVIRONMENT=production
+```
+
+Restart and rebuild after switching from the partner configuration. This mode shows fictional sample fares and student illustrations; it does not issue tickets. It is not a fallback for failed primary search.
+
+Install Chromium once with `npx playwright install chromium`. With a fresh API-demo server on port 3000, run:
 
 ```bash
 npm run test:e2e
 ```
 
-On a computer with an existing server, Playwright reuses port 3000. Stop an old server and rebuild after code changes so the browser checks exercise the latest application. Linux machines may need Playwright's documented system dependencies; the GitHub workflow installs them on its disposable runner.
+In the managed Linux cloud, use `PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium`. The default suite exercises the retained API demo and local tools. Separate partner-module tests intercept the SDK with a fixture; consult [Travelpayouts setup](travelpayouts-setup.md) for their environment and command. Fixtures do not verify actual live results or account approval.
 
-## GitHub validation
+The GitHub workflow runs validation on pushes/pull requests without deploying a site or using private provider credentials. Runner availability, quotas and hosting commercial-use terms depend on the account and plan. Confirm that the selected hosting plan permits the intended affiliate/commercial use rather than assuming a free plan does.
 
-`.github/workflows/ci.yml` checks pushes to `main`, pull requests and manual runs. It uses Node.js 24, `npm ci`, unit tests, a production build, TypeScript checks, and Chromium browser tests against explicit demo mode. It then starts a production demo server for the read-only HTTP checker. Its official GitHub actions are pinned to full commit hashes and use the Node.js 24 action runtime. The workflow has repository read permission, references no provider credentials and does not deploy a site.
+## Optional live API searches
 
-GitHub Actions requires a GitHub repository/account. Available runner minutes and storage depend on repository visibility and the account's current plan. The workflow does not enroll you in a paid service; review your account's usage settings before enabling repeated runs.
+Only `FLIGHT_SEARCH_INTEGRATION=api` uses `FLIGHT_PROVIDER`, `FLIGHT_DATA_MODE`, Amadeus credentials or the optional Skyscanner partner key/price-basis settings. See [Amadeus instructions](live-flight-search.md) and [seller comparison guide](seller-price-comparison.md). Keep every secret server-side and out of `NEXT_PUBLIC_` variables.
 
-## Put a public preview online when you choose a host
-
-Use a host that runs Next.js 16 on Node.js 24 with server-side route handlers. A static-only host cannot run Flyora's `/api/status` and `/api/flights` routes.
-
-For a host supporting this deployment model, use `npm ci` to install, `npm run build` to build, and `npm start` to serve the application. Some Next.js hosts manage the start command themselves. Set `FLIGHT_DATA_MODE=demo` and leave API credentials unset for a public demonstration. Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS site origin before the production build, then rebuild or redeploy; this value is used in site metadata.
-
-Hosting requires your own account and acceptance of the host's terms. A provider-issued subdomain may be sufficient for a preview, depending on the chosen service. A custom domain requires a domain you own and may incur registration/renewal costs. Check traffic limits, build quotas, privacy terms and whether commercial or affiliate use is permitted by the chosen plan. Do not assume a free plan permits this business model; in particular, verify Vercel's current Hobby/commercial-use rules rather than treating Hobby as a commercial launch plan.
-
-After deployment, check the canonical public HTTPS origin:
-
-```bash
-node scripts/check-deployment.mjs https://your-site.example --expect-mode=demo
-```
-
-Use an origin without credentials, paths, query parameters or fragments. The checker follows no redirects and sends no cookies or authentication tokens, so login-protected previews should be checked locally or after the host supplies an accessible preview. It has a 10-second timeout per response and a 2 MiB body limit. Change the timeout when needed with `--timeout-ms=15000`.
-
-## Real fares and commercial launch remain separate
-
-Live pricing needs a provider account with approved production access and private server credentials. Amadeus integration returns provider fares; airline search links do not guarantee that the airline website has the same price. Seller comparisons require approved Skyscanner partner access and confirmation of the contracted price basis. Review provider charges, data-use rights and affiliate eligibility before enabling live traffic. See [live-flight-search.md](live-flight-search.md) and [seller-price-comparison.md](seller-price-comparison.md).
-
-The operator must also supply working contact information, review legal/privacy text, verify any published student offers from official airline terms, and test the actual provider and booking handoffs once authorized accounts are available. The local tests and HTTP checker do not certify these items or declare the site universally ready to launch. See [launch-checklist.md](launch-checklist.md).
+API search access does not itself create affiliate revenue. The primary Travelpayouts configuration likewise needs genuine account, tracking and commercial permissions. Complete the [launch audit and owner requirements](launch-preparation.md) before calling the deployment commercially ready.

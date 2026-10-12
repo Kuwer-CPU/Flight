@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import nextEnv from '@next/env';
 import { getFlightConfig } from '../src/lib/flight-config.ts';
+import { getFlightIntegration } from '../src/lib/flight-integration.ts';
 import { getSiteConfig, canIndexSite } from '../src/lib/site-config.ts';
 
 // Offline configuration/evidence audit. No provider calls, account creation or payments.
@@ -27,31 +28,42 @@ export function validEvidence(value) {
 
 export function assessLaunch(review) {
   const config = getFlightConfig();
+  const integration = getFlightIntegration();
+  const partner = integration.integration === 'travelpayouts';
   const site = getSiteConfig();
   const checks = [];
   const add = (id, pass, description) => checks.push({ id, status: pass ? 'pass' : 'blocked', description });
-  add('production_configuration', config.mode === 'live' && config.environment === 'production' && config.status === 'configured',
-    'Selected feed must use configured production credentials. Presence does not verify authentication.');
-  add('seller_comparison_feed', config.provider === 'skyscanner',
-    'This release uses the approved seller partner feed for airline/agency comparison; ordinary Amadeus fares alone do not supply it.');
+  add('production_configuration', partner ? integration.status === 'configured' : config.mode === 'live' && config.environment === 'production' && config.status === 'configured',
+    partner ? 'The selected Travelpayouts interface must have valid enabled configuration. Configuration does not verify deployed rendering, live fares or successful booking handoffs.'
+      : 'Selected feed must use configured production credentials. Presence does not verify authentication.');
+  add('seller_comparison_feed', partner ? integration.status === 'configured' : config.provider === 'skyscanner',
+    partner ? 'The selected Travelpayouts interface is configured. Its actual seller coverage and booking handoffs require separate verification; Amadeus keys are not required for this integration.'
+      : 'This release uses the approved seller partner feed for airline/agency comparison; ordinary Amadeus fares alone do not supply it.');
   add('public_origin', site.publicOrigin, 'Set NEXT_PUBLIC_SITE_URL to the real HTTPS site origin, without a path, query or placeholder domain.');
   add('business_identity', !!site.businessName, 'Set FLYORA_BUSINESS_NAME to the actual operator name.');
   add('business_contact', !!site.contactEmail, 'Set FLYORA_CONTACT_EMAIL to a working support address; verify delivery yourself.');
   const exposedSecretNames = Object.keys(process.env).filter(name => /^NEXT_PUBLIC_.*(?:SECRET|TOKEN|PASSWORD|API_KEY|PRIVATE_KEY)/i.test(name) && !!process.env[name]);
   add('private_credentials', exposedSecretNames.length === 0,
     'Keys, tokens, secrets and passwords must never use NEXT_PUBLIC_ variables.');
-  add('indexing_configuration', !site.indexingRequested || canIndexSite(config, site),
-    'Indexing is optional for a limited launch and stays off by default. Opt-in requires a configured live feed, valid origin and business contact.');
+  add('indexing_configuration', !site.indexingRequested || canIndexSite(config, site, integration),
+    'Indexing is optional for a limited launch and stays off by default. Opt-in requires a configured selected integration, valid origin and business contact.');
   const evidence = review?.schemaVersion === 1 && review?.checks && typeof review.checks === 'object' ? review.checks : {};
-  for (const [id, description] of Object.entries(manualChecks)) add(id, validEvidence(evidence[id]), description);
+  const selectedManualChecks = partner ? {
+    ...manualChecks,
+    provider_contract: 'Travelpayouts account/interface ownership, partner terms, permitted commercial use and booking-link rights reviewed',
+    live_seller_quotes: 'The deployed Travelpayouts interface renders and real multi-traveler searches, seller prices and booking handoffs have been manually verified',
+    monitoring_and_limits: 'Partner usage conditions, host limits, log retention and monitoring reviewed',
+  } : manualChecks;
+  for (const [id, description] of Object.entries(selectedManualChecks)) add(id, validEvidence(evidence[id]), description);
   return {
     audit: 'offline launch preparation',
-    provider: config.provider,
-    mode: config.mode,
-    configurationStatus: config.status,
+    integration: integration.integration,
+    provider: partner ? 'travelpayouts' : config.provider,
+    mode: partner ? 'partner-interface' : config.mode,
+    configurationStatus: partner ? integration.status : config.status,
     blocked: checks.filter(check => check.status === 'blocked').length,
     checks,
-    limitations: 'Recorded manual evidence is not independently verified by this checker. Passing does not certify legal compliance, API access, prices or successful ticket issuance.',
+    limitations: 'Recorded manual evidence is not independently verified by this checker. Passing does not certify legal compliance, API access, prices or successful ticket issuance. Partner configuration alone does not verify widget rendering, availability, account ownership or booking handoffs.',
   };
 }
 
@@ -68,7 +80,7 @@ async function main() {
   if (args.includes('--json')) console.log(JSON.stringify(report, null, 2));
   else {
     console.log('Flyora launch preparation — offline audit');
-    console.log('Provider: ' + report.provider + '; mode: ' + report.mode + '; configuration: ' + report.configurationStatus + '.');
+    console.log('Integration: ' + report.integration + '; provider: ' + report.provider + '; mode: ' + report.mode + '; configuration: ' + report.configurationStatus + '.');
     for (const check of report.checks) console.log('[' + check.status.toUpperCase() + '] ' + check.id + ': ' + check.description);
     console.log('\n' + report.blocked + ' blockers remain. Record real, non-secret review evidence in docs/launch-review.json only after completing each check.');
     console.log(report.limitations);

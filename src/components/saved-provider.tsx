@@ -9,11 +9,16 @@ export function SavedProvider({ children }: { children: React.ReactNode }) {
   const [loaded, setLoaded] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    try {
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      try {
       const raw = localStorage.getItem('flyora:saved:v1');
       setSaved(readSavedFlights(raw));
     } catch { /* A browser with disabled storage can still search flights. */ }
-    setLoaded(true);
+      setLoaded(true);
+    });
+    return () => { cancelled = true; };
   }, []);
   useEffect(() => {
     if (loaded) try { if (saved.length) localStorage.setItem('flyora:saved:v1', JSON.stringify(saved)); else localStorage.removeItem('flyora:saved:v1'); } catch { /* Saving remains available for the session. */ }

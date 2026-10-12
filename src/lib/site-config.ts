@@ -53,7 +53,9 @@ export function getSiteConfig(): SiteConfig {
 }
 
 /** Explicit opt-in after launch review; presence of credentials is not live verification. */
-export function canIndexSite(connection: FlightConnection, site = getSiteConfig()) {
-  return site.indexingRequested && site.publicOrigin && !!site.businessName && !!site.contactEmail &&
+export function canIndexSite(connection: FlightConnection, site = getSiteConfig(), integration?: { integration: 'api' | 'travelpayouts'; status?: string }) {
+  const configured = integration?.integration === 'travelpayouts' ? integration.status === 'configured' :
     connection.mode === 'live' && connection.status === 'configured' && connection.environment === 'production';
+  return site.indexingRequested && site.publicOrigin && !!site.businessName && !!site.contactEmail &&
+    configured;
 }

@@ -20,6 +20,7 @@ jobs:
     env:
       FLIGHT_DATA_MODE: demo
       FLIGHT_PROVIDER: amadeus
+      FLIGHT_SEARCH_INTEGRATION: api
       AMADEUS_ENVIRONMENT: production
       NEXT_TELEMETRY_DISABLED: '1'
       PLAYWRIGHT_WEB_SERVER_COMMAND: npm start
@@ -37,6 +38,8 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Run unit tests
         run: npm test
+      - name: Lint application
+        run: npm run lint
       - name: Build production application
         run: npm run build
       - name: Check TypeScript
@@ -63,7 +66,40 @@ jobs:
             echo "The production demo server did not become ready."
             exit 1
           fi
-          node scripts/check-deployment.mjs http://127.0.0.1:3000 --expect-mode=demo
+          node scripts/check-deployment.mjs http://127.0.0.1:3000 --expect-integration=api --expect-mode=demo
+      - name: Build primary Travelpayouts integration without API credentials
+        env:
+          FLIGHT_SEARCH_INTEGRATION: travelpayouts
+          TRAVELPAYOUTS_EMBED_ENABLED: 'true'
+          TRAVELPAYOUTS_WHITE_LABEL_ID: '23277'
+          FLIGHT_DATA_MODE: live
+        run: npm run build
+      - name: Test partner wrapper using a local module fixture
+        env:
+          FLIGHT_SEARCH_INTEGRATION: travelpayouts
+          TRAVELPAYOUTS_EMBED_ENABLED: 'true'
+          TRAVELPAYOUTS_WHITE_LABEL_ID: '23277'
+          FLIGHT_DATA_MODE: live
+          FLYORA_PARTNER_E2E: '1'
+        shell: bash
+        run: |
+          npm start -- --port 3001 > "$RUNNER_TEMP/flyora-partner-server.log" 2>&1 &
+          partner_server_pid=$!
+          trap 'kill "$partner_server_pid" 2>/dev/null || true' EXIT
+          partner_server_ready=false
+          for attempt in {1..30}; do
+            if curl --fail --silent --max-time 2 --output /dev/null http://127.0.0.1:3001/api/integration-status; then
+              partner_server_ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$partner_server_ready" != true ]; then
+            echo "The production partner server did not become ready."
+            exit 1
+          fi
+          npm run test:e2e
+          node scripts/check-deployment.mjs http://127.0.0.1:3001 --expect-integration=travelpayouts
       - name: Retain failed browser traces
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, Node 24 runtime

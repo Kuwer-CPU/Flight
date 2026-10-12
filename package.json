@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "lint": "eslint src next.config.ts playwright.config.ts vitest.config.ts scripts",
     "launch:check": "node --experimental-strip-types scripts/launch-check.mjs",
     "check:deployment": "node scripts/check-deployment.mjs"
   },
@@ -30,6 +31,8 @@
     "@types/node": "^24.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "eslint": "10.12.0",
+    "eslint-config-next": "16.4.0",
     "typescript": "^5.9.0",
     "tz-lookup": "6.1.25",
     "vitest": "5.0.3"

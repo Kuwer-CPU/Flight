@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 test('key pages and the booking dialog have no detected WCAG A/AA violations', async ({ page }) => {
   test.setTimeout(90_000);
-  for (const path of ['/', '/student-perks', '/flights']) {
+  for (const path of ['/', '/student-benefits', '/flights']) {
     await page.goto(path);
     if (path === '/flights') await page.getByRole('button', { name: 'Select flight', exact: true }).first().waitFor();
     await page.evaluate(() => document.fonts.ready);

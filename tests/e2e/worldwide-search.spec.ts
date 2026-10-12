@@ -5,7 +5,7 @@ test.use({ hasTouch: true });
 
 test('searches between South America and Africa by city and code using keyboard airport selection', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByText(/5,332 airports across 235/)).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Worldwide flight search' }).getByText(/5,332 airports across 235/)).toBeVisible();
   const origin = page.getByRole('combobox', { name: 'Departure airport' });
   await origin.fill('Sao Paulo');
   await expect(page.getByRole('option', { name: /^GRU\b/ })).toBeVisible();
@@ -64,7 +64,7 @@ test('airport suggestions fit mobile screens, accept touch selection and meet ac
 
 test('international destination cards open working route searches', async ({ page }) => {
   await page.goto('/');
-  await page.locator('.destination-card').filter({ hasText: 'New York' }).click();
+  await page.getByRole('link', { name: /New York.*Tokyo/ }).click();
   await expect(page).toHaveURL(/origin=JFK&destination=HND/);
   await expect(page.getByRole('button', { name: 'Select flight', exact: true })).toHaveCount(6);
 });

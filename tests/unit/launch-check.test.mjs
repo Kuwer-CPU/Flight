@@ -6,6 +6,8 @@ const envNames = [
   'SKYSCANNER_ENVIRONMENT', 'SKYSCANNER_API_KEY', 'SKYSCANNER_MARKET', 'SKYSCANNER_LOCALE', 'SKYSCANNER_PRICE_BASIS',
   'NEXT_PUBLIC_SITE_URL', 'FLYORA_BUSINESS_NAME', 'FLYORA_CONTACT_EMAIL', 'FLYORA_ALLOW_INDEXING',
   'NEXT_PUBLIC_PROVIDER_API_KEY',
+  'FLIGHT_SEARCH_INTEGRATION', 'TRAVELPAYOUTS_EMBED_ENABLED', 'TRAVELPAYOUTS_AFFILIATE_LINKS',
+  'TRAVELPAYOUTS_WHITE_LABEL_ID', 'TRAVELPAYOUTS_WHITE_LABEL_URL', 'TRAVELPAYOUTS_WIDGET_CODE',
 ];
 const manualIds = ['provider_contract', 'live_seller_quotes', 'student_rules', 'business_and_legal', 'hosting_https', 'monitoring_and_limits'];
 function reviewed() {
@@ -25,8 +27,60 @@ function check(report, id) { return report.checks.find(value => value.id === id)
 
 beforeEach(() => {
   for (const name of envNames) vi.stubEnv(name, undefined);
+  // These legacy tests exercise the explicitly selected API integration.
+  vi.stubEnv('FLIGHT_SEARCH_INTEGRATION', 'api');
   vi.useFakeTimers();
   vi.setSystemTime(new Date('2026-10-12T12:00:00Z'));
+});
+
+describe('primary Travelpayouts launch preparation', () => {
+  it('does not require Amadeus or Skyscanner keys for the configured primary script interface', () => {
+    configuredSellerFeed();
+    vi.stubEnv('FLIGHT_SEARCH_INTEGRATION', 'travelpayouts');
+    vi.stubEnv('SKYSCANNER_API_KEY', undefined);
+    vi.stubEnv('SKYSCANNER_PRICE_BASIS', undefined);
+    const report = assessLaunch(reviewed());
+    expect(report).toMatchObject({ integration: 'travelpayouts', provider: 'travelpayouts', mode: 'partner-interface', configurationStatus: 'configured', blocked: 0 });
+    expect(check(report, 'production_configuration').status).toBe('pass');
+    expect(check(report, 'seller_comparison_feed').description).toContain('Amadeus keys are not required');
+  });
+  it('still blocks pending partner ownership, deployed rendering and booking-handoff reviews', () => {
+    vi.stubEnv('FLIGHT_SEARCH_INTEGRATION', 'travelpayouts');
+    const report = assessLaunch({ schemaVersion: 1, checks: {} });
+    expect(report.configurationStatus).toBe('configured');
+    expect(check(report, 'provider_contract').status).toBe('blocked');
+    expect(check(report, 'provider_contract').description).toContain('ownership');
+    expect(check(report, 'live_seller_quotes').status).toBe('blocked');
+    expect(check(report, 'live_seller_quotes').description).toContain('deployed Travelpayouts interface renders');
+    expect(report.limitations).toContain('configuration alone does not verify widget rendering');
+  });
+  it.each([
+    ['TRAVELPAYOUTS_EMBED_ENABLED', 'false', 'disabled'],
+    ['TRAVELPAYOUTS_WHITE_LABEL_ID', 'invalid', 'invalid-configuration'],
+  ])('blocks disabled or malformed partner configuration', (name, value, expected) => {
+    vi.stubEnv('FLIGHT_SEARCH_INTEGRATION', 'travelpayouts');
+    vi.stubEnv(name, value);
+    const report = assessLaunch(reviewed());
+    expect(report.configurationStatus).toBe(expected);
+    expect(check(report, 'production_configuration').status).toBe('blocked');
+    expect(check(report, 'seller_comparison_feed').status).toBe('blocked');
+  });
+  it('checks indexing against the selected partner configuration rather than unused API keys', () => {
+    configuredSellerFeed();
+    vi.stubEnv('FLIGHT_SEARCH_INTEGRATION', 'travelpayouts');
+    vi.stubEnv('SKYSCANNER_API_KEY', undefined);
+    vi.stubEnv('FLYORA_ALLOW_INDEXING', 'true');
+    expect(check(assessLaunch(reviewed()), 'indexing_configuration').status).toBe('pass');
+    vi.stubEnv('TRAVELPAYOUTS_EMBED_ENABLED', 'false');
+    expect(check(assessLaunch(reviewed()), 'indexing_configuration').status).toBe('blocked');
+  });
+  it('never prints raw iframe source, affiliate queries or private provider values', () => {
+    vi.stubEnv('FLIGHT_SEARCH_INTEGRATION', 'travelpayouts');
+    vi.stubEnv('TRAVELPAYOUTS_WHITE_LABEL_URL', 'https://partner-flight-interface.com/search?marker=fixture-public-marker');
+    vi.stubEnv('AMADEUS_API_SECRET', 'fixture-unused-api-secret');
+    const serialized = JSON.stringify(assessLaunch(reviewed()));
+    expect(serialized).not.toMatch(/fixture-public-marker|fixture-unused-api-secret|partner-flight-interface\.com|iframe|23277/);
+  });
 });
 afterEach(() => { vi.unstubAllEnvs(); vi.useRealTimers(); });
 

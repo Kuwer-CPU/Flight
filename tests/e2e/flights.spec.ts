@@ -4,11 +4,11 @@ test('searches round trips, compares bags, sorts flights and hands off to the ai
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: /Same flight/ })).toBeVisible();
-  await expect(page.getByRole('main').getByText('Preview mode', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Smarter flights for students worldwide.', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Search flights', exact: true }).click();
   await expect(page).toHaveURL(/\/flights\?/);
   await expect(page.getByRole('button', { name: 'Select flight', exact: true })).toHaveCount(6);
+  await expect(page.getByRole('main').getByText('Preview mode', { exact: true })).toBeVisible();
   await page.getByLabel('At least 30 kg included').check();
   await expect(page.getByRole('button', { name: 'Select flight', exact: true })).toHaveCount(1);
   await expect(page.locator('.flight-airline h3')).toHaveText('Emirates');
@@ -59,10 +59,10 @@ test('mobile navigation, search, filters and booking dialog fit the screen', asy
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   await page.getByRole('button', { name: 'Open navigation' }).click();
-  await page.getByRole('navigation').getByRole('link', { name: /Student perks/ }).click();
-  await expect(page.getByRole('heading', { name: /A little extra/ })).toBeVisible();
-  await page.getByLabel('Find an airline student program').fill('Qatar');
-  await expect(page.locator('.program-card')).toHaveCount(1);
+  await page.getByRole('navigation').getByRole('link', { name: /Student benefits/i }).click();
+  await expect(page.getByRole('heading', { name: 'Check your student advantage.', exact: true })).toBeVisible();
+  await page.getByLabel('Search airlines or student programs', { exact: true }).fill('Qatar');
+  await expect(page.locator('.benefit-card')).toHaveCount(1);
   await page.goto('/');
   await page.getByRole('button', { name: 'Search flights', exact: true }).click();
   await page.getByRole('button', { name: 'Filters', exact: true }).click();

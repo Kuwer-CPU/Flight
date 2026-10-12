@@ -1,67 +1,77 @@
-# Flyora launch preparation
+# Flyora 2.0 launch preparation
 
-The application can be built and explored without a paid service or provider key. That is different from opening a working commercial flight comparison to travelers. This release prepares the independent work and records the remaining external prerequisites.
+Flyora can be installed, built and used for student planning without a paid flight API. The primary customer flight search is Travelpayouts White Label **23277**, with the retained Amadeus/Skyscanner experience available only through explicit API mode. A configured module is not proof of account approval, live results or successful booking.
 
-## Prepared without an account or payment
+## Prepared without payments or private API credentials
 
 | Work | What is prepared |
 | --- | --- |
-| Release checks | GitHub workflow for locked installation, unit tests, production build, TypeScript, browser tests and response checks; no provider secrets or live searches |
-| Deployment inspection | `npm run check:deployment -- <site-origin>` checks public pages, headers, indexing and safe provider status without calling a flight API |
-| Launch audit | `npm run launch:check` reports missing production/business configuration and actual review evidence; `-- --json` produces a machine-readable report |
-| Preview indexing | Indexing is disabled by default. Demo, sandbox, invalid configurations and missing public/operator settings cannot enable it |
-| Support and privacy | Contact page, configurable operator/contact, accurate search URL/history/log disclosures and a clear-all saved-flight control |
-| Flight data reliability | Invalid saved records are isolated; Amadeus fares must match currency, route, dates and reported cabin, with a bounded overall search deadline |
-| Provider application | [Prepared brief and enquiry](provider-application.md), with owner fields blank; nothing submitted |
-| Student policies | [Review procedure](student-policy-review.md) and a [14-airline worksheet](student-policy-template.csv); all initial policy facts and review dates remain unverified |
+| Product experience | Student travel homepage, worldwide route-planning form and links to four planning tools |
+| Primary flight-search integration | Fixed Travelpayouts module source, initialization/failure states, retained search surface across SPA navigation and customer privacy/affiliate notices |
+| Student benefits | Structured directory, official-source links, honest policy-review states and eligibility fields; initial terms remain unverified |
+| Travel budget | Manual 2–4 option calculator, validated costs, exact-cent totals, pending unknown bag charges and an explicitly hypothetical example |
+| Miles Wallet | Validated manual loyalty records, browser-local persistence, expiry reminders and cash-versus-miles calculation |
+| Checklist | General trip reminders, editable items, completion progress, custom reminders, printing and browser-local persistence/clear controls |
+| Release checks | Repeatable lint, unit, production build, TypeScript and browser checks; SDK fixtures do not need live provider secrets |
+| Deployment inspection | Read-only public-page/header/configuration checks that do not request flight offers or enter payment details |
+| Launch audit | Offline configuration and genuine recorded-evidence checks; missing owner or approval records remain blockers |
+| Business readiness | Contact configuration, privacy and booking boundaries, preview indexing controls and saved-data clear controls |
+| External review preparation | [Provider brief](provider-application.md), [student policy review procedure](student-policy-review.md) and an unverified airline worksheet; no account applications submitted by this work |
 
-The GitHub workflow is prepared in source. A successful local run does not prove the hosted Actions run or a deployed Vercel site has passed. Hosting quotas and account permissions remain controlled by those services.
+The SDK and the intended deployed URL could not be inspected from this cloud environment: the CONNECT proxy returned HTTP 403. Module browser tests use an intercepted fixture. A passing fixture, local response check or build does not establish real third-party rendering, current fares, affiliate attribution or deployed behavior.
 
-Local validation on 12 October 2026 passed: 302 unit tests, 23 Chromium browser tests, TypeScript and the production build. The read-only checker passed on nine routes in both explicit demo and missing-key live configurations. Live and sandbox startup checks confirmed that fictional student examples are absent and missing credentials return 503 without sample fares. The production dependency audit reported no known vulnerabilities. None of these checks authenticated a provider or established real ticket availability.
+## Configure Vercel, then redeploy
 
-## Run the audit
+Use these values under **Project → Settings → Environment Variables** for the deployment environment:
 
-Use Node.js 24, or at least 22.18, from the repository folder:
+```env
+NEXT_PUBLIC_SITE_URL=https://flight-ten-steel.vercel.app
+FLIGHT_SEARCH_INTEGRATION=travelpayouts
+TRAVELPAYOUTS_WHITE_LABEL_ID=23277
+TRAVELPAYOUTS_EMBED_ENABLED=true
+TRAVELPAYOUTS_AFFILIATE_LINKS=true
+FLYORA_ALLOW_INDEXING=false
+```
+
+Affiliate use must be permitted by the actual agreement; otherwise set `TRAVELPAYOUTS_AFFILIATE_LINKS=false`. Confirm the account and domain authorization for White Label 23277. These settings enable the intended source but do not prove authorization or revenue eligibility.
+
+Remove `TRAVELPAYOUTS_WHITE_LABEL_URL` and `TRAVELPAYOUTS_WIDGET_CODE` or leave both unset for the primary script transport. A populated source switches to separate iframe compatibility mode. Amadeus credentials are unnecessary for the primary module, local tools or production builds.
+
+Add the actual `FLYORA_BUSINESS_NAME` and a working `FLYORA_CONTACT_EMAIL` before a public commercial launch. The contact page does not create an inbox or send mail; test receiving mail yourself. These details are optional for builds and cannot be invented by the application.
+
+**Local `.env.local` values do not update Vercel. Rebuild/redeploy after changing Vercel settings**, including the public origin, business/contact information, indexing and search transport. Build-time metadata and CSP must match the intended runtime configuration.
+
+## Run the audits
+
+From the repository folder, use Node.js 24 or at least 22.18:
 
 ```bash
 npm ci
 npm run launch:check
+npm run check:deployment -- https://flight-ten-steel.vercel.app --expect-integration=travelpayouts
 ```
 
-The command reads production `.env` files through Next.js's environment loader and reads [launch-review.json](launch-review.json). It performs no network calls. Exit code **1** means there are outstanding launch prerequisites; **2** means the command could not read its inputs. A blocked audit is expected while credentials and owner details are absent. Do not disable the checks to make it pass.
+The launch audit reads production `.env` files through Next.js's environment loader and the committed [launch-review.json](launch-review.json). It performs no provider or hosting requests. Exit **1** means remaining prerequisites; **2** means invalid/unreadable audit inputs. `npm run launch:check -- --json` emits the report as JSON.
 
-Review records use `status`, `reviewedOn` and `evidence`. Set a record to `complete` only after the corresponding work has actually happened, with a real calendar review date and a non-secret reference. Do not store credentials, passenger data or private partner documents in this committed file. The checker can validate record shape and dates; it cannot authenticate evidence, certify legal compliance or guarantee ticket availability.
+Review records contain `status`, `reviewedOn` and `evidence`. Mark a record complete only after the actual check has occurred, using a real date and a non-secret reference. Do not store credentials, passenger details or confidential partner documents in the committed review file. The audit validates configuration and evidence shape; it does not authenticate evidence, certify legal compliance or guarantee ticket availability.
 
-The audit requires the seller feed because airline/agency price comparison is the intended launch product. Amadeus remains available for ordinary fare searches, but those alone do not complete the requested seller comparison.
+The deployment checker inspects public routes, all four tool pages, baseline headers, indexing and safe `/api/integration-status` configuration. It checks the separate `/api/status` provider response only for explicit API mode. It does not load the real SDK in a browser, search flights, open seller checkout or enter payment details. A failure from the current cloud proxy does not establish whether the website works for an ordinary visitor; perform the same check from an allowed environment and use a browser for real module verification.
 
-## Configure the public business details
+## Remaining owner and external checks
 
-Add these values to ignored `.env.local` or the host's environment settings:
-
-| Setting | Value to supply |
-| --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Actual public HTTPS origin, without a path, query, credentials or placeholder domain |
-| `FLYORA_BUSINESS_NAME` | Actual operator name to publish |
-| `FLYORA_CONTACT_EMAIL` | Working support/privacy inbox to publish; test receiving mail yourself |
-| `FLYORA_ALLOW_INDEXING` | Leave `false` for previews; opt into `true` only after real launch review |
-
-The contact page does not create an inbox, send mail or collect documents. Without contact configuration it honestly says the support address will be published before public launch. Indexing opt-in also needs a configured production feed, origin and contact; credential presence is not evidence that the provider works. Enabling it is an owner decision after the external checks.
-
-**Rebuild/redeploy after changing public origin, business information or indexing settings.** Some pages and metadata are generated at build time. Changing only a runtime variable can leave previously built contact pages or metadata unchanged.
-
-## Items requiring the owner or external access
-
-| Priority | Missing item | Why it cannot be completed from code |
+| Priority | Required check | Evidence needed |
 | --- | --- | --- |
-| 1 | Approved seller API account, contract and credentials | Provider eligibility, price rights, budget and private credentials must come from the account holder |
-| 2 | Business/operator name, operating jurisdiction and contact inbox | These are real identity and business choices, not values the application can invent |
-| 3 | Hosting account and public HTTPS origin | The owner must accept the host's terms and choose a plan permitting the intended commercial use; a custom domain is optional for a preview |
-| 4 | Official student-rule verification | Airline documentation is outside the current cloud network allowlist. Saved network drafts must be applied before research here can proceed; a worksheet is not verification |
-| 5 | Real quote and seller checkout verification | Requires approved access. Confirm group prices, taxes, fees, baggage, ticket/transfer conditions and booking links without purchasing a ticket |
-| 6 | Legal/privacy and operations review | Depends on jurisdiction, chosen provider/host agreements, log retention, rate limits and actual API spend controls |
+| 1 | Intended Travelpayouts account/module and domain authorization | White Label 23277 belongs to the intended account; current display, booking, affiliate and market permissions are confirmed |
+| 2 | Real production module and booking handoffs | Route, dates, full traveler count, actual fares, seller links, baggage/fees and mobile rendering checked without purchasing a ticket |
+| 3 | Operator identity and support | Actual business/operator name, jurisdiction and working contact inbox published |
+| 4 | Hosting and privacy | Deployed HTTPS origin, commercial/affiliate use allowed by the host's plan, current partner tracking/cookie behavior and jurisdiction-specific privacy/terms reviewed |
+| 5 | Student rules | Official current route/fare/age/verification/registration/booking-channel conditions reviewed before showing concrete benefits or savings |
+| 6 | Operational limits | Provider/partner quotas, host limits, alerting, log retention, rate protection and any actual spending reviewed |
 
-The configured server caches and IP limits are process-local. A production host with multiple instances needs shared limits or equivalent edge/host protection, plus provider quotas and budget alerts. This code does not establish a global API cost cap. The response checker can support monitoring, but no external uptime/alert service is activated.
+Keep indexing disabled during preview. Turn `FLYORA_ALLOW_INDEXING=true` on only after the real launch review; eligible configured production settings and business details are necessary but not independent verification. `/flights` search URLs and private profile/query context should remain out of search indexes.
 
-Start with a limited audience after these items are met. A database, user accounts, on-site payment integration and a custom domain are not required for the current comparison-and-handoff model. Affiliate monetization needs a separate permitted agreement; search access does not automatically generate commission.
+The retained API experience has separate approval and credential requirements. Process-local API caches and limits do not establish shared protection or a global cost cap for a multi-instance deployment. The module uses partner-managed results, but host limits and the partner agreement still need review.
 
-See [deployment.md](deployment.md) for local and hosting steps and [launch-checklist.md](launch-checklist.md) for the commercial prerequisites. Payment or ticket issuance on Flyora would require a separate operational booking stack.
+A native database, login, cross-device wallet, custom domain and on-site payments are unnecessary for the current planning-and-handoff model. Affiliate monetization requires the actual permitted agreement and correct attribution. On-site ticket payments or issuance would require a separate booking, payment and customer-support stack.
+
+See [deployment.md](deployment.md), [Travelpayouts setup](travelpayouts-setup.md), [Flyora 2.0 behavior](flyora-v2.md) and the [commercial launch checklist](launch-checklist.md).

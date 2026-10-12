@@ -1,131 +1,108 @@
-# Flyora
+# Flyora 2.0
 
-A student-focused flight-search website built with Next.js, React and TypeScript. Travelers search routes worldwide, compare baggage and student benefits, inspect returned airline/travel-agency quotes for the same flight, save a shortlist and continue to the chosen seller’s booking link. Real price-feed access and verified student terms are launch prerequisites.
+A student travel website built with Next.js, React and TypeScript. Flight search remains the main experience; student airline benefits, a full travel-cost calculator, a Miles Wallet and an editable travel checklist help visitors plan before booking externally.
 
-Preview screenshots: [Homepage](docs/previews/homepage.png), [student comparison](docs/previews/comparison.png), and [mobile flight card](docs/previews/mobile-flight.png). Also see [worldwide airport search](docs/previews/worldwide-search.png) and [global destinations](docs/previews/worldwide-destinations.png). These screenshots show the labeled demo mode, not verified airline offers.
+The primary flight-search integration is the Travelpayouts White Label module **23277**. Amadeus and the optional Skyscanner seller API remain available through an explicit API mode. Flyora does not collect ticket payments or issue tickets.
 
 ## Run locally
 
-Requires Node.js 22.18 or later. Node.js 24 is recommended and used in the cloud environment.
+Use Node.js 24, or at least Node.js 22.18. From the folder containing `package.json`:
 
-    npm ci
-    npm run dev
+```bash
+npm ci
+cp .env.example .env.local
+npm run dev
+```
 
-Open the address printed by Next.js. Flight search now defaults to Amadeus production. Create `.env.local` from `.env.example` and add the matching production credentials as described in [Connect real flight search](docs/live-flight-search.md). Without credentials, the site loads but search reports that it is not connected. To intentionally explore fictional sample flights without an account, set `FLIGHT_DATA_MODE=demo` in `.env.local` and restart.
+On Windows, copy `.env.example` to `.env.local` using your file manager. Open the localhost address printed by Next.js and keep the terminal running. Amadeus credentials are unnecessary for a build or the primary Travelpayouts experience.
 
-## Launch on Vercel
+The tools work without a flight-provider account. Partner fares require the actual third-party module to load and the account/domain configuration to be valid. A local environment file does not change Vercel settings.
 
-1. Push these application files to your Flight repository.
-2. Import the repository in Vercel. Select Next.js as the framework; use Node.js 24, the default repository root, install command npm ci and build command npm run build.
-3. Add NEXT_PUBLIC_SITE_URL with your deployed HTTPS origin, without a trailing slash. Add the actual FLYORA_BUSINESS_NAME and FLYORA_CONTACT_EMAIL before public launch. Keep FLYORA_ALLOW_INDEXING=false for previews; public metadata and contact changes require a rebuild/redeploy.
-4. Choose your approved feed. For Amadeus fares, add `FLIGHT_DATA_MODE=live`, `FLIGHT_PROVIDER=amadeus`, `AMADEUS_ENVIRONMENT=production` and matching server-side credentials. For airline/agency price comparison, follow the partner settings and contract validation in [seller-price-comparison.md](docs/seller-price-comparison.md). Set `FLIGHT_DATA_MODE=demo` only for a labeled demonstration.
-5. Deploy. Run the [launch audit](docs/launch-preparation.md) and read-only response checker, then test actual searches and each returned seller handoff on your deployed domain before opening it to customers. Enable indexing explicitly only after these external checks.
+## Vercel configuration
 
-The website has not been deployed by this coding task. Deployment to a hosting account is a separate action.
+Import `Kuwer-CPU/Flight` as a Next.js project. Use the repository root, Node.js 24, install command `npm ci` and build command `npm run build`. Add these values under **Project → Settings → Environment Variables** for the deployment environment, then redeploy:
 
-Any Node.js hosting platform can also use:
+```env
+NEXT_PUBLIC_SITE_URL=https://flight-ten-steel.vercel.app
+FLIGHT_SEARCH_INTEGRATION=travelpayouts
+TRAVELPAYOUTS_WHITE_LABEL_ID=23277
+TRAVELPAYOUTS_EMBED_ENABLED=true
+TRAVELPAYOUTS_AFFILIATE_LINKS=true
+FLYORA_ALLOW_INDEXING=false
+```
 
-    npm ci
-    npm run build
-    npm start
+Set `TRAVELPAYOUTS_AFFILIATE_LINKS=true` only if the partner agreement permits the intended affiliate use; otherwise use `false`. The flag declares link behavior and does not create an account, establish approval or guarantee commission.
 
-Set PORT if your hosting platform requires it. This app needs a Next.js/Node runtime because flight credentials stay on the server; do not host it as a plain static export.
+**Remove or leave unset `TRAVELPAYOUTS_WHITE_LABEL_URL` and `TRAVELPAYOUTS_WIDGET_CODE` for this script module.** A populated value selects the separate hosted/iframe compatibility mode. Setting both sources is invalid.
 
-## Worldwide airport search
+Before a public commercial launch, also supply the actual `FLYORA_BUSINESS_NAME` and a working `FLYORA_CONTACT_EMAIL`. These details are optional for builds. Keep indexing disabled until the real partner, privacy, business and booking checks have passed. Public metadata, contact details and integration security headers require a rebuild/redeploy after configuration changes.
 
-The From and To fields search 5,332 airports across 235 countries and territories. Enter a city, airport name, country, or three-letter IATA code, then choose an airport suggestion. Keyboard users can use arrow keys and Enter; a complete airport code can be selected directly with Enter. Replacing a selected name clears its airport code so an unfinished edit cannot silently submit the old route.
+The URL above is the intended Vercel origin. This coding environment could not inspect the deployed site or retrieve the real module because the CONNECT proxy returned HTTP 403. Local mocked tests do not establish that the deployed widget, current prices, booking links or affiliate attribution work.
 
-The airport catalog covers every inhabited continent. Example searches include New York–Tokyo, São Paulo–Cape Town, Sydney–Singapore, Toronto–Mexico City and Nairobi–London. It is bundled with the application, so airport lookup works without a provider account or a separate locations API. Airport and timezone data sources, licenses and refresh instructions are documented in [docs/airport-data.md](docs/airport-data.md).
+See [deployment instructions](docs/deployment.md), [Travelpayouts setup](docs/travelpayouts-setup.md) and the [Flyora 2.0 guide](docs/flyora-v2.md).
 
-This enables worldwide route inputs; actual flight availability is determined by the flight provider. An airport being in the catalog is not a guarantee that a particular airline serves it. Preview routes use visibly labeled generated flights. Live search requires the selected provider's approved credentials and production access; coverage does not include every airline, fare or route worldwide.
+## What is implemented
 
-## Connect live flight search
-
-For airline/OTA seller comparison, see [docs/seller-price-comparison.md](docs/seller-price-comparison.md). An approved partner feed is required; an ordinary Amadeus fare is not the airline website’s confirmed selling price. Before launch, complete [docs/launch-checklist.md](docs/launch-checklist.md).
-
-Independent launch work, remaining owner requirements and audit commands are documented in [docs/launch-preparation.md](docs/launch-preparation.md). The provider application brief and 14-airline policy worksheet are prepared there; no applications have been submitted and no policies have been marked verified.
-
-Step-by-step account, local setup, hosting and troubleshooting instructions: [docs/live-flight-search.md](docs/live-flight-search.md).
-
-Create an Amadeus for Developers account and a Flight Offers Search application. Enter credentials securely in your hosting provider’s environment settings, or in an ignored .env.local file for development. Never put credentials in source files or NEXT_PUBLIC variables.
-
-The .env.example file documents these settings:
-
-| Variable | Purpose |
+| Page | Behavior |
 | --- | --- |
-| FLIGHT_DATA_MODE | live by default; demo only for intentional fictional previews |
-| FLIGHT_PROVIDER | amadeus by default; skyscanner for the optional multi-seller partner feed |
-| AMADEUS_ENVIRONMENT | production by default; test for matching sandbox credentials |
-| AMADEUS_API_KEY | Server-side Amadeus client ID |
-| AMADEUS_API_SECRET | Server-side Amadeus client secret |
-| NEXT_PUBLIC_SITE_URL | Your public HTTPS site origin |
-| FLYORA_BUSINESS_NAME | Actual operator name displayed publicly; optional for builds |
-| FLYORA_CONTACT_EMAIL | Public support/privacy inbox; optional for builds |
-| FLYORA_ALLOW_INDEXING | false/unset for previews; true opts into indexing after launch review |
+| `/` | Student travel homepage, worldwide route planning and links to the four tools |
+| `/flights` | Primary Travelpayouts search module; externally handled results and booking |
+| `/student-benefits` | Searchable airline directory with policy-review status, official sources and eligibility fields |
+| `/travel-calculator` | Compare 2–4 manually entered ticket, baggage, transfer, insurance and other costs in one currency |
+| `/miles-wallet` | Browser-local manual loyalty balances, entered expiry dates and a cash-versus-miles value calculator |
+| `/travel-checklist` | Generate, edit, complete, add, remove, print and clear general travel reminders |
+| `/student-perks` | Retained earlier program-directory route |
 
-For sandbox testing, use FLIGHT_DATA_MODE=live and AMADEUS_ENVIRONMENT=test with your test credentials. Results are labeled “Provider sandbox” and are not bookable production tickets.
+Student policy leads remain unverified. The directory displays “Confirm with airline” and “Not verified” rather than inventing numerical benefits or review dates. The calculator does not modify partner fares; unknown necessary bag charges keep an option pending. Its optional monetary example is explicitly hypothetical.
 
-For real fares, obtain Amadeus production access, use production credentials, and set AMADEUS_ENVIRONMENT=production and FLIGHT_DATA_MODE=live. Restart or redeploy after changing variables. Amadeus Self-Service coverage does not include every airline, route, special student fare or booking channel.
+Wallet balances and checklist progress are manual records saved in this browser. There is no airline login, automatic balance sync, redemption purchase, cloud account or cross-device backup. The calculator does not persist entries. Browser storage can be cleared using each tool's controls or the browser's site-data settings.
 
-The server requests an OAuth token, then Flight Offers Search. Tokens and search results are cached briefly in memory; keys never reach the browser. Missing credentials, invalid settings and provider failures produce explicit errors instead of substituting sample results. `/api/status` exposes safe configuration status without any credentials; `configured` means values are present, not that authentication was verified. Successful live results show their retrieval timestamp. Malformed rows are isolated, and baggage stays unknown unless every traveler and segment is covered. Allow HTTPS egress to test.api.amadeus.com and api.amadeus.com when using a restricted cloud environment.
+## Worldwide route planning
 
-Real provider access has not been exercised because credentials are not available. The adapter is tested against mocked provider responses, including production/test hosts, missing and invalid settings, authentication and rate-limit failures, caching, malformed responses and baggage normalization. Browser tests simulate production offers to verify their display; they do not establish provider access.
+The bundled catalog supports searching 5,332 airports across 235 countries and territories by city, airport name, country or IATA code. This enables worldwide route inputs; it does not guarantee provider coverage of every route, airline, seller or fare. See [airport sources and refresh instructions](docs/airport-data.md).
 
-## Booking model
+The Flyora form is a planning summary. No verified module-prefill contract is implemented: check route, dates, traveler count and cabin in the partner interface. Student eligibility and baggage must be confirmed for the fare and booking channel actually chosen.
 
-When a partner feed returns priced seller links, flight details compare those airline and travel-agency quotes and link to the chosen offer. The headline price is the lowest accepted returned seller quote. Coverage may be incomplete and no universal lowest-price claim is made. Without a quote-specific link, a known airline’s website is offered only as a clearly labeled search handoff; its price is unconfirmed. Unknown airlines with no booking link return to Flyora search. This version does not reserve offers, issue tickets or process payments. Final fares and conditions are confirmed by the seller.
+## Optional API experience
 
-The website does not yet earn affiliate revenue. Join permitted affiliate programs and follow their tracking and disclosure requirements. Do not modify provider quote links without permission under the partner contract. On-site ticket issuance would require a separate booking-provider integration, passenger collection, payment flow, order storage and booking lifecycle support; there is no simulated checkout or fake purchase confirmation.
+Set `FLIGHT_SEARCH_INTEGRATION=api` to use the retained native flight cards. This mode defaults to live Amadeus production and needs matching server-side `AMADEUS_API_KEY` and `AMADEUS_API_SECRET` for searches. It still builds without those credentials; searches fail clearly rather than substituting fictional fares.
 
-## Student baggage and fares
+For deliberate API demonstrations, use `FLIGHT_DATA_MODE=demo`. For Amadeus sandbox responses, use `FLIGHT_DATA_MODE=live` and `AMADEUS_ENVIRONMENT=test` with test credentials. Both are visibly labeled and must not be presented as bookable production prices.
 
-Student-program links are in src/lib/airlines.ts. Current terms could not be retrieved from the cloud’s restricted network during development, so every listed program is visibly marked as needing review. Links themselves also need review before a commercial launch. No program is represented as a verified discount, guaranteed age eligibility or extra baggage allowance.
+The optional Skyscanner adapter requires approved partner access, its own server key and a confirmed price basis. It can compare returned airline/agency seller quotes, but ordinary Amadeus fares alone are not a confirmed airline-website selling price. See [Amadeus setup](docs/live-flight-search.md) and [seller comparison requirements](docs/seller-price-comparison.md). These API settings do not drive the primary Travelpayouts module.
 
-The demo homepage leads with a fictional Airline A/B example showing why a €610 fare with sufficient baggage can beat a €545 fare plus a €95 bag add-on. Live and sandbox homepages instead explain student eligibility without fictional numerical benefits. Search results put a comparison table above the flights and a prominent baggage equation on each card and itinerary dialog. Registration and student verification requirements are visible beside the allowance.
+Never place private credentials in source files or `NEXT_PUBLIC_` variables. White Label ID 23277 is a public module identifier, not an API secret or proof of account ownership.
 
-Displayed standard baggage comes from the flight offer. The minimum known allowance across all travelers and segments is shown; pieces are never converted into an invented weight. Demo flights also have explicitly fictional student bonuses and bag add-on prices to demonstrate this comparison. Every numerical example is labeled as an illustration rather than actual airline policy. These inputs are only accepted for demo-mode offers; the comparison code discards them for both live and Amadeus sandbox offers. Actual student terms remain unverified, with eligible totals and student scores shown as pending.
+## Validation and launch review
 
-Student value is the default sort for student searches. It weights cost with the requested baggage at 40%, included baggage coverage at 45%, and combined outbound/return travel time at 15%. Cost and time are relative to the cheapest comparable cost and shortest journey in the full search; filters do not change the scores. Baggage coverage is capped at the traveler's request. Costs are per adult; paid packages are rounded up to meet the shortfall, and the original ticket fare is unchanged. The example add-on quotes cover the complete itinerary. Unknown allowances or necessary add-on prices, and mixed currencies, leave scores pending rather than inventing a cost. The interface includes an explanation of the calculation.
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
 
-Before advertising specific student savings, review the official airline terms for the relevant route, fare, age, registration and verification conditions, then extend the data model with source URLs and actual review dates. Student offers can require booking through a different channel from ordinary provider fares.
+Browser tests use an explicit API demo server for the retained flow and local tools. Install Chromium with `npx playwright install chromium`, then run `npm run test:e2e`. On this cloud machine use `PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium`. Primary-module browser tests intercept the SDK with a local fixture; they verify mounting, route behavior, failures and privacy disclosures without verifying the actual SDK or live fares. See [Flyora 2.0 validation boundaries](docs/flyora-v2.md).
 
-## Validation
+`npm run launch:check` performs an offline configuration and recorded-evidence audit. `npm run check:deployment -- <public-origin> --expect-integration=travelpayouts` inspects public HTTP responses and `/api/integration-status` without executing the SDK or searching flights. `/api/status` describes only the retained API provider and is checked when API mode is selected. Neither command certifies commercial approval, student policies, actual fares or ticket issuance. Review [launch preparation](docs/launch-preparation.md) and the [launch checklist](docs/launch-checklist.md).
 
-    npm run typecheck
-    npm test
-    npx playwright install chromium
-    npm run test:e2e
-    npm run build
-
-GitHub validation runs these checks against a production demo server. To inspect a running deployment without searching flights, use `npm run check:deployment -- https://your-site-origin`. `npm run launch:check` performs the separate offline configuration/evidence audit and intentionally reports blockers when required production access or owner information is absent.
-
-If a system Chromium is already installed, use its absolute path:
-
-    PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e
-
-Browser tests cover worldwide city/code/country search, keyboard and touch airport selection, search validation, sorting, student comparisons and score explanations, baggage and stop filters, round-trip/one-way selection, adult counts, saved-flight persistence, mobile layout, accessibility, booking handoffs, provider errors and empty states. Unit tests cover input validation, pricing and baggage comparisons, student-value calculations, separation of fictional and live benefits, and the Amadeus and optional seller-feed adapters.
+The GitHub workflow runs repository validation; it does not deploy or activate a paid service. Hosting eligibility, commercial-use terms, quotas and affiliate permissions remain owner responsibilities. Current configuration and mocked tests do not establish a live commercial launch.
 
 ## Project map
 
 | Location | Contents |
 | --- | --- |
-| src/app | Pages, metadata and server-side search/status endpoints |
-| src/components | Search form, results, booking details, saved flights and layout |
-| src/lib/amadeus.ts | Server-side Amadeus authentication and offer normalization |
-| src/lib/skyscanner.ts | Optional partner API polling and multi-seller quote normalization |
-| src/lib/booking-offers.ts | Safe quote links and seller comparison validation |
-| docs/launch-checklist.md | Business, data, student terms and production launch prerequisites |
-| docs/launch-preparation.md | Completed independent preparation, launch audit and owner requirements |
-| scripts/check-deployment.mjs | Read-only public response and header inspection without flight searches |
-| .github/workflows/ci.yml | Repeatable unit, build, type, browser and response checks |
-| src/lib/demo.ts | Deterministic sample offers, marked as preview data |
-| src/lib/search.ts | Validation, query serialization and recommendation sorting |
-| src/lib/student-value.ts | Eligible baggage, comparable costs and transparent student value scores |
-| src/lib/airports.ts | Worldwide airport lookup and city, name, country and IATA search |
-| src/data/airports.json | Sourced worldwide airport catalog with coordinates and time zones |
-| scripts/build-airport-catalog.mjs | Reproducible airport catalog generation from upstream downloads |
-| src/lib/airlines.ts | Airline identities, official websites and student-program links |
-| public | Original local SVG artwork; fonts are served locally from an npm package |
-| tests | Unit and browser checks |
+| `src/lib/flight-integration.ts` | Primary Travelpayouts configuration and explicit API selection |
+| `src/components/partner-flight-search.tsx` | Partner search UI and customer notices |
+| `src/lib/student-benefits.ts` | Structured policy leads and honest verification states |
+| `src/lib/travel-cost.ts` | Manual expense validation and integer-cent comparison |
+| `src/lib/miles-wallet.ts` | Bounded browser-local wallet data and redemption math |
+| `src/lib/travel-checklist.ts` | General reminders, trip validation and local saved-list recovery |
+| `src/lib/amadeus.ts`, `src/lib/skyscanner.ts` | Retained optional API adapters |
+| `src/lib/booking-offers.ts` | Quote-specific booking-link and seller validation in API mode |
+| `docs/flyora-v2.md` | Product behavior, deployment settings and verification limits |
+| `docs/launch-preparation.md` | Independent preparation and outstanding owner requirements |
+| `.github/workflows/ci.yml` | Repeatable installation, lint, unit, build, type and browser checks |
+| `tests` | Unit and browser regressions; provider fixtures are simulated |
 
-There are no accounts, payments, analytics or tracking cookies. Saved flights stay in the visitor’s browser. Flight API rate limiting and caches are per process; a higher-traffic or multi-instance deployment should add a shared rate-limit store and provider monitoring. Review privacy/terms copy for your business identity before a commercial launch.
+Flyora has no native accounts or ticket checkout. The primary partner module executes third-party JavaScript in the page context after visiting flight search and may use cookies or affiliate tracking. Once loaded it may remain mounted during SPA navigation. Review the partner's current terms and the site's privacy disclosure before public launch.

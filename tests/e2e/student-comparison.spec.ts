@@ -2,9 +2,6 @@ import { test, expect } from '@playwright/test';
 
 test('student comparison is prominent, explains its score and persists in the itinerary dialog', async ({ page }) => {
   await page.goto('/');
-  const illustration = page.getByLabel('Illustrative student flight comparison');
-  await expect(illustration.getByText('33', { exact: false }).first()).toBeVisible();
-  await expect(illustration.getByText(/Fictional airlines and benefits/)).toBeVisible();
   await page.getByRole('button', { name: 'Search flights', exact: true }).click();
   await expect(page.getByRole('button', { name: /^Student value/ })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('table')).toBeVisible();

@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Product and development
 
-Flyora is a flight-search and booking-handoff website, with student baggage and fare benefits as a differentiator. Keep flight search as the primary experience.
+Flyora 2.0 is a student flight-search and booking-handoff website. Travelpayouts White Label 23277 is the primary search module; the Amadeus/Skyscanner experience remains explicit API opt-in. Keep flight search as the primary experience, supported by student-benefit discovery, a manual travel-cost calculator, a browser-local Miles Wallet and an editable travel checklist. Configured modules and mocked tests do not establish live fares, affiliate approval or verified student terms.
 
 Use the existing checkout. Cloud tasks are isolated; do not create worktrees unless the user requests one.
 

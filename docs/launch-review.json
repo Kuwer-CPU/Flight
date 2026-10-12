@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "checks": {
+    "provider_contract": { "status": "pending", "reviewedOn": "", "evidence": "" },
+    "live_seller_quotes": { "status": "pending", "reviewedOn": "", "evidence": "" },
+    "student_rules": { "status": "pending", "reviewedOn": "", "evidence": "" },
+    "business_and_legal": { "status": "pending", "reviewedOn": "", "evidence": "" },
+    "hosting_https": { "status": "pending", "reviewedOn": "", "evidence": "" },
+    "monitoring_and_limits": { "status": "pending", "reviewedOn": "", "evidence": "" }
+  }
+}

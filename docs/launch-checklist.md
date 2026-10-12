@@ -2,6 +2,8 @@
 
 This release compares flights and hands booking to the selected seller. It does not collect payment or issue tickets. The main launch blockers are approved production price-feed access and verified student-benefit rules.
 
+See [launch-preparation.md](launch-preparation.md) for independent work completed in code, the offline audit command, the prepared provider enquiry and the student-policy worksheet. These preparations do not mark the commercial requirements below as complete.
+
 ## Required for a useful public launch
 
 1. **Approve the data source.** Obtain production access, rights to display prices and permission to use seller booking links. For multi-seller comparison, the Amadeus adapter alone is insufficient; activate and verify the partner seller feed. Confirm current API contracts, quote units/passenger basis, attribution and geographic coverage. Review usage charges, quotas and support channels.

@@ -6,7 +6,7 @@ Preview screenshots: [Homepage](docs/previews/homepage.png), [student comparison
 
 ## Run locally
 
-Requires Node.js 22 or later. Node.js 24 is used in the cloud environment.
+Requires Node.js 22.18 or later. Node.js 24 is recommended and used in the cloud environment.
 
     npm ci
     npm run dev
@@ -17,9 +17,9 @@ Open the address printed by Next.js. Flight search now defaults to Amadeus produ
 
 1. Push these application files to your Flight repository.
 2. Import the repository in Vercel. Select Next.js as the framework; use Node.js 24, the default repository root, install command npm ci and build command npm run build.
-3. Add NEXT_PUBLIC_SITE_URL with your deployed HTTPS origin, without a trailing slash. This sets canonical metadata and the sitemap.
+3. Add NEXT_PUBLIC_SITE_URL with your deployed HTTPS origin, without a trailing slash. Add the actual FLYORA_BUSINESS_NAME and FLYORA_CONTACT_EMAIL before public launch. Keep FLYORA_ALLOW_INDEXING=false for previews; public metadata and contact changes require a rebuild/redeploy.
 4. Choose your approved feed. For Amadeus fares, add `FLIGHT_DATA_MODE=live`, `FLIGHT_PROVIDER=amadeus`, `AMADEUS_ENVIRONMENT=production` and matching server-side credentials. For airline/agency price comparison, follow the partner settings and contract validation in [seller-price-comparison.md](docs/seller-price-comparison.md). Set `FLIGHT_DATA_MODE=demo` only for a labeled demonstration.
-5. Deploy. Test actual searches and each returned seller handoff on your deployed domain before opening it to customers.
+5. Deploy. Run the [launch audit](docs/launch-preparation.md) and read-only response checker, then test actual searches and each returned seller handoff on your deployed domain before opening it to customers. Enable indexing explicitly only after these external checks.
 
 The website has not been deployed by this coding task. Deployment to a hosting account is a separate action.
 
@@ -43,6 +43,8 @@ This enables worldwide route inputs; actual flight availability is determined by
 
 For airline/OTA seller comparison, see [docs/seller-price-comparison.md](docs/seller-price-comparison.md). An approved partner feed is required; an ordinary Amadeus fare is not the airline website’s confirmed selling price. Before launch, complete [docs/launch-checklist.md](docs/launch-checklist.md).
 
+Independent launch work, remaining owner requirements and audit commands are documented in [docs/launch-preparation.md](docs/launch-preparation.md). The provider application brief and 14-airline policy worksheet are prepared there; no applications have been submitted and no policies have been marked verified.
+
 Step-by-step account, local setup, hosting and troubleshooting instructions: [docs/live-flight-search.md](docs/live-flight-search.md).
 
 Create an Amadeus for Developers account and a Flight Offers Search application. Enter credentials securely in your hosting provider’s environment settings, or in an ignored .env.local file for development. Never put credentials in source files or NEXT_PUBLIC variables.
@@ -57,6 +59,9 @@ The .env.example file documents these settings:
 | AMADEUS_API_KEY | Server-side Amadeus client ID |
 | AMADEUS_API_SECRET | Server-side Amadeus client secret |
 | NEXT_PUBLIC_SITE_URL | Your public HTTPS site origin |
+| FLYORA_BUSINESS_NAME | Actual operator name displayed publicly; optional for builds |
+| FLYORA_CONTACT_EMAIL | Public support/privacy inbox; optional for builds |
+| FLYORA_ALLOW_INDEXING | false/unset for previews; true opts into indexing after launch review |
 
 For sandbox testing, use FLIGHT_DATA_MODE=live and AMADEUS_ENVIRONMENT=test with your test credentials. Results are labeled “Provider sandbox” and are not bookable production tickets.
 
@@ -76,7 +81,7 @@ The website does not yet earn affiliate revenue. Join permitted affiliate progra
 
 Student-program links are in src/lib/airlines.ts. Current terms could not be retrieved from the cloud’s restricted network during development, so every listed program is visibly marked as needing review. Links themselves also need review before a commercial launch. No program is represented as a verified discount, guaranteed age eligibility or extra baggage allowance.
 
-The homepage leads with a fictional Airline A/B example showing why a €610 fare with sufficient baggage can beat a €545 fare plus a €95 bag add-on. Search results put a comparison table above the flights and a prominent baggage equation on each card and itinerary dialog. Registration and student verification requirements are visible beside the allowance.
+The demo homepage leads with a fictional Airline A/B example showing why a €610 fare with sufficient baggage can beat a €545 fare plus a €95 bag add-on. Live and sandbox homepages instead explain student eligibility without fictional numerical benefits. Search results put a comparison table above the flights and a prominent baggage equation on each card and itinerary dialog. Registration and student verification requirements are visible beside the allowance.
 
 Displayed standard baggage comes from the flight offer. The minimum known allowance across all travelers and segments is shown; pieces are never converted into an invented weight. Demo flights also have explicitly fictional student bonuses and bag add-on prices to demonstrate this comparison. Every numerical example is labeled as an illustration rather than actual airline policy. These inputs are only accepted for demo-mode offers; the comparison code discards them for both live and Amadeus sandbox offers. Actual student terms remain unverified, with eligible totals and student scores shown as pending.
 
@@ -91,6 +96,8 @@ Before advertising specific student savings, review the official airline terms f
     npx playwright install chromium
     npm run test:e2e
     npm run build
+
+GitHub validation runs these checks against a production demo server. To inspect a running deployment without searching flights, use `npm run check:deployment -- https://your-site-origin`. `npm run launch:check` performs the separate offline configuration/evidence audit and intentionally reports blockers when required production access or owner information is absent.
 
 If a system Chromium is already installed, use its absolute path:
 
@@ -108,6 +115,9 @@ Browser tests cover worldwide city/code/country search, keyboard and touch airpo
 | src/lib/skyscanner.ts | Optional partner API polling and multi-seller quote normalization |
 | src/lib/booking-offers.ts | Safe quote links and seller comparison validation |
 | docs/launch-checklist.md | Business, data, student terms and production launch prerequisites |
+| docs/launch-preparation.md | Completed independent preparation, launch audit and owner requirements |
+| scripts/check-deployment.mjs | Read-only public response and header inspection without flight searches |
+| .github/workflows/ci.yml | Repeatable unit, build, type, browser and response checks |
 | src/lib/demo.ts | Deterministic sample offers, marked as preview data |
 | src/lib/search.ts | Validation, query serialization and recommendation sorting |
 | src/lib/student-value.ts | Eligible baggage, comparable costs and transparent student value scores |

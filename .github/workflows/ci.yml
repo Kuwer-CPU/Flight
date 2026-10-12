@@ -1,0 +1,74 @@
+name: Validate Flyora
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: flyora-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FLIGHT_DATA_MODE: demo
+      FLIGHT_PROVIDER: amadeus
+      AMADEUS_ENVIRONMENT: production
+      NEXT_TELEMETRY_DISABLED: '1'
+      PLAYWRIGHT_WEB_SERVER_COMMAND: npm start
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, Node 24 runtime
+        with:
+          persist-credentials: false
+      - name: Use Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0, Node 24 runtime
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Run unit tests
+        run: npm test
+      - name: Build production application
+        run: npm run build
+      - name: Check TypeScript
+        run: npm run typecheck
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Test production demo website
+        run: npm run test:e2e
+      - name: Check deployment responses without flight searches
+        shell: bash
+        run: |
+          npm start > "$RUNNER_TEMP/flyora-smoke-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          server_ready=false
+          for attempt in {1..30}; do
+            if curl --fail --silent --max-time 2 --output /dev/null http://127.0.0.1:3000/api/status; then
+              server_ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$server_ready" != true ]; then
+            echo "The production demo server did not become ready."
+            exit 1
+          fi
+          node scripts/check-deployment.mjs http://127.0.0.1:3000 --expect-mode=demo
+      - name: Retain failed browser traces
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, Node 24 runtime
+        with:
+          name: browser-test-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7

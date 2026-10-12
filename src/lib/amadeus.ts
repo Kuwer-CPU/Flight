@@ -10,6 +10,7 @@ export class FlightProviderError extends Error {
 type ProviderBag = { quantity?: number; weight?: number; weightUnit?: string };
 type ProviderSettings = { mode: 'test' | 'live'; host: string; key: string; secret: string; identity: string };
 type RecordValue = Record<string, unknown>;
+const SEARCH_TIMEOUT = 30_000;
 function record(value: unknown): value is RecordValue {
   return !!value && typeof value === 'object' && !Array.isArray(value);
 }
@@ -55,14 +56,19 @@ function conservativeBaggage(offer: RecordValue, adults: number, segmentIds: unk
   if (entries.length && entries.every(b => b.quantity !== undefined)) return { pieces: Math.min(...entries.map(b => b.quantity!)) };
   return {};
 }
+function cabinMatches(offer: RecordValue, cabin: SearchQuery['cabin']) {
+  if (!Array.isArray(offer.travelerPricings)) return true;
+  return offer.travelerPricings.every(traveler => !record(traveler) || !Array.isArray(traveler.fareDetailsBySegment) ||
+    traveler.fareDetailsBySegment.every(detail => !record(detail) || detail.cabin === undefined || detail.cabin === '' || detail.cabin === cabin));
+}
 export function normalizeOffers(data: unknown[], query: SearchQuery, mode: DataMode, carriers: unknown = {}): FlightOffer[] {
   return data.flatMap(offer => {
     if (!record(offer) || !nonempty(offer.id) || !record(offer.price)) return [];
     const rawPrice = offer.price.grandTotal ?? offer.price.total;
     const price = typeof rawPrice === 'string' && rawPrice.trim() ? Number(rawPrice) : NaN;
     const currency = offer.price.currency;
-    if (!Number.isFinite(price) || price <= 0 || typeof currency !== 'string' || !/^[A-Z]{3}$/.test(currency) ||
-      !Array.isArray(offer.itineraries) || offer.itineraries.length !== (query.returnDate ? 2 : 1)) return [];
+    if (!Number.isFinite(price) || price <= 0 || currency !== 'EUR' ||
+      !Array.isArray(offer.itineraries) || offer.itineraries.length !== (query.returnDate ? 2 : 1) || !cabinMatches(offer, query.cabin)) return [];
     const itineraries: FlightOffer['itineraries'] = [];
     const segmentIds: unknown[] = [];
     for (const itinerary of offer.itineraries) {
@@ -76,6 +82,7 @@ export function normalizeOffers(data: unknown[], query: SearchQuery, mode: DataM
           typeof segment.arrival.iataCode !== 'string' || !/^[A-Z]{3}$/.test(segment.arrival.iataCode) ||
           !localTimestamp(segment.departure.at) || !localTimestamp(segment.arrival.at) ||
           !nonempty(segment.carrierCode) || !nonempty(segment.number)) return [];
+        if (segments.length && segments.at(-1)!.to !== segment.departure.iataCode) return [];
         segmentIds.push(segment.id);
         segments.push({
           from: segment.departure.iataCode, to: segment.arrival.iataCode,
@@ -84,6 +91,10 @@ export function normalizeOffers(data: unknown[], query: SearchQuery, mode: DataM
           operatingCarrier: record(segment.operating) && nonempty(segment.operating.carrierCode) ? segment.operating.carrierCode : undefined,
         });
       }
+      const index = itineraries.length;
+      if (segments[0].from !== (index === 0 ? query.origin : query.destination) ||
+        segments.at(-1)!.to !== (index === 0 ? query.destination : query.origin) ||
+        segments[0].departure.slice(0, 10) !== (index === 0 ? query.departureDate : query.returnDate)) return [];
       itineraries.push({ duration, segments });
     }
     const validatingCode = Array.isArray(offer.validatingAirlineCodes) ? offer.validatingAirlineCodes.find(nonempty) : undefined;
@@ -134,21 +145,32 @@ async function accessToken(settings: ProviderSettings) {
   tokenPending.set(settings.identity, request);
   try { return await request; } finally { tokenPending.delete(settings.identity); }
 }
-async function requestOffers(query: SearchQuery, settings: ProviderSettings): Promise<SearchResponse> {
-  let bearer = await accessToken(settings);
+function waitForToken(settings: ProviderSettings, signal: AbortSignal): Promise<string> {
+  signal.throwIfAborted();
+  const token = accessToken(settings);
+  // Cancel this search's wait, not a shared OAuth request needed by other searches.
+  return new Promise((resolve, reject) => {
+    const aborted = () => reject(signal.reason);
+    signal.addEventListener('abort', aborted, { once: true });
+    token.then(value => { signal.removeEventListener('abort', aborted); resolve(value); },
+      error => { signal.removeEventListener('abort', aborted); reject(error); });
+  });
+}
+async function requestOffers(query: SearchQuery, settings: ProviderSettings, signal: AbortSignal): Promise<SearchResponse> {
+  let bearer = await waitForToken(settings, signal);
   const params = new URLSearchParams({
     originLocationCode: query.origin, destinationLocationCode: query.destination, departureDate: query.departureDate,
     adults: String(query.adults), travelClass: query.cabin, currencyCode: 'EUR', max: '40',
   });
   if (query.returnDate) params.set('returnDate', query.returnDate);
   const request = () => fetch(settings.host + '/v2/shopping/flight-offers?' + params.toString(), {
-    headers: { Authorization: 'Bearer ' + bearer }, cache: 'no-store', signal: AbortSignal.timeout(20_000),
+    headers: { Authorization: 'Bearer ' + bearer }, cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(20_000)]),
   });
   let response = await request();
   if (response.status === 401) {
     // A provider can expire a token early. Refresh once; never turn failures into demos.
     if (tokens.get(settings.identity)?.value === bearer) tokens.delete(settings.identity);
-    bearer = await accessToken(settings);
+    bearer = await waitForToken(settings, signal);
     response = await request();
   }
   if (!response.ok) {
@@ -179,15 +201,18 @@ export async function searchFlights(query: SearchQuery): Promise<SearchResponse>
   const pending = searchPending.get(cacheKey);
   if (pending) return pending;
   const request = (async () => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(new DOMException('Search deadline exceeded.', 'TimeoutError')), SEARCH_TIMEOUT);
     try {
-      const result = await requestOffers(query, settings);
+      const result = await requestOffers(query, settings, controller.signal);
       if (cache.size >= 50) cache.delete(cache.keys().next().value!);
       cache.set(cacheKey, { expires: Date.now() + 120_000, response: result });
       return result;
     } catch (error) {
+      if (controller.signal.aborted) throw new FlightProviderError('Flight search took too long. Please try again.', 504);
       if (error instanceof FlightProviderError) throw error;
       throw new FlightProviderError('Flight search took too long or could not connect. Please try again.');
-    }
+    } finally { clearTimeout(timeout); }
   })();
   searchPending.set(cacheKey, request);
   try { return await request; } finally { searchPending.delete(cacheKey); }

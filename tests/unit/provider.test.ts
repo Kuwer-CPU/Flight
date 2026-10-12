@@ -3,13 +3,15 @@ import { isoDuration, normalizeOffers } from '../../src/lib/amadeus';
 import { defaults } from '../../src/lib/search';
 
 function rawOffer(adults = 1, roundTrip = true) {
+  const query = defaults();
+  const out = query.departureDate, back = query.returnDate!;
   const segments = [
-    { id: '1', departure: { iataCode: 'CDG', at: '2026-10-28T09:00:00' }, arrival: { iataCode: 'DOH', at: '2026-10-28T16:00:00' }, duration: 'PT6H', carrierCode: 'QR', number: '40' },
-    { id: '2', departure: { iataCode: 'DOH', at: '2026-10-28T17:00:00' }, arrival: { iataCode: 'DEL', at: '2026-10-28T22:00:00' }, duration: 'PT3H30M', carrierCode: 'QR', number: '90' },
+    { id: '1', departure: { iataCode: query.origin, at: out + 'T09:00:00' }, arrival: { iataCode: 'DOH', at: out + 'T16:00:00' }, duration: 'PT6H', carrierCode: 'QR', number: '40' },
+    { id: '2', departure: { iataCode: 'DOH', at: out + 'T17:00:00' }, arrival: { iataCode: query.destination, at: out + 'T22:00:00' }, duration: 'PT3H30M', carrierCode: 'QR', number: '90' },
   ];
   const returns = [
-    { id: '3', departure: { iataCode: 'DEL', at: '2026-11-11T02:00:00' }, arrival: { iataCode: 'DOH', at: '2026-11-11T04:00:00' }, duration: 'PT4H30M', carrierCode: 'QR', number: '91' },
-    { id: '4', departure: { iataCode: 'DOH', at: '2026-11-11T05:00:00' }, arrival: { iataCode: 'CDG', at: '2026-11-11T09:00:00' }, duration: 'PT6H', carrierCode: 'QR', number: '41' },
+    { id: '3', departure: { iataCode: query.destination, at: back + 'T02:00:00' }, arrival: { iataCode: 'DOH', at: back + 'T04:00:00' }, duration: 'PT4H30M', carrierCode: 'QR', number: '91' },
+    { id: '4', departure: { iataCode: 'DOH', at: back + 'T05:00:00' }, arrival: { iataCode: query.origin, at: back + 'T09:00:00' }, duration: 'PT6H', carrierCode: 'QR', number: '41' },
   ];
   return {
     id: '1', price: { total: '870.00', grandTotal: '900.00', currency: 'EUR' }, validatingAirlineCodes: ['QR'],
@@ -30,6 +32,7 @@ function offersResponse(data: unknown[] = [rawOffer()]) {
 }
 beforeEach(() => {
   vi.resetModules();
+  vi.stubEnv('FLIGHT_PROVIDER', 'amadeus');
   vi.stubEnv('FLIGHT_DATA_MODE', 'live'); vi.stubEnv('AMADEUS_ENVIRONMENT', 'test');
   vi.stubEnv('AMADEUS_API_KEY', 'test-key'); vi.stubEnv('AMADEUS_API_SECRET', 'test-secret');
 });
@@ -94,6 +97,46 @@ describe('provider normalization', () => {
   it('retains valid one-way fares and refuses a missing return itinerary for a round-trip search', () => {
     expect(normalizeOffers([rawOffer(1, false)], { ...defaults(), returnDate: undefined }, 'live')).toHaveLength(1);
     expect(normalizeOffers([rawOffer(1, false)], defaults(), 'live')).toEqual([]);
+  });
+  it.each([
+    ['outbound origin', 0, 0, 'departure'], ['outbound destination', 0, 1, 'arrival'],
+    ['return origin', 1, 0, 'departure'], ['return destination', 1, 1, 'arrival'],
+  ] as const)('rejects a wrong %s while preserving the matching itinerary', (_label, leg, segment, endpoint) => {
+    const wrong = rawOffer(); wrong.id = 'wrong-route';
+    wrong.itineraries[leg].segments[segment][endpoint].iataCode = 'LHR';
+    const offers = normalizeOffers([wrong, rawOffer()], defaults(), 'live');
+    expect(offers).toHaveLength(1);
+    expect(offers[0].id).not.toContain('wrong-route');
+  });
+  it.each([0, 1])('requires itinerary %s to depart on its requested date', leg => {
+    const wrong = rawOffer(); wrong.id = 'wrong-date';
+    wrong.itineraries[leg].segments[0].departure.at = (leg === 0 ? defaults().returnDate : defaults().departureDate) + 'T09:00:00';
+    const offers = normalizeOffers([wrong, rawOffer()], defaults(), 'live');
+    expect(offers).toHaveLength(1);
+    expect(offers[0].id).not.toContain('wrong-date');
+  });
+  it('rejects a disconnected connection rather than joining different airport segments', () => {
+    const wrong = rawOffer(); wrong.itineraries[0].segments[1].departure.iataCode = 'DXB';
+    expect(normalizeOffers([wrong], defaults(), 'live')).toEqual([]);
+  });
+  it.each([0, 1])('rejects an explicitly mismatched return cabin for traveler %s', traveler => {
+    const wrong = rawOffer(2); wrong.id = 'wrong-cabin';
+    wrong.travelerPricings[traveler].fareDetailsBySegment[3].cabin = 'BUSINESS';
+    const offers = normalizeOffers([wrong, rawOffer(2)], { ...defaults(), adults: 2 }, 'live');
+    expect(offers).toHaveLength(1);
+    expect(offers[0].id).not.toContain('wrong-cabin');
+  });
+  it('preserves a matching fare with unknown baggage and no explicitly reported cabin', () => {
+    const offer = rawOffer();
+    offer.travelerPricings[0].fareDetailsBySegment = [];
+    const normalized = normalizeOffers([offer], defaults(), 'live')[0];
+    expect(normalized.cabin).toBe('ECONOMY');
+    expect(normalized.baggage).toEqual({});
+  });
+  it('retains requested business fares when every reported segment cabin matches', () => {
+    const offer = rawOffer();
+    for (const traveler of offer.travelerPricings) for (const detail of traveler.fareDetailsBySegment) detail.cabin = 'BUSINESS';
+    expect(normalizeOffers([offer], { ...defaults(), cabin: 'BUSINESS' }, 'live')[0].cabin).toBe('BUSINESS');
   });
   it('ignores any student example fields in provider responses', () => {
     const offer = { ...rawOffer(), studentExample: { extraKg: 50, verificationRequired: false, registrationRequired: false } };
@@ -160,6 +203,49 @@ describe('Amadeus integration', () => {
     const [first, second] = await Promise.all([searchFlights(defaults()), searchFlights({ ...defaults(), baggage: 40 })]);
     expect(first).toEqual(second);
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+  it('aborts a quote at the overall deadline and removes the timed-out search from pending/cache state', async () => {
+    vi.useFakeTimers();
+    const fetchMock = vi.fn().mockResolvedValueOnce(tokenResponse())
+      .mockImplementationOnce((_url, options) => new Promise((_resolve, reject) => options.signal.addEventListener('abort', () => reject(options.signal.reason), { once: true })))
+      .mockResolvedValueOnce(offersResponse());
+    vi.stubGlobal('fetch', fetchMock);
+    const { searchFlights } = await import('../../src/lib/amadeus');
+    const first = expect(searchFlights(defaults())).rejects.toMatchObject({ status: 504, message: 'Flight search took too long. Please try again.' });
+    await vi.advanceTimersByTimeAsync(30_000); await first;
+    expect(fetchMock.mock.calls[1][1].signal.aborted).toBe(true);
+    expect(vi.getTimerCount()).toBe(0);
+    expect((await searchFlights(defaults())).offers).toHaveLength(1);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+  it('expires one auth-refresh waiter without canceling shared OAuth needed by a later search', async () => {
+    vi.useFakeTimers();
+    let authCalls = 0;
+    let refreshSignal: AbortSignal | undefined;
+    const fetchMock = vi.fn().mockImplementation((url: string, options) => {
+      if (url.includes('/oauth2/token')) {
+        authCalls++;
+        if (authCalls === 2) refreshSignal = options.signal;
+        return new Promise((resolve, reject) => {
+          const timer = setTimeout(() => resolve(tokenResponse(authCalls === 1 ? 'initial' : 'refreshed')), 10_000);
+          options.signal.addEventListener('abort', () => { clearTimeout(timer); reject(options.signal.reason); }, { once: true });
+        });
+      }
+      if (new URL(url).searchParams.get('adults') === '1') return new Promise(resolve => setTimeout(() => resolve(new Response('expired', { status: 401 })), 18_000));
+      return Promise.resolve(offersResponse([rawOffer(2)]));
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    const { searchFlights } = await import('../../src/lib/amadeus');
+    const first = expect(searchFlights(defaults())).rejects.toMatchObject({ status: 504 });
+    await vi.advanceTimersByTimeAsync(29_000);
+    const second = searchFlights({ ...defaults(), adults: 2 });
+    await vi.advanceTimersByTimeAsync(1_000); await first;
+    expect(refreshSignal).toBeDefined(); expect(refreshSignal!.aborted).toBe(false);
+    await vi.advanceTimersByTimeAsync(8_000);
+    const result = await second;
+    expect(result.offers[0].passengers).toBe(2); expect(result.offers[0].price).toBe(900);
+    expect(authCalls).toBe(2); expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(vi.getTimerCount()).toBe(0);
   });
   it('isolates caches when credentials rotate or the provider environment changes', async () => {
     const fetchMock = vi.fn()

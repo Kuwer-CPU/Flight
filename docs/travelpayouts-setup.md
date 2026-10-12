@@ -8,7 +8,7 @@ The owner supplied this White Label module and its required containers:
 <script type="module" src="https://tpwidg.com/wl_web/main.js?wl_id=23277"></script>
 ```
 
-Flyora uses that owner-provided source as its default customer flight-search integration. White Label ID `23277` is public configuration, not an API secret or proof of account/domain approval. The code uses Next.js `Script`, with `type="module"`, `strategy="afterInteractive"` and `crossOrigin="anonymous"`; matching the framework preload and module CORS mode avoids a duplicate download. It does not render arbitrary pasted HTML or JavaScript. The public SDK and deployed page were retrieved with HTTP 200 through the inherited proxy. A limited local check initialized the actual SDK using public JavaScript assets fetched with verified TLS, while browser-owned API requests remained blocked. Actual city lookup, fares, booking and attribution have not been verified. Five additional browser regressions use a clearly labeled mock SDK, without invented fares.
+Flyora uses that owner-provided source as its default customer flight-search integration. White Label ID `23277` is public configuration, not an API secret or proof of account/domain approval. The code uses Next.js `Script`, with `type="module"`, `strategy="afterInteractive"` and `crossOrigin="anonymous"`; matching the framework preload and module CORS mode avoids a duplicate download. It does not render arbitrary pasted HTML or JavaScript. The public SDK and deployed page were retrieved with HTTP 200 through the inherited proxy. A limited local check initialized the actual SDK using public JavaScript assets fetched with verified TLS, while browser-owned API requests remained blocked. Actual city lookup, fares, booking and attribution have not been verified. Seven browser regressions use a clearly labeled mock SDK: five cover widget behavior and two check enforced document CSP, without invented fares.
 
 ## Default settings
 
@@ -40,7 +40,7 @@ A script error or 20-second rendering timeout shows **Flight search could not lo
 
 In primary mode, Flyora's homepage search actions and destination inspiration cards open `/flights` without itinerary-prefill queries. There is one itinerary search form: the Travelpayouts interface. Travelers enter or check origin, destination, dates, cabin and passenger count there.
 
-Official help/developer pages remained blocked with CONNECT HTTP 403, so a supported custom-form submission contract was not verified. Flyora does not use internal `TPWL_CONFIGURATION`, undocumented events or a second form to submit searches. The inspected public White Label configuration had blank route fields and no NCE literal in the downloaded entry/main chunks. The SDK may restore browser/URL or geolocation defaults, but the source of any particular preselected airport was not established. Check the displayed route before submitting.
+Earlier help/developer requests returned CONNECT HTTP 403. The [official widget setup guide](https://support.travelpayouts.com/hc/en-us/articles/26857907357458-Setting-up-a-White-Label-with-Widget-type) was subsequently retrieved successfully during CSP investigation; it documents the search/results containers, but no custom-form submission contract was verified. Flyora does not use internal `TPWL_CONFIGURATION`, undocumented events or a second form to submit searches. The inspected public White Label configuration had blank route fields and no NCE literal in the downloaded entry/main chunks. The SDK may restore browser/URL or geolocation defaults, but the source of any particular preselected airport was not established. Check the displayed route before submitting.
 
 Separate local student planning below search accepts optional age, needed checked baggage and the seller's confirmed included kilograms. Its shortfall estimate does not submit a route, change partner prices or confirm a student offer. Four links lead to Student Benefits, Travel Calculator, Miles Wallet and Travel Checklist. The native Flyora route form is retained only for explicitly selected API mode.
 
@@ -50,16 +50,17 @@ Unlike the optional cross-origin iframe boundary, this module runs in Flyora's p
 
 The page discloses that eligible partner bookings may earn Flyora a commission and that booking/result ordering is handled by the partner. No commission, free ticket or extra-cost claim is guaranteed. `TRAVELPAYOUTS_AFFILIATE_LINKS=true` adds `sponsored` to an optional iframe-interface outbound link only after owner confirmation; it does not modify the module's booking links or suppress the disclosure.
 
-The safe configuration exposes the fixed `scriptOrigin` `https://tpwidg.com`. SDK inspection informed these category-specific default CSP allowances:
+The safe configuration exposes the fixed `scriptOrigin` `https://tpwidg.com`. Public SDK/stylesheet inspection and the owner's live Edge CSP violations informed these category-specific default CSP allowances:
 
 | Resource category | Permitted origins |
 | --- | --- |
 | SDK assets | `https://tpwidg.com` |
-| Connections | `https://api.apistp.com`, `https://autocomplete.apistp.com`, `https://tickets-api.apistp.com`, `https://www.apistp.com` |
+| Connections | `https://api.apistp.com`, `https://autocomplete.apistp.com`, `https://tickets-api.apistp.com`, `https://www.apistp.com`, `https://tickets-api.eu-north-1.apistp.com`, `https://avsplow.com` |
 | Images | `https://img.avs.io` |
 | Font stylesheets | `https://fonts.googleapis.com` |
+| Font files | `https://fonts.gstatic.com` |
 
-These are exact origins, with no wildcard. Analytics hosts such as `avsplow` are not allowed by default. Allowing a destination in CSP does not establish that the network permits it or that the corresponding request succeeds. Actual font binaries, polling, result and booking destinations still need verification in a browser with permitted access and valid certificate trust. Do not guess those hosts or disable TLS checks. Any extra `TRAVELPAYOUTS_RESOURCE_ORIGINS` entry requires review of the actual requested resource and partner terms before redeployment; it broadens resource permissions and should not be used as a catch-all repair.
+These are exact HTTPS origins, with no wildcard. The regional results host is allowed only for connections; the base `tickets-api.apistp.com` entry does not cover it. `avsplow.com` is the observed analytics collector, allowed only for connections at the owner's request. The fetched Inter stylesheet references `fonts.gstatic.com`, which gets only font permission. These permissions apply only to configured script mode; API, disabled and iframe modes retain their existing restrictions. Allowing a destination in CSP does not establish network availability, analytics consent or successful fare retrieval. Other regional polling hosts and booking destinations still require live evidence; do not guess those hosts or disable TLS checks. Any extra `TRAVELPAYOUTS_RESOURCE_ORIGINS` entry requires review of the actual requested resource and partner terms before redeployment; it broadens resource permissions and should not be used as a catch-all repair. See [CSP fix and deployment checks](travelpayouts-csp-fix.md).
 
 `getFlightIntegration()` returns `{ integration: 'api' }` for explicit API mode, or safe partner fields including `status`, `transport`, `affiliateLinks`, and either `whiteLabelId`/`scriptUrl`/`scriptOrigin` or `frameUrl`/`frameOrigin`. Raw widget code, provider keys and credential-looking iframe query parameters are not emitted. `configured` means the local integration settings are valid, not that live fares have been verified.
 

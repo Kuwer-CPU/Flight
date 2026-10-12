@@ -16,12 +16,13 @@ const config: NextConfig = {
     const sdk = widgetOrigins.length > 0;
     const connectSources = widgetSources + (sdk ? ' ' + TRAVELPAYOUTS_RESOURCES.connect.join(' ') : '');
     const styleSources = widgetSources + (sdk ? ' ' + TRAVELPAYOUTS_RESOURCES.style.join(' ') : '');
+    const fontSources = widgetSources + (sdk ? ' ' + TRAVELPAYOUTS_RESOURCES.font.join(' ') : '');
     const imageSources = widgetSources + (sdk ? ' ' + TRAVELPAYOUTS_RESOURCES.image.join(' ') : '');
     const frames = [...new Set([...widgetOrigins, ...(frameOrigin ? [frameOrigin] : [])])];
     const csp = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline'" + (development ? " 'unsafe-eval'" : '') + widgetSources,
-      "style-src 'self' 'unsafe-inline'" + styleSources, "img-src 'self' data:" + imageSources, "font-src 'self'" + widgetSources,
+      "style-src 'self' 'unsafe-inline'" + styleSources, "img-src 'self' data:" + imageSources, "font-src 'self'" + fontSources,
       "connect-src 'self'" + (development ? ' ws: wss:' : '') + connectSources,
       "object-src 'none'", "base-uri 'self'", "form-action 'self'" + widgetSources, "frame-ancestors 'none'",
       'frame-src ' + (frames.length ? frames.join(' ') : "'none'"),

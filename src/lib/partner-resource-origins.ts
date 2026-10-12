@@ -1,10 +1,19 @@
 import { validatedFrameOrigin } from './flight-integration';
 
-// Referenced by the owner-supplied public WL23277 SDK on 12 October2026.
+// Referenced by the owner-supplied public WL23277 SDK on 12 October 2026.
 // These permit browser SDK requests; Flyora never calls these APIs directly.
 export const TRAVELPAYOUTS_RESOURCES = {
-  connect: ['https://api.apistp.com', 'https://autocomplete.apistp.com', 'https://tickets-api.apistp.com', 'https://www.apistp.com'],
+  connect: [
+    'https://api.apistp.com', 'https://autocomplete.apistp.com',
+    'https://tickets-api.apistp.com', 'https://www.apistp.com',
+    // Owner's live Edge CSP violations: /search/wl/results and /a/j respectively.
+    // Exact HTTPS hosts only; regional APIs and analytics get no script/frame permission.
+    'https://tickets-api.eu-north-1.apistp.com',
+    'https://avsplow.com',
+  ],
   style: ['https://fonts.googleapis.com'],
+  // Font files referenced by the SDK's Inter stylesheet on fonts.googleapis.com.
+  font: ['https://fonts.gstatic.com'],
   image: ['https://img.avs.io'],
 } as const;
 

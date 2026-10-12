@@ -100,6 +100,55 @@ function futureDate(days: number) {
   return new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10);
 }
 
+for (const entryPath of ['/', '/flights']) {
+  test('production CSP permits the observed results and collector connections from ' + entryPath, async ({ page, baseURL }) => {
+    const observedEndpoints = [
+      'https://tickets-api.eu-north-1.apistp.com/search/wl/results',
+      'https://avsplow.com/a/j',
+    ];
+    const intercepted: string[] = [];
+    await page.route(sdkUrl, route => route.fulfill(scriptResponse));
+    for (const endpoint of observedEndpoints) {
+      // A transport-only CSP probe: no actual provider request, result or tracking event.
+      await page.route(endpoint, async route => {
+        intercepted.push(route.request().url());
+        await route.fulfill({ status: 204, headers: { 'Access-Control-Allow-Origin': new URL(baseURL!).origin } });
+      });
+    }
+    const response = await page.goto(entryPath);
+    const policy = response!.headers()['content-security-policy'];
+    for (const endpoint of observedEndpoints) expect(policy).toContain(new URL(endpoint).origin);
+    if (entryPath === '/') {
+      await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Flights', exact: true }).click();
+    }
+    await expectOnlyPartnerFlightForm(page);
+    const probe = await page.evaluate(async endpoints => {
+      const violations: { directive: string; blockedURI: string }[] = [];
+      const blocked = new Promise<void>(resolve => {
+        document.addEventListener('securitypolicyviolation', event => {
+          violations.push({ directive: event.effectiveDirective, blockedURI: event.blockedURI });
+          if (event.blockedURI.startsWith('https://unreviewed-partner.example.test')) resolve();
+        });
+      });
+      const statuses = await Promise.all(endpoints.map(async endpoint => (await fetch(endpoint)).status));
+      const unreviewed = 'https://unreviewed-partner.example.test/csp-probe';
+      let unreviewedBlocked = false;
+      try { await fetch(unreviewed); } catch { unreviewedBlocked = true; }
+      // CSP violation events are dispatched after the blocked fetch rejects.
+      await blocked;
+      return { statuses, violations, unreviewedBlocked };
+    }, observedEndpoints);
+    expect(probe.statuses).toEqual([204, 204]);
+    expect(intercepted.sort()).toEqual([...observedEndpoints].sort());
+    expect(probe.unreviewedBlocked).toBe(true);
+    expect(probe.violations.some(violation => violation.directive === 'connect-src'
+      && new URL(violation.blockedURI).origin === 'https://unreviewed-partner.example.test')).toBe(true);
+    for (const endpoint of observedEndpoints) {
+      expect(probe.violations.some(violation => violation.blockedURI.startsWith(new URL(endpoint).origin))).toBe(false);
+    }
+  });
+}
+
 // The separate partner server renders the real integration wrapper. The script
 // below is a local module mock, not Travelpayouts availability or fare data.
 test('the sole partner flight form and separate student notes preserve their state through SPA navigation', async ({ page }) => {

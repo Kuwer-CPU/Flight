@@ -31,14 +31,17 @@ The shipped header previously allowed only `tpwidg.com`. The public SDK referenc
 | `autocomplete.apistp.com` | Connections for place suggestions |
 | `tickets-api.apistp.com` | SDK search-start connections |
 | `www.apistp.com` | SDK geolocation connections |
+| `tickets-api.eu-north-1.apistp.com` | Regional results connections reported in the owner's live Edge console |
+| `avsplow.com` | Observed SDK analytics connections, enabled at the owner's request |
 | `img.avs.io` | Airline/seller images |
 | `fonts.googleapis.com` | SDK-selected font stylesheet |
+| `fonts.gstatic.com` | Font files referenced by the fetched SDK stylesheet |
 
-Flyora does not call these APIs directly. No broad wildcard, private credential or fictional data feed is added. The observed optional analytics collector `avsplow.com` is not enabled by default. Additional font-file, polling or booking-form destinations must be checked against actual authorized provider behavior; the existing validated `TRAVELPAYOUTS_RESOURCE_ORIGINS` setting can extend exact origins after that review.
+Flyora does not call these APIs directly. No broad wildcard, private credential or fictional data feed is added. The regional results and analytics entries were added after the owner's live Edge report; the font-file origin was confirmed in the fetched Inter stylesheet. Other regional polling or booking destinations must be checked against actual authorized provider behavior. The existing validated `TRAVELPAYOUTS_RESOURCE_ORIGINS` setting can extend exact origins after that review. See the subsequent [CSP fix report](travelpayouts-csp-fix.md) for its evidence and checks.
 
 ## Verification and limits
 
-The production build, lint, TypeScript and 552 unit tests pass. Five isolated browser regressions use an explicitly synthetic SDK with open shadow roots. They check one visible flight form, fixture-required field validation, independent age/baggage notes, origin/destination/date/passenger state across navigation, one initialization/download, conflicting legacy URLs, blocked-script reload, late rendering and button-only error placeholders. They also cover mobile layout and accessibility of Flyora’s wrapper with the fixture. The fixture’s NCE value is synthetic and is not claimed to be the WL configuration.
+The original single-form change passed the production build, lint, TypeScript and 552 unit tests. Five isolated browser regressions use an explicitly synthetic SDK with open shadow roots. They check one visible flight form, fixture-required field validation, independent age/baggage notes, origin/destination/date/passenger state across navigation, one initialization/download, conflicting legacy URLs, blocked-script reload, late rendering and button-only error placeholders. They also cover mobile layout and accessibility of Flyora’s wrapper with the fixture. The fixture’s NCE value is synthetic and is not claimed to be the WL configuration.
 
 A separate limited test executes the actual downloaded public SDK. Cloud Chromium rejected the proxy certificate, so only public JavaScript assets were replayed through Node’s managed proxy with TLS verification retained. Provider API requests were left browser-owned and unchanged. No mock API response, price or booking link was injected. This confirmed a real shadow-root form, the expected trip controls, one entry-module request and retained departure draft/student notes after navigation through Miles Wallet, Student Benefits and Travel Checklist. No page JavaScript errors were observed.
 

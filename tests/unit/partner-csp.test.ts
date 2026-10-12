@@ -36,13 +36,14 @@ function expectOnlyIn(policy: Policy, origin: string, directive: string) {
 const sdkOrigins = [
   'https://tpwidg.com', 'https://api.apistp.com', 'https://autocomplete.apistp.com',
   'https://tickets-api.apistp.com', 'https://www.apistp.com', 'https://img.avs.io',
-  'https://fonts.googleapis.com',
+  'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://tickets-api.eu-north-1.apistp.com', 'https://avsplow.com',
 ];
 
 describe('Travelpayouts deployment CSP', () => {
   it.each([
     'https://api.apistp.com', 'https://autocomplete.apistp.com',
     'https://tickets-api.apistp.com', 'https://www.apistp.com',
+    'https://tickets-api.eu-north-1.apistp.com', 'https://avsplow.com',
   ])('permits SDK requests to %s without allowing scripts, frames or other resource types from that API', async origin => {
     expectOnlyIn(await contentSecurityPolicy(), origin, 'connect-src');
   });
@@ -54,10 +55,13 @@ describe('Travelpayouts deployment CSP', () => {
   it('permits the observed font stylesheet origin without allowing JavaScript or arbitrary font hosts', async () => {
     const policy = await contentSecurityPolicy();
     expectOnlyIn(policy, 'https://fonts.googleapis.com', 'style-src');
-    expect(Object.values(policy).flat()).not.toContain('https://fonts.gstatic.com');
   });
 
-  it('loads the owner-supplied SDK from its exact origin without broad schemes, wildcard hosts or default analytics', async () => {
+  it('permits font files referenced by the actual partner stylesheet only as fonts', async () => {
+    expectOnlyIn(await contentSecurityPolicy(), 'https://fonts.gstatic.com', 'font-src');
+  });
+
+  it('loads the owner-supplied SDK from its exact origin without broad schemes or wildcard hosts', async () => {
     const policy = await contentSecurityPolicy();
     expect(policy['script-src']).toContain('https://tpwidg.com');
     expect(policy['script-src']).not.toContain("'unsafe-eval'");
@@ -67,8 +71,34 @@ describe('Travelpayouts deployment CSP', () => {
     for (const source of Object.values(policy).flat()) {
       expect(source).not.toContain('*');
       expect(source).not.toMatch(/^(?:https?|wss?):$/);
-      expect(source).not.toContain('avsplow.com');
     }
+  });
+
+  it('limits connections to the exact observed HTTPS hosts, without guessing other regions or collector subdomains', async () => {
+    const policy = await contentSecurityPolicy();
+    expect(policy['connect-src']).toEqual([
+      "'self'", 'https://tpwidg.com', 'https://api.apistp.com', 'https://autocomplete.apistp.com',
+      'https://tickets-api.apistp.com', 'https://www.apistp.com',
+      'https://tickets-api.eu-north-1.apistp.com', 'https://avsplow.com',
+    ]);
+    expect(policy['base-uri']).toEqual(["'self'"]);
+    expect(policy['form-action']).toEqual(["'self'", 'https://tpwidg.com']);
+    expect(policy['frame-src']).toEqual(['https://tpwidg.com']);
+  });
+
+  it('retains the production security headers and global document policy needed for SPA entry', async () => {
+    const rules = await nextConfig.headers!();
+    const headers = Object.fromEntries(rules.find(rule => rule.source === '/:path*')!.headers.map(header => [header.key, header.value]));
+    expect(headers).toMatchObject({
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'no-referrer',
+      'X-Frame-Options': 'DENY',
+      'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+      'Strict-Transport-Security': 'max-age=31536000',
+    });
+    expect(rules.find(rule => rule.source === '/flights')?.headers).toContainEqual({
+      key: 'X-Robots-Tag', value: 'noindex, nofollow, nosnippet',
+    });
   });
 
   it('extends resource categories only with explicitly configured exact HTTPS origins', async () => {

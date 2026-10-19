@@ -52,7 +52,7 @@ export interface TicketTerms {
   cabin?: { pieces: number; perBagKg: number };
 }
 export type Fit = 'fits' | 'exceeds' | 'unknown';
-export type ComparisonStatus = 'Fits standard allowance' | 'May fit with student benefit' | 'Exceeds allowance' | 'Needs airline confirmation';
+export type ComparisonStatus = 'Fits your entered allowance' | 'May fit with student benefit' | 'Exceeds allowance' | 'Needs airline confirmation';
 export interface FitResult { status: Fit; reasons: string[] }
 
 export function validRule(rule: BaggageRule): boolean {
@@ -127,7 +127,7 @@ export function compareBaggage(airline: BaggageAirline, journey: Journey, checke
   const student = assessBags(checked, eligibility.applicable && program ? program.allowance : null);
   const cabinResult = cabin.length ? assessBags(cabin, terms.contextConfirmed && journeyComplete && terms.cabin ? { basis: 'pieces', ...terms.cabin } : null) : { status: 'fits' as Fit, reasons: [] };
   let status: ComparisonStatus = 'Needs airline confirmation';
-  if (standard.status === 'fits') status = 'Fits standard allowance';
+  if (standard.status === 'fits') status = 'Fits your entered allowance';
   else if (student.status === 'fits') status = 'May fit with student benefit';
   else if (standard.status === 'exceeds' && student.status === 'exceeds') status = 'Exceeds allowance';
   // Without reviewed student terms, excess against the entered standard stays explicit,

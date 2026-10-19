@@ -199,12 +199,29 @@ describe('conditional student eligibility', () => {
 });
 
 describe('airline comparisons and result states', () => {
-  it('distinguishes a known standard fit from unverified student terms', () => {
+  it('labels a confirmed fit as the user’s entered allowance, independently of unverified student terms', () => {
     const result = compareBaggage(airline(), journey(), [23, 23], [], ticket(), today);
-    expect(result.status).toBe('Fits standard allowance');
+    expect(result.status).toBe('Fits your entered allowance');
     expect(result.standard.status).toBe('fits');
     expect(result.student.status).toBe('unknown');
     expect(result.eligibility.applicable).toBe(false);
+  });
+
+  it.each([
+    { name: 'piece-based', standard: twoPieces },
+    { name: 'weight-based', standard: { basis: 'weight', totalKg: 46, perBagKg: 23 } as BaggageRule },
+  ])('requires explicit ticket-context confirmation for a $name allowance, even when every entered bag fits', ({ standard }) => {
+    const terms = ticket({ standard, contextConfirmed: false, cabin: { pieces: 1, perBagKg: 7 } });
+    const unconfirmed = compareBaggage(airline(), journey(), [23, 23], [7], terms, today);
+    expect(assessBags([23, 23], standard).status).toBe('fits');
+    expect(unconfirmed.status).toBe('Needs airline confirmation');
+    expect(unconfirmed.standard.status).toBe('unknown');
+    expect(unconfirmed.cabin.status).toBe('unknown');
+    const confirmed = compareBaggage(airline(), journey(), [23, 23], [7], { ...terms, contextConfirmed: true }, today);
+    expect(confirmed.status).toBe('Fits your entered allowance');
+    expect(confirmed.standard.status).toBe('fits');
+    expect(confirmed.cabin.status).toBe('fits');
+    expect(confirmed.student.status).toBe('unknown');
   });
 
   it('keeps explicit standard excess warnings when unknown student terms prevent a definitive overall result', () => {
@@ -227,7 +244,7 @@ describe('airline comparisons and result states', () => {
   it('retains a standard fit if a conditional program has a smaller total allowance', () => {
     const result = compareBaggage(airline({ program: program({ allowance: { basis: 'pieces', pieces: 1, perBagKg: 23 } }) }), journey(), [23, 23], [], ticket({ studentActivationConfirmed: true }), today);
     expect(result.student.status).toBe('exceeds');
-    expect(result.status).toBe('Fits standard allowance');
+    expect(result.status).toBe('Fits your entered allowance');
   });
 
   it('does not activate student extras from verification alone or an unconfirmed ticket context', () => {
@@ -252,7 +269,7 @@ describe('airline comparisons and result states', () => {
     const results = companies.map((company, index) => compareBaggage(company, journey(), [23, 23], [], tickets[index], today));
     expect(results.map(result => result.airline.code)).toEqual(['XX', 'YY']);
     expect(results.map(result => result.standard.status)).toEqual(['fits', 'exceeds']);
-    expect(results.map(result => result.status)).toEqual(['Fits standard allowance', 'Needs airline confirmation']);
+    expect(results.map(result => result.status)).toEqual(['Fits your entered allowance', 'Needs airline confirmation']);
   });
 
   it.each([
@@ -267,7 +284,7 @@ describe('airline comparisons and result states', () => {
 
   it('handles optional cabin bags separately from checked baggage', () => {
     expect(compareBaggage(airline(), journey(), [23, 23], [7], ticket(), today).status).toBe('Needs airline confirmation');
-    expect(compareBaggage(airline(), journey(), [23, 23], [7], ticket({ cabin: { pieces: 1, perBagKg: 7 } }), today).status).toBe('Fits standard allowance');
+    expect(compareBaggage(airline(), journey(), [23, 23], [7], ticket({ cabin: { pieces: 1, perBagKg: 7 } }), today).status).toBe('Fits your entered allowance');
     const overweightCabin = compareBaggage(airline(), journey(), [23, 23], [8], ticket({ cabin: { pieces: 1, perBagKg: 7 } }), today);
     expect(overweightCabin.status).toBe('Exceeds allowance');
     expect(overweightCabin.cabin.reasons).toContain('Bag 1 exceeds the 7 kg per-bag limit (1 kg over).');

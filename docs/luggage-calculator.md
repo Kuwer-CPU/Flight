@@ -38,6 +38,12 @@ no review date, age eligibility, standard allowance, student extra or discount i
 asserted. Official sources were blocked by the cloud environment's CONNECT 403 policy
 on 19 October 2026. Screenshot text and historic numbers are not verification evidence.
 
+Ticket confirmation defaults to unchecked. Completing the form does not confirm any
+ticket. Each result card explicitly labels unconfirmed details as illustrative, and
+positive results require active confirmation and say “Fits your entered allowance.”
+User confirmation is never presented as independent approval by an airline. Editing
+ticket terms or journey details clears the relevant confirmation.
+
 Standard results use the user's entered and confirmed ticket terms only. Generic
 policies are never applied across every ticket. No official program has been activated
 by entering a student ID or selecting an airline. Discounts and flexibility benefits
@@ -86,3 +92,8 @@ Validated on 19 October 2026: 659 unit tests; 29 existing application browser te
 demo and primary Travelpayouts modes. Final primary-mode calculator and partner tests
 passed after accessibility fixes. Existing-page HTTP checks also passed. Live airline
 policy, fare and booking verification remains outside these tests.
+
+The final help-text and confirmation corrections were validated with 661 unit tests,
+11 calculator browser tests, lint, TypeScript and the primary production build. The
+results screenshots were refreshed to show the corrected system-specific guidance
+and explicitly distinguish user-confirmed ticket inputs from airline approval.

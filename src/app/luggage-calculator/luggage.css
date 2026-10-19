@@ -1,0 +1,1181 @@
+/* This page extends Flyora's existing cream, forest and soft olive surfaces. */
+.luggage-page {
+  padding-top: 25px;
+  padding-bottom: 50px;
+  --luggage-muted: #596950;
+}
+
+.luggage-page .luggage-header {
+  max-width: 790px;
+  margin-bottom: 25px;
+}
+
+.luggage-page .luggage-header .eyebrow {
+  font-size: 10px;
+  color: #607354;
+  letter-spacing: 1.7px;
+}
+
+.luggage-page .luggage-header h1 {
+  max-width: 710px;
+  margin-top: 12px;
+  font-size: clamp(34px, 3.8vw, 49px);
+  font-weight: 550;
+  line-height: 1.1;
+  letter-spacing: -1.9px;
+}
+
+.luggage-page .luggage-header > p {
+  max-width: 700px;
+  margin-top: 13px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--luggage-muted);
+}
+
+.luggage-page .luggage-header > .text-link {
+  margin-top: 15px;
+  font-size: 12px;
+}
+
+.luggage-page .luggage-header-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 17px;
+}
+
+.luggage-page .luggage-header-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.luggage-page .luggage-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  align-items: start;
+  gap: 24px;
+}
+
+.luggage-page .luggage-main,
+.luggage-page .baggage-main,
+.luggage-page .student-baggage,
+.luggage-page .luggage-side {
+  min-width: 0;
+}
+
+.luggage-page .luggage-assurance {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 17px 19px;
+  border: 1px solid #dce5cf;
+  border-radius: 11px;
+  background: #edf2e3;
+  color: #4f6341;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.luggage-page .luggage-assurance > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.luggage-page .luggage-assurance strong {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: 650;
+}
+
+.luggage-page .baggage-workspace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.luggage-page .tool-panel {
+  padding: 23px;
+  border-radius: 14px;
+  box-shadow: 0 2px 0 #253f3402;
+}
+
+.luggage-page .baggage-section-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.luggage-page .baggage-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 29px;
+  height: 29px;
+  border: 1px solid #dce4d1;
+  border-radius: 8px;
+  background: #f0f4e8;
+  color: #425b32;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 1px;
+}
+
+.luggage-page .baggage-section-title h2 {
+  margin-top: 2px;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -.65px;
+}
+
+.luggage-page .baggage-section-title p {
+  margin-top: 7px;
+  color: var(--luggage-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.luggage-page .baggage-section-title > svg {
+  flex-shrink: 0;
+  margin-left: auto;
+  margin-top: 3px;
+  color: #3c5f49;
+}
+
+.luggage-page .baggage-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px 12px;
+}
+
+.luggage-page .baggage-airports {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px 12px;
+}
+
+.luggage-page .baggage-wide {
+  grid-column: 1 / -1;
+}
+
+.luggage-page .tool-label {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.luggage-page .tool-label input,
+.luggage-page .tool-label select {
+  min-height: 45px;
+  font-size: 13px;
+  padding: 10px 11px;
+  border-radius: 7px;
+  background: #fafbf7;
+}
+
+.luggage-page .tool-label small {
+  font-size: 11px;
+  line-height: 1.75;
+  color: #5e6e54;
+}
+
+.luggage-page input::placeholder {
+  color: #66725f;
+  font-weight: 400;
+  opacity: 1;
+}
+
+.luggage-page .airport-search {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: initial;
+  padding: 0;
+  border: 0;
+  min-height: 0;
+}
+
+.luggage-page .airport-search > .field-label {
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.6;
+}
+
+.luggage-page .airport-search > input {
+  margin: 0;
+  width: 100%;
+  height: auto;
+  min-height: 45px;
+  border: 1px solid #d8dfd0;
+  border-radius: 7px;
+  padding: 10px 11px;
+  background: #fafbf7;
+  font-size: 13px;
+  font-weight: 450;
+}
+
+.luggage-page .airport-search > .field-hint {
+  min-height: 0;
+  font-size: 10px;
+  line-height: 1.6;
+  white-space: normal;
+}
+
+.luggage-page .airport-dropdown {
+  left: 0;
+  width: min(370px, calc(100vw - 80px));
+}
+
+.luggage-page .baggage-quick-routes,
+.luggage-page .baggage-airport-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 18px;
+  margin-top: 17px;
+  color: var(--luggage-muted);
+  font-size: 11px;
+}
+
+.luggage-page .baggage-quick-routes > span,
+.luggage-page .baggage-quick-routes > p,
+.luggage-page .baggage-airport-options > span,
+.luggage-page .baggage-airport-options > p {
+  flex-basis: 100%;
+  margin-bottom: 2px;
+}
+
+.luggage-page .baggage-quick-routes button,
+.luggage-page .baggage-airport-options button {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid #dce4d1;
+  border-radius: 6px;
+  background: #f5f8ee;
+  color: #405b38;
+  font-size: 11px;
+}
+
+.luggage-page .baggage-quick-routes button:hover,
+.luggage-page .baggage-airport-options button:hover {
+  background: #eaf0df;
+  border-color: #bcccad;
+}
+
+.luggage-page .baggage-quick-routes button[aria-pressed="true"] {
+  background: #e5edd7;
+  border-color: #8da57a;
+  color: #315535;
+}
+
+.luggage-page .baggage-packing-total {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #e0e7d5;
+  border-radius: 9px;
+  background: #f0f4e7;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #526843;
+  margin-bottom: 18px;
+}
+
+.luggage-page .baggage-packing-total strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 29px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  color: var(--forest);
+  line-height: 1.35;
+}
+
+.luggage-page .baggage-packing-total > span:last-child {
+  padding-bottom: 3px;
+  text-align: right;
+}
+
+.luggage-page .baggage-weight-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 20px;
+}
+
+.luggage-page .baggage-weight-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 9px;
+}
+
+.luggage-page .baggage-weight-row > label {
+  flex: 1;
+}
+
+.luggage-page .baggage-unit-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.luggage-page .baggage-unit-input input {
+  padding-right: 40px;
+}
+
+.luggage-page .baggage-unit-input > span {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: #627255;
+  font-size: 12px;
+  font-weight: 450;
+}
+
+.luggage-page .baggage-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 45px;
+  border: 1px solid #dce3d3;
+  border-radius: 7px;
+  background: #fff;
+  color: #657457;
+}
+
+.luggage-page .baggage-remove:hover {
+  background: #f5f1e7;
+  color: #825d31;
+}
+
+.luggage-page .baggage-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 8px 0;
+  font-size: 12px;
+  font-weight: 550;
+}
+
+.luggage-page button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.luggage-page .baggage-cabin {
+  margin-top: 12px;
+  padding-top: 17px;
+  border-top: 1px solid #e4e9dc;
+}
+
+.luggage-page .baggage-cabin summary {
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.luggage-page .baggage-cabin > p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--luggage-muted);
+  margin: 9px 0 14px;
+}
+
+.luggage-page .baggage-small-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  color: #5d6e51;
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 14px;
+}
+
+.luggage-page .baggage-small-note > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.luggage-page .baggage-airline-selection {
+  margin-top: 22px;
+}
+
+.luggage-page .baggage-airline-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.luggage-page .baggage-airline-chips label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  border: 1px solid #dfe5d6;
+  border-radius: 7px;
+  padding: 9px 11px;
+  background: #fafbf7;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.luggage-page .baggage-airline-chips .is-selected {
+  border-color: #8da57a;
+  background: #edf3e3;
+  color: #315535;
+}
+
+.luggage-page .baggage-airline-chips label:has(input:disabled) {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.luggage-page .baggage-airline-chips input {
+  width: 14px;
+  height: 14px;
+}
+
+.luggage-page .baggage-ticket-grid,
+.luggage-page .baggage-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.luggage-page .baggage-ticket {
+  min-width: 0;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid #dfe5d5;
+  border-radius: 10px;
+  background: #fcfdf9;
+}
+
+.luggage-page .baggage-ticket legend {
+  padding: 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -.2px;
+}
+
+.luggage-page .baggage-ticket > .tool-label + .tool-label,
+.luggage-page .baggage-ticket > .baggage-small-note + .tool-label,
+.luggage-page .baggage-ticket > .baggage-form-grid {
+  margin-top: 16px;
+}
+
+.luggage-page .baggage-confirm {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 18px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #4d6144;
+  cursor: pointer;
+}
+
+.luggage-page .baggage-confirm input {
+  margin-top: 3px;
+}
+
+.luggage-page .baggage-submit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  margin-top: 24px;
+  padding-top: 21px;
+  border-top: 1px solid #e1e7d9;
+}
+
+.luggage-page .baggage-submit-row .button {
+  gap: 10px;
+  font-size: 13px;
+}
+
+.luggage-page .baggage-submit-row > span {
+  flex: 1;
+  min-width: 170px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #5b6a51;
+}
+
+.luggage-page .baggage-results {
+  margin-top: 35px;
+  scroll-margin-top: 25px;
+}
+
+.luggage-page .baggage-results-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 19px;
+}
+
+.luggage-page .baggage-results-heading .eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.6px;
+  color: #627451;
+}
+
+.luggage-page .baggage-results-heading h2 {
+  margin-top: 9px;
+  font-size: 31px;
+  line-height: 1.2;
+  font-weight: 550;
+  letter-spacing: -1.2px;
+}
+
+.luggage-page .baggage-results-heading p {
+  margin-top: 9px;
+  font-size: 12px;
+  color: var(--luggage-muted);
+  line-height: 1.7;
+}
+
+.luggage-page .baggage-results-heading > a {
+  font-size: 11px;
+}
+
+.luggage-page .baggage-result-notice,
+.luggage-page .baggage-warning {
+  margin-bottom: 19px;
+  padding: 14px 16px;
+  border: 1px solid #dfe6d3;
+  border-radius: 9px;
+  background: #eef3e5;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #4d6341;
+}
+
+.luggage-page .baggage-warning {
+  border-color: #e6d8b8;
+  background: #faf4e6;
+  color: #745423;
+}
+
+.luggage-page .baggage-result-card {
+  min-width: 0;
+  padding: 23px;
+  border: 1px solid #dfe5d6;
+  border-radius: 13px;
+  background: #fff;
+}
+
+.luggage-page .baggage-result-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.luggage-page .baggage-result-brand > span {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 41px;
+  height: 41px;
+  background: #edf1e5;
+  color: #4d6541;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.luggage-page .baggage-result-brand h3 {
+  font-size: 18px;
+  line-height: 1.4;
+  letter-spacing: -.5px;
+}
+
+.luggage-page .baggage-result-brand p {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--luggage-muted);
+}
+
+.luggage-page .baggage-outcome {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #e1dfc8;
+  border-radius: 7px;
+  padding: 10px 11px;
+  background: #f6f4e8;
+  color: #6d633c;
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.6;
+  margin-bottom: 19px;
+}
+
+.luggage-page .baggage-outcome > svg {
+  flex-shrink: 0;
+}
+
+.luggage-page .baggage-outcome-fit {
+  background: #edf4e4;
+  border-color: #d4e2c5;
+  color: #375c35;
+}
+
+.luggage-page .baggage-outcome-exceeds {
+  background: #fcf0e8;
+  border-color: #ecd4c3;
+  color: #8c522e;
+}
+
+.luggage-page .baggage-result-values {
+  margin: 0;
+  border: 1px solid #dfe7d4;
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.luggage-page .baggage-result-values > div {
+  padding: 15px;
+  background: #fbfcf8;
+}
+
+.luggage-page .baggage-result-values > div + div {
+  border-top: 1px solid #e1e7d7;
+}
+
+.luggage-page .baggage-result-values > div:nth-child(2) {
+  background: #eef3e1;
+}
+
+.luggage-page .baggage-result-values > div:nth-child(3) {
+  background: #e8eeda;
+}
+
+.luggage-page .baggage-result-values dt {
+  font-size: 11px;
+  font-weight: 550;
+  color: #546849;
+  line-height: 1.6;
+}
+
+.luggage-page .baggage-result-values dd {
+  margin: 7px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 600;
+  letter-spacing: -.25px;
+  overflow-wrap: anywhere;
+}
+
+.luggage-page .baggage-result-values small {
+  display: block;
+  margin-top: 5px;
+  color: #5f6e52;
+  font-size: 11px;
+  line-height: 1.8;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.luggage-page .baggage-result-reasons {
+  margin: 15px 0 0;
+  padding: 12px 13px 12px 28px;
+  border: 1px solid #e9dcbf;
+  border-radius: 8px;
+  background: #faf5e9;
+  color: #735628;
+  font-size: 11px;
+  line-height: 1.9;
+}
+
+.luggage-page .baggage-offer-notes {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid #e4e8dd;
+}
+
+.luggage-page .baggage-offer-notes h4 {
+  margin: 0 0 9px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.luggage-page .baggage-offer-notes p,
+.luggage-page .baggage-offer-notes ul,
+.luggage-page .baggage-policy-details p,
+.luggage-page .baggage-policy-details ul {
+  color: #53674a;
+  font-size: 12px;
+  line-height: 1.85;
+}
+
+.luggage-page .baggage-offer-notes ul,
+.luggage-page .baggage-policy-details ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.luggage-page .baggage-offer-notes li + li,
+.luggage-page .baggage-policy-details li + li {
+  margin-top: 6px;
+}
+
+.luggage-page .baggage-policy-details {
+  margin-top: 19px;
+  border-top: 1px solid #e2e8d9;
+  border-bottom: 1px solid #e2e8d9;
+}
+
+.luggage-page .baggage-policy-details summary {
+  padding: 15px 0;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.8;
+}
+
+.luggage-page .baggage-policy-details[open] {
+  padding-bottom: 16px;
+}
+
+.luggage-page .baggage-official-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding-top: 18px;
+}
+
+.luggage-page .baggage-official-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #8b9c80;
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.6;
+}
+
+.luggage-page .baggage-official-links svg {
+  flex-shrink: 0;
+}
+
+.luggage-page .baggage-summary-status {
+  margin-top: 14px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #53674a;
+}
+
+.luggage-page .baggage-essentials {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid #dfe5d3;
+  border-radius: 13px;
+  background: #f0f4e8;
+}
+
+.luggage-page .baggage-essentials h2 {
+  margin-top: 9px;
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: -.8px;
+  font-weight: 550;
+}
+
+.luggage-page .baggage-essentials > div > p {
+  margin-top: 10px;
+  color: var(--luggage-muted);
+  font-size: 12px;
+  line-height: 1.85;
+}
+
+.luggage-page .baggage-essentials-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+  margin-top: 19px;
+}
+
+.luggage-page .baggage-essentials-grid > a {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid #dde5d1;
+  border-radius: 9px;
+  background: #fff;
+  transition: border-color .15s, background .15s;
+}
+
+.luggage-page .baggage-essentials-grid > a:hover {
+  border-color: #98ad85;
+  background: #fcfdf9;
+}
+
+.luggage-page .baggage-essentials-grid h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  letter-spacing: -.2px;
+  line-height: 1.6;
+}
+
+.luggage-page .baggage-essentials-grid h3 > svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.luggage-page .baggage-essentials-grid p,
+.luggage-page .baggage-essentials-grid small {
+  display: block;
+  margin-top: 7px;
+  font-size: 11px;
+  line-height: 1.85;
+  color: #5b6c50;
+}
+
+.luggage-page .baggage-essentials-grid small {
+  margin-top: 11px;
+  font-size: 10px;
+}
+
+.luggage-page .luggage-side {
+  padding: 23px;
+  border: 1px solid #dde4d3;
+  border-radius: 14px;
+  background: linear-gradient(#fff, #f3f6eb);
+}
+
+.luggage-page .luggage-side .eyebrow {
+  font-size: 9px;
+  line-height: 1.8;
+  letter-spacing: 1px;
+  color: #647653;
+}
+
+.luggage-page .luggage-side h2 {
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 550;
+  letter-spacing: -.8px;
+  margin-top: 17px;
+}
+
+.luggage-page .luggage-side p {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.85;
+  color: var(--luggage-muted);
+}
+
+.luggage-page .luggage-side ul {
+  margin: 18px 0 0;
+  padding-left: 17px;
+  color: #53684a;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.luggage-page .luggage-side li + li {
+  margin-top: 10px;
+}
+
+.luggage-page .luggage-side .text-link {
+  font-size: 11px;
+  margin-top: 20px;
+}
+
+.luggage-page .luggage-side .baggage-essentials {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.luggage-page .luggage-side .baggage-essentials-grid {
+  grid-template-columns: 1fr;
+}
+
+.luggage-page .luggage-side .baggage-essentials-grid > a {
+  padding: 14px;
+}
+
+.luggage-page .luggage-side .baggage-essentials-grid h3 {
+  font-size: 13px;
+}
+
+.luggage-page .luggage-side .baggage-essentials-grid p {
+  margin-top: 7px;
+  font-size: 11px;
+}
+
+.luggage-page .luggage-guide-links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 26px;
+  padding: 24px;
+  border: 1px solid #dfe5d6;
+  border-radius: 13px;
+  background: #fff;
+}
+
+.luggage-page .luggage-guide-links h2 {
+  font-size: 22px;
+  line-height: 1.4;
+  letter-spacing: -.6px;
+}
+
+.luggage-page .luggage-guide-links p {
+  margin-top: 9px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--luggage-muted);
+}
+
+.luggage-page .luggage-guide-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  border-bottom: 1px solid #8e9c83;
+  padding-bottom: 6px;
+}
+
+@media (max-width: 1150px) {
+  .luggage-page .luggage-layout {
+    grid-template-columns: minmax(0, 1fr) 225px;
+    gap: 20px;
+  }
+
+  .luggage-page .baggage-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .luggage-page .baggage-ticket,
+  .luggage-page .baggage-result-card,
+  .luggage-page .luggage-side {
+    padding: 18px;
+  }
+
+  .luggage-page .baggage-ticket .baggage-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .luggage-page .luggage-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .luggage-page .luggage-side {
+    padding: 24px;
+  }
+
+  .luggage-page .luggage-side ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 30px;
+  }
+
+  .luggage-page .luggage-side li + li {
+    margin-top: 0;
+  }
+
+  .luggage-page .baggage-ticket .baggage-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .luggage-page {
+    width: calc(100% - 36px);
+    padding-top: 20px;
+    padding-bottom: 35px;
+  }
+
+  .luggage-page .luggage-header {
+    margin-bottom: 21px;
+  }
+
+  .luggage-page .luggage-header h1 {
+    max-width: 490px;
+    font-size: 37px;
+    letter-spacing: -1.5px;
+  }
+
+  .luggage-page .luggage-header > p {
+    font-size: 12px;
+    line-height: 1.85;
+    margin-top: 12px;
+  }
+
+  .luggage-page .luggage-header .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.3px;
+  }
+
+  .luggage-page .luggage-assurance {
+    padding: 14px;
+    gap: 9px;
+    font-size: 11px;
+  }
+
+  .luggage-page .baggage-workspace,
+  .luggage-page .baggage-ticket-grid,
+  .luggage-page .baggage-comparison-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .luggage-page .tool-panel {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .luggage-page .baggage-section-title {
+    gap: 10px;
+    margin-bottom: 19px;
+  }
+
+  .luggage-page .baggage-section-title h2 {
+    font-size: 21px;
+  }
+
+  .luggage-page .tool-label input,
+  .luggage-page .tool-label select,
+  .luggage-page .airport-search > input {
+    font-size: 16px;
+    min-height: 46px;
+  }
+
+  .luggage-page .baggage-quick-routes button,
+  .luggage-page .baggage-airport-options button {
+    min-height: 40px;
+    padding: 8px 11px;
+    font-size: 12px;
+  }
+
+  .luggage-page .baggage-ticket {
+    padding: 17px;
+  }
+
+  .luggage-page .baggage-submit-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 13px;
+    padding-top: 18px;
+    margin-top: 20px;
+  }
+
+  .luggage-page .baggage-submit-row .button {
+    padding-inline: 12px;
+    font-size: 12px;
+    white-space: normal;
+  }
+
+  .luggage-page .baggage-submit-row .button svg {
+    flex-shrink: 0;
+  }
+
+  .luggage-page .baggage-results {
+    margin-top: 29px;
+  }
+
+  .luggage-page .baggage-results-heading h2 {
+    font-size: 29px;
+  }
+
+  .luggage-page .baggage-result-card {
+    padding: 21px;
+  }
+
+  .luggage-page .baggage-result-brand h3 {
+    font-size: 19px;
+  }
+
+  .luggage-page .baggage-essentials,
+  .luggage-page .luggage-guide-links {
+    padding: 20px;
+  }
+
+  .luggage-page .baggage-essentials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .luggage-page .luggage-side ul {
+    display: block;
+  }
+
+  .luggage-page .luggage-side li + li {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 430px) {
+  .luggage-page .luggage-header h1 {
+    font-size: 34px;
+    letter-spacing: -1.3px;
+  }
+
+  .luggage-page .baggage-form-grid,
+  .luggage-page .baggage-airports,
+  .luggage-page .baggage-weight-list,
+  .luggage-page .baggage-ticket .baggage-form-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .luggage-page .baggage-airline-chips {
+    gap: 7px;
+  }
+
+  .luggage-page .baggage-airline-chips label {
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .luggage-page .baggage-result-card {
+    padding: 18px;
+  }
+
+  .luggage-page .baggage-results-heading h2 {
+    font-size: 27px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luggage-page .baggage-essentials-grid > a {
+    transition: none;
+  }
+}

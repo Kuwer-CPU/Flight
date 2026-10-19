@@ -10,12 +10,12 @@ async function expectAccessible(page: Page, context: string) {
   expect(results.violations.map(violation => ({ id: violation.id, targets: violation.nodes.map(node => node.target) })), context).toEqual([]);
 }
 
-test('the student travel homepage exposes all five main tools', async ({ page }) => {
+test('the student travel homepage exposes all six main tools', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1, name: 'Smarter flights for students worldwide.', exact: true })).toBeVisible();
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
-  await expect(navigation.getByRole('link')).toHaveCount(5);
-  for (const route of ['/flights', '/student-benefits', '/travel-calculator', '/miles-wallet', '/travel-checklist']) {
+  await expect(navigation.getByRole('link')).toHaveCount(6);
+  for (const route of ['/flights', '/student-benefits', '/travel-essentials', '/travel-calculator', '/miles-wallet', '/travel-checklist']) {
     await expect(navigation.locator('a[href="' + route + '"]')).toHaveCount(1);
   }
 });

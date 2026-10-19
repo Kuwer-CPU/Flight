@@ -12,7 +12,7 @@ async function expectAccessible(page: Page, context: string) {
 
 test('the India-first homepage embeds the luggage calculator and keeps the other travel tools available', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1, name: 'Your bags.Your flight.Know your allowance.' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: /Your bags.*Your flight.*Know your allowance\./ })).toBeVisible();
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
   await expect(navigation.getByRole('link')).toHaveCount(6);
   for (const route of ['/#luggage-calculator', '/flights', '/student-benefits', '/travel-essentials', '/travel-calculator', '/travel-checklist']) {

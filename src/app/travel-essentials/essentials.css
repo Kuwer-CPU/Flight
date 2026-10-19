@@ -1,0 +1,423 @@
+/* Travel Essentials stays scoped to its own page and shares Flyora's palette. */
+.essentials-page {
+  --essentials-muted: #5b6959;
+  --essentials-line: #dce3d5;
+  padding-top: 22px;
+  padding-bottom: 64px;
+}
+
+.essentials-page .essentials-breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  min-height: 30px;
+  margin-bottom: 17px;
+  color: #5b6959;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.essentials-page .essentials-breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  text-decoration: underline;
+  text-decoration-color: #a8b69d;
+  text-underline-offset: 4px;
+}
+
+.essentials-page .essentials-breadcrumb svg { flex-shrink: 0; }
+
+.essentials-page .essentials-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.17fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 38px 42px;
+  border: 1px solid #dce4d4;
+  border-radius: 21px;
+  background: radial-gradient(ellipse at 88% 5%, #dce8d1 0, transparent 55%), #edf1e5;
+}
+
+.essentials-page .essentials-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #47633e;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 1.6px;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.essentials-page .essentials-eyebrow svg { flex-shrink: 0; }
+
+.essentials-page .essentials-hero-copy { position: relative; z-index: 1; }
+
+.essentials-page .essentials-hero-copy h1 {
+  max-width: 620px;
+  margin: 16px 0 17px;
+  font-size: clamp(39px, 4.5vw, 61px);
+  line-height: 1.07;
+  font-weight: 550;
+  letter-spacing: -2.8px;
+  text-wrap: balance;
+}
+
+.essentials-page .essentials-hero-copy h1 em { color: #527249; }
+
+.essentials-page .essentials-hero-copy > p {
+  max-width: 480px;
+  color: #53644e;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.essentials-page .essentials-hero-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px 17px;
+  margin-top: 23px;
+}
+
+.essentials-page .essentials-hero-notes > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #445b3f;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.essentials-page .essentials-hero-notes svg { flex-shrink: 0; }
+
+.essentials-page .essentials-hero-art {
+  position: relative;
+  width: 100%;
+  max-width: 412px;
+  height: 304px;
+  margin-inline: auto;
+  transform: rotate(2deg);
+}
+
+.essentials-page .essentials-art-label {
+  position: absolute;
+  top: 0;
+  left: 24px;
+  color: #5b7350;
+  font-size: 8px;
+  letter-spacing: 1.6px;
+  line-height: 1.6;
+}
+
+.essentials-page .essentials-art-item {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  border: 1px solid #d3dfc5;
+  border-radius: 15px;
+  background: #dce6cb;
+  box-shadow: 0 14px 30px #35502c09;
+  color: #536e40;
+}
+
+.essentials-page .essentials-art-item > span { color: #253f34; font-size: 8px; font-weight: 550; letter-spacing: .3px; }
+.essentials-page .essentials-art-luggage { top: 31px; left: 11px; width: 208px; height: 246px; transform: rotate(-6deg); }
+.essentials-page .essentials-art-luggage > svg { width: 119px; height: 119px; }
+.essentials-page .essentials-art-passport { top: 38px; right: 9px; width: 156px; height: 114px; background: #ede3ce; border-color: #e1d7bf; color: #806a42; transform: rotate(5deg); }
+.essentials-page .essentials-art-plug { right: 10px; bottom: 20px; width: 145px; height: 114px; background: #e2e9e7; border-color: #d0dfd9; color: #53766b; transform: rotate(-4deg); }
+.essentials-page .essentials-art-passport > svg,
+.essentials-page .essentials-art-plug > svg { width: 44px; height: 44px; }
+.essentials-page .essentials-art-stamp { position: absolute; left: 168px; bottom: 1px; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; width: 85px; height: 85px; border: 4px solid #edf1e5; border-radius: 50%; background: #28523b; color: #e3ecb3; transform: rotate(-11deg); }
+.essentials-page .essentials-art-stamp > span { font-size: 7px; line-height: 1.5; letter-spacing: .9px; text-align: center; }
+
+.essentials-page .essentials-disclosure {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin: 19px 0 34px;
+  padding: 15px 18px;
+  border: 1px solid #e5e0cd;
+  border-radius: 11px;
+  background: #f4f0e4;
+  color: #645c43;
+  font-size: 11px;
+  line-height: 1.85;
+}
+
+.essentials-page .essentials-disclosure > svg { flex-shrink: 0; margin-top: 3px; }
+.essentials-page .essentials-disclosure strong { font-weight: 650; }
+.essentials-page .essentials-disclosure a { text-decoration: underline; text-underline-offset: 3px; }
+.essentials-page .essentials-browser { scroll-margin-top: 24px; }
+
+.essentials-page .essentials-browser h2,
+.essentials-page .essentials-faq h2,
+.essentials-page .essentials-trip-links h2 {
+  font-size: 30px;
+  font-weight: 550;
+  letter-spacing: -1.2px;
+  line-height: 1.2;
+}
+
+.essentials-page .essentials-browser > p {
+  margin-top: 10px;
+  color: var(--essentials-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.essentials-page .essentials-category-heading { display: flex; justify-content: space-between; gap: 20px; align-items: flex-end; }
+.essentials-page .essentials-category-heading h2 { margin-top: 10px; }
+.essentials-page .essentials-category-heading p { margin-top: 10px; color: var(--essentials-muted); font-size: 12px; line-height: 1.8; }
+.essentials-page .essentials-all { flex-shrink: 0; min-height: 44px; font-size: 11px; }
+.essentials-page .essentials-all[aria-pressed="true"] { color: #36572d; text-decoration-thickness: 2px; }
+
+.essentials-page .essentials-category-nav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 11px;
+  margin: 25px 0 23px;
+}
+
+.essentials-page .essentials-category-button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  min-height: 67px;
+  padding: 14px;
+  border: 1px solid #dce4d3;
+  border-radius: 10px;
+  background: #fff;
+  text-align: left;
+  transition: background .18s, border-color .18s;
+}
+
+.essentials-page .essentials-category-button:hover { background: #edf2e5; border-color: #a9bb98; }
+.essentials-page .essentials-category-button[aria-pressed="true"] { background: #e7eedc; border-color: #6d8856; box-shadow: inset 0 0 0 1px #6d8856; }
+.essentials-page .essentials-category-button > svg { width: 22px; height: 22px; flex-shrink: 0; color: #587447; stroke-width: 1.6; }
+.essentials-page .essentials-category-button > span { min-width: 0; font-size: 11px; font-weight: 600; line-height: 1.6; }
+.essentials-page .essentials-category-button small { display: block; color: #627056; font-size: 10px; font-weight: 400; line-height: 1.6; }
+.essentials-page .essentials-category-button > small { margin-left: auto; flex-shrink: 0; }
+
+.essentials-page .essentials-toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid #dce3d5;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.essentials-page .essentials-toolbar > label,
+.essentials-page .essentials-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  color: #4c5c45;
+  font-size: 11px;
+  font-weight: 550;
+  line-height: 1.5;
+}
+
+.essentials-page .essentials-toolbar > label:first-child { flex: 1; }
+.essentials-page .essentials-search { min-width: 0; }
+.essentials-page .essentials-search > div { display: flex; align-items: center; position: relative; min-width: 0; width: 100%; }
+.essentials-page .essentials-search > div > svg { position: absolute; left: 13px; width: 18px; height: 18px; flex-shrink: 0; color: #67795a; pointer-events: none; }
+.essentials-page .essentials-search input { padding-left: 40px; }
+
+.essentials-page .essentials-toolbar input,
+.essentials-page .essentials-toolbar select {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid #d8dfd0;
+  border-radius: 7px;
+  background: #f9faf5;
+  color: #314b38;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.essentials-page .essentials-toolbar .essentials-search input { padding-left: 40px; }
+.essentials-page input.essentials-search { padding-left: 13px; }
+.essentials-page .essentials-filter { flex: 0 1 220px; }
+.essentials-page .essentials-toolbar > button { min-height: 46px; font-size: 11px; padding: 11px 15px; }
+.essentials-page .essentials-results-summary { display: flex; justify-content: space-between; align-items: center; gap: 15px; min-height: 60px; color: #58674e; font-size: 11px; line-height: 1.7; }
+.essentials-page .essentials-results-summary p { margin: 0; }
+.essentials-page .essentials-results-summary button { min-height: 44px; padding: 8px 0 8px 12px; text-decoration: underline; text-underline-offset: 4px; font-size: 11px; }
+.essentials-page .essentials-price-filter { display: flex; align-items: center; gap: 8px; min-height: 44px; margin-left: auto; font-size: 10px; cursor: pointer; }
+.essentials-page .essentials-browser > .essentials-price-note { margin: -2px 0 20px; padding: 0 0 0 1px; font-size: 10px; line-height: 1.8; }
+
+.essentials-page .essentials-product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 21px; }
+.essentials-page .essential-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid #dde3d6; border-radius: 14px; background: #fff; transition: border-color .2s, box-shadow .2s; }
+.essentials-page .essential-card:hover { border-color: #bdcdb0; box-shadow: 0 8px 24px #304b2b0b; }
+.essentials-page .essential-visual { position: relative; display: flex; align-items: center; justify-content: center; min-height: 169px; overflow: hidden; background: #edf1e4; color: #5e7850; }
+.essentials-page .essential-visual::before { content: ""; position: absolute; width: 114px; height: 114px; border: 1px solid #8ba27344; border-radius: 50%; background: #ffffff36; }
+.essentials-page .essential-visual::after { content: ""; position: absolute; right: -17px; top: -26px; width: 110px; height: 110px; border: 1px solid #8ba27322; border-radius: 50%; }
+.essentials-page .essential-visual > svg { position: relative; z-index: 1; width: 64px; height: 64px; stroke-width: 1.35; }
+.essentials-page .essential-category { position: absolute; top: 14px; left: 15px; max-width: calc(100% - 30px); padding: 5px 8px; border-radius: 5px; background: #ffffffbb; color: #506044; font-size: 8px; font-weight: 550; letter-spacing: .6px; line-height: 1.5; text-transform: uppercase; }
+.essentials-page .essential-tone-1 .essential-visual { background: #eee8d9; color: #846e45; }
+.essentials-page .essential-tone-2 .essential-visual { background: #f0e4dd; color: #956d5c; }
+.essentials-page .essential-tone-3 .essential-visual { background: #e4ece3; color: #577555; }
+.essentials-page .essential-tone-4 .essential-visual { background: #e1e9ec; color: #547486; }
+.essentials-page .essential-tone-5 .essential-visual { background: #ebe5d8; color: #7c714b; }
+.essentials-page .essential-tone-6 .essential-visual { background: #e1e8d4; color: #5b7446; }
+.essentials-page .essential-tone-7 .essential-visual { background: #eee6e0; color: #8a7062; }
+.essentials-page .essential-card-content { display: flex; flex: 1; flex-direction: column; padding: 21px; }
+.essentials-page .essential-card-content h3 { font-size: 19px; line-height: 1.3; letter-spacing: -.65px; font-weight: 600; }
+.essentials-page .essential-card-content > p { margin-top: 10px; color: #5c6855; font-size: 11px; line-height: 1.85; }
+.essentials-page .essential-card-content .essential-tip { display: flex; align-items: flex-start; gap: 7px; margin: 14px 0 0; padding: 11px 12px; border-radius: 7px; background: #f5f7ef; color: #526148; font-size: 10px; line-height: 1.8; }
+.essentials-page .essential-tip > svg { flex-shrink: 0; margin-top: 3px; }
+.essentials-page .essential-price { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; margin-top: auto; padding-top: 20px; color: #506248; font-size: 11px; line-height: 1.7; }
+.essentials-page .essential-price strong { font-size: 20px; font-weight: 600; letter-spacing: -.5px; }
+.essentials-page .essential-price strong:first-child { font-size: 13px; letter-spacing: -.2px; }
+.essentials-page .essential-price small { color: #66715e; font-size: 10px; }
+.essentials-page .essential-price small:first-child:last-of-type { width: 100%; }
+.essentials-page .essential-price a { font-size: 10px; text-decoration: underline; text-underline-offset: 3px; }
+.essentials-page .essential-link { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 45px; margin-top: 15px; padding: 12px; border: 1px solid #ccd8bf; border-radius: 7px; background: #f0f4e7; color: #304e31; font-size: 11px; font-weight: 600; line-height: 1.6; text-align: center; transition: background .18s; }
+.essentials-page .essential-link:hover { background: #e4edd6; }
+.essentials-page .essential-link svg { flex-shrink: 0; width: 14px; height: 14px; }
+.essentials-page .essential-link-kind { display: block; margin-top: 9px; color: #66705d; font-size: 9px; line-height: 1.7; text-align: center; }
+.essentials-page .essential-card-content > .essential-link-kind:last-child { margin-bottom: -1px; }
+.essentials-page .essentials-empty { display: flex; flex-direction: column; align-items: center; gap: 13px; padding: 60px 24px; border: 1px dashed #bcccad; border-radius: 14px; background: #f0f4e8; text-align: center; }
+.essentials-page .essentials-empty h3 { font-size: 23px; }
+.essentials-page .essentials-empty p { max-width: 480px; color: #586850; font-size: 12px; line-height: 1.8; }
+.essentials-page .essentials-empty button { min-height: 44px; margin-top: 6px; }
+
+.essentials-page .essentials-faq { margin-top: 49px; padding: 30px; border: 1px solid #dce3d4; border-radius: 15px; background: #edf1e5; }
+.essentials-page .essentials-faq h2 { margin-bottom: 20px; font-size: 28px; }
+.essentials-page .essentials-faq > p { max-width: 760px; margin-top: 10px; color: #5b6853; font-size: 12px; line-height: 1.85; }
+.essentials-page .essentials-faq details { border-top: 1px solid #d4deca; }
+.essentials-page .essentials-faq summary { min-height: 53px; padding: 17px 3px; font-size: 12px; font-weight: 600; line-height: 1.7; cursor: pointer; }
+.essentials-page .essentials-faq details p { max-width: 860px; padding: 0 3px 19px; color: #53634b; font-size: 11px; line-height: 1.9; }
+.essentials-page .essentials-faq details a { text-decoration: underline; text-underline-offset: 3px; }
+
+.essentials-page .essentials-trip-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 25px; }
+.essentials-page .essentials-trip-links > a { display: grid; grid-template-columns: 23px minmax(0, 1fr); align-content: start; gap: 4px 13px; padding: 22px; border: 1px solid #dce3d5; border-radius: 12px; background: #fff; }
+.essentials-page .essentials-trip-links > a:hover { background: #f0f4e9; }
+.essentials-page .essentials-trip-links > a > svg { flex-shrink: 0; margin-top: 1px; }
+.essentials-page .essentials-trip-links > a > svg:last-child { margin-left: auto; }
+.essentials-page .essentials-trip-links strong { display: block; font-size: 13px; line-height: 1.6; }
+.essentials-page .essentials-trip-links p,
+.essentials-page .essentials-trip-links small,
+.essentials-page .essentials-trip-links > a > span { display: block; grid-column: 2; margin-top: 3px; color: #5d6b54; font-size: 10px; line-height: 1.8; }
+
+@media (max-width: 1100px) {
+  .essentials-page .essentials-hero { padding: 32px; gap: 25px; }
+  .essentials-page .essentials-hero-copy h1 { font-size: 50px; letter-spacing: -2.2px; }
+  .essentials-page .essentials-hero-art { max-width: 344px; height: 284px; }
+  .essentials-page .essentials-art-luggage { width: 181px; height: 223px; }
+  .essentials-page .essentials-art-passport { width: 137px; height: 103px; right: 0; }
+  .essentials-page .essentials-art-plug { width: 132px; height: 103px; right: 0; }
+  .essentials-page .essentials-art-stamp { left: 133px; }
+  .essentials-page .essentials-category-button { padding: 12px; gap: 8px; }
+  .essentials-page .essentials-category-button > span { font-size: 10px; }
+  .essentials-page .essential-card-content { padding: 18px; }
+  .essentials-page .essentials-trip-links > a { padding: 19px; gap: 10px; }
+}
+
+@media (max-width: 900px) {
+  .essentials-page .essentials-hero { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); padding: 30px; gap: 22px; }
+  .essentials-page .essentials-hero-copy h1 { font-size: 43px; }
+  .essentials-page .essentials-hero-copy > p { font-size: 12px; }
+  .essentials-page .essentials-eyebrow { font-size: 9px; letter-spacing: 1.1px; }
+  .essentials-page .essentials-hero-art { max-width: 290px; height: 259px; }
+  .essentials-page .essentials-art-label { left: 4px; font-size: 7px; letter-spacing: 1.1px; }
+  .essentials-page .essentials-art-luggage { top: 35px; left: 1px; width: 153px; height: 194px; }
+  .essentials-page .essentials-art-luggage > svg { width: 94px; height: 94px; }
+  .essentials-page .essentials-art-passport { top: 34px; width: 121px; height: 91px; }
+  .essentials-page .essentials-art-plug { width: 114px; height: 91px; bottom: 28px; }
+  .essentials-page .essentials-art-item { gap: 9px; }
+  .essentials-page .essentials-art-item > span { font-size: 7px; }
+  .essentials-page .essentials-art-passport > svg,
+  .essentials-page .essentials-art-plug > svg { width: 36px; height: 36px; }
+  .essentials-page .essentials-art-stamp { left: 104px; width: 73px; height: 73px; }
+  .essentials-page .essentials-hero-notes { gap: 7px 13px; margin-top: 17px; }
+  .essentials-page .essentials-hero-notes > span { font-size: 9px; }
+  .essentials-page .essentials-category-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .essentials-page .essentials-category-button { min-height: 62px; padding: 12px 15px; gap: 11px; }
+  .essentials-page .essentials-category-button > span { font-size: 11px; }
+  .essentials-page .essentials-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  .essentials-page .essentials-toolbar { flex-wrap: wrap; }
+  .essentials-page .essentials-toolbar > label:first-child { flex-basis: 100%; }
+  .essentials-page .essentials-filter { flex: 1; }
+  .essentials-page .essentials-trip-links { grid-template-columns: 1fr; gap: 11px; }
+  .essentials-page .essentials-trip-links > a { padding: 20px; }
+}
+
+@media (max-width: 600px) {
+  .essentials-page { padding-top: 13px; padding-bottom: 39px; }
+  .essentials-page .essentials-breadcrumb { margin-bottom: 12px; font-size: 10px; }
+  .essentials-page .essentials-hero { grid-template-columns: 1fr; gap: 25px; padding: 27px 22px; border-radius: 16px; }
+  .essentials-page .essentials-hero-copy h1 { max-width: 390px; margin: 14px 0; font-size: 41px; letter-spacing: -1.9px; }
+  .essentials-page .essentials-hero-copy > p { font-size: 12px; line-height: 1.9; }
+  .essentials-page .essentials-hero-notes { gap: 9px 14px; margin-top: 18px; }
+  .essentials-page .essentials-hero-notes > span { font-size: 9px; }
+  .essentials-page .essentials-hero-art { width: 100%; max-width: 280px; height: 240px; margin: 0 auto 0; transform: rotate(1deg); }
+  .essentials-page .essentials-art-label { top: 0; left: 6px; font-size: 7px; }
+  .essentials-page .essentials-art-luggage { top: 28px; left: 2px; width: 151px; height: 186px; }
+  .essentials-page .essentials-art-luggage > svg { width: 94px; height: 94px; }
+  .essentials-page .essentials-art-passport { top: 30px; right: 1px; width: 114px; height: 85px; }
+  .essentials-page .essentials-art-plug { bottom: 19px; right: 2px; width: 111px; height: 86px; }
+  .essentials-page .essentials-art-stamp { left: 108px; bottom: 0; width: 70px; height: 70px; }
+  .essentials-page .essentials-art-stamp > svg { width: 19px; height: 19px; }
+  .essentials-page .essentials-art-stamp > span { font-size: 6px; }
+  .essentials-page .essentials-disclosure { gap: 9px; margin: 15px 0 28px; padding: 14px; font-size: 10px; }
+  .essentials-page .essentials-browser h2 { font-size: 27px; letter-spacing: -1px; }
+  .essentials-page .essentials-browser > p { font-size: 11px; }
+  .essentials-page .essentials-category-heading { display: block; }
+  .essentials-page .essentials-category-heading .eyebrow { font-size: 8px; letter-spacing: 1.1px; }
+  .essentials-page .essentials-category-heading p { font-size: 11px; }
+  .essentials-page .essentials-all { margin-top: 9px; padding-left: 0; }
+  .essentials-page .essentials-category-nav { gap: 9px; margin: 20px 0; }
+  .essentials-page .essentials-category-button { align-items: flex-start; gap: 8px; padding: 12px 10px; min-height: 74px; }
+  .essentials-page .essentials-category-button > svg { width: 19px; height: 19px; margin-top: 2px; }
+  .essentials-page .essentials-category-button > span { font-size: 10px; line-height: 1.55; }
+  .essentials-page .essentials-category-button small { font-size: 9px; line-height: 1.6; margin-top: 2px; }
+  .essentials-page .essentials-toolbar { gap: 14px; padding: 16px; }
+  .essentials-page .essentials-toolbar > label,
+  .essentials-page .essentials-filter { flex-basis: 100%; font-size: 11px; }
+  .essentials-page .essentials-toolbar input,
+  .essentials-page .essentials-toolbar select { font-size: 16px; }
+  .essentials-page .essentials-toolbar > button { width: 100%; }
+  .essentials-page .essentials-results-summary { flex-wrap: wrap; justify-content: flex-start; min-height: 59px; gap: 0 9px; padding: 12px 0; font-size: 10px; }
+  .essentials-page .essentials-results-summary p { flex-basis: 100%; }
+  .essentials-page .essentials-price-filter { margin-left: 0; font-size: 10px; }
+  .essentials-page .essentials-browser > .essentials-price-note { font-size: 10px; }
+  .essentials-page .essentials-results-summary button { flex-shrink: 0; font-size: 10px; }
+  .essentials-page .essentials-product-grid { grid-template-columns: 1fr; gap: 18px; }
+  .essentials-page .essential-visual { min-height: 165px; }
+  .essentials-page .essential-card-content { padding: 21px; }
+  .essentials-page .essential-card-content h3 { font-size: 21px; }
+  .essentials-page .essential-card-content > p { font-size: 12px; }
+  .essentials-page .essential-card-content .essential-tip { font-size: 11px; }
+  .essentials-page .essential-category { top: 13px; left: 15px; font-size: 8px; }
+  .essentials-page .essential-link { min-height: 47px; font-size: 12px; }
+  .essentials-page .essential-link-kind { font-size: 10px; }
+  .essentials-page .essential-price { font-size: 12px; }
+  .essentials-page .essential-price strong:first-child { font-size: 14px; }
+  .essentials-page .essential-price small { font-size: 11px; }
+  .essentials-page .essentials-faq { margin-top: 31px; padding: 22px 19px; border-radius: 12px; }
+  .essentials-page .essentials-faq h2 { font-size: 26px; letter-spacing: -.9px; }
+  .essentials-page .essentials-faq summary { font-size: 12px; }
+  .essentials-page .essentials-faq details p { font-size: 11px; }
+  .essentials-page .essentials-trip-links { margin-top: 19px; }
+  .essentials-page .essentials-trip-links > a { padding: 19px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .essentials-page .essential-card,
+  .essentials-page .essential-link,
+  .essentials-page .essentials-category-button { transition: none; }
+}

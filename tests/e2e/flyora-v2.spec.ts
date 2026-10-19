@@ -10,14 +10,23 @@ async function expectAccessible(page: Page, context: string) {
   expect(results.violations.map(violation => ({ id: violation.id, targets: violation.nodes.map(node => node.target) })), context).toEqual([]);
 }
 
-test('the student travel homepage exposes all six main tools', async ({ page }) => {
+test('the India-first homepage embeds the luggage calculator and keeps the other travel tools available', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1, name: 'Smarter flights for students worldwide.', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Your bags.Your flight.Know your allowance.' })).toBeVisible();
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
   await expect(navigation.getByRole('link')).toHaveCount(6);
-  for (const route of ['/flights', '/student-benefits', '/travel-essentials', '/travel-calculator', '/miles-wallet', '/travel-checklist']) {
+  for (const route of ['/#luggage-calculator', '/flights', '/student-benefits', '/travel-essentials', '/travel-calculator', '/travel-checklist']) {
     await expect(navigation.locator('a[href="' + route + '"]')).toHaveCount(1);
   }
+  await expect(navigation.getByRole('link', { name: 'Miles Wallet' })).toHaveCount(0);
+  const calculator = page.locator('#luggage-calculator');
+  await expect(calculator.getByRole('heading', { name: 'Your journey', exact: true })).toBeVisible();
+  await expect(calculator.getByRole('combobox', { name: 'Departure country', exact: true })).toHaveValue('IN');
+  await calculator.getByRole('spinbutton', { name: 'Student age', exact: true }).fill('22');
+  await calculator.getByRole('spinbutton', { name: /^Checked bag 1\b/ }).fill('23');
+  await calculator.getByRole('spinbutton', { name: /^Checked bag 2\b/ }).fill('23');
+  await calculator.getByRole('button', { name: 'Compare baggage & benefits', exact: true }).click();
+  await expect(calculator.getByText('46 kg checked · 2 bags · 2 airlines · one traveler', { exact: true })).toBeVisible();
 });
 
 test('the student directory searches official leads without inventing current policy terms', async ({ page }) => {

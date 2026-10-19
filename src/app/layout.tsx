@@ -19,6 +19,9 @@ export function generateMetadata(): Metadata { return {
   icons: { icon: '/icon.svg', apple: '/icon.svg' },
   openGraph: { title: 'Flyora — Smarter flights for students worldwide.', description: 'Search flights. Compare student benefits. Travel smarter.', type: 'website', locale: 'en_GB', siteName: 'Flyora' },
   robots: { index: canIndexSite(getFlightConfig(), getSiteConfig(), getFlightIntegration()), follow: true },
+  other: {
+  'mitgo-verification': '08c88822-be96-4dbc-9919-58716884be28',
+},
 }; }
 export const viewport: Viewport = { themeColor: '#f7f8f2', width: 'device-width', initialScale: 1 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {

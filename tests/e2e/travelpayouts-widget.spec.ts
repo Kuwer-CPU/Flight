@@ -176,7 +176,8 @@ test('the sole partner flight form and separate student notes preserve their sta
   await expect(page.getByText('Live flight prices', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Select flight', exact: true })).toHaveCount(0);
   await expect(page.getByRole('form', { name: 'Mock partner flight search', exact: true })).toHaveCount(0);
-  await expect(page.locator('form:visible')).toHaveCount(0);
+  await expect(page.locator('form:visible')).toHaveCount(1);
+  await expect(page.locator('#luggage-calculator').getByRole('button', { name: 'Compare baggage & benefits' })).toBeVisible();
   releaseSdk!();
   await expectOnlyPartnerFlightForm(page);
   await expect(page.getByText('Preparing partner flight search…', { exact: true })).toHaveCount(0);
@@ -234,8 +235,8 @@ test('the sole partner flight form and separate student notes preserve their sta
   await expect(page).toHaveURL(/\/flights$/);
   await expectVendorFieldsUnchanged();
   const tools = [
-    ['Student Benefits', '/student-benefits'], ['Travel Calculator', '/travel-calculator'],
-    ['Miles Wallet', '/miles-wallet'], ['Travel Checklist', '/travel-checklist'],
+    ['Student Benefits', '/student-benefits'], ['Trip Cost Calculator', '/travel-calculator'],
+    ['Travel Essentials', '/travel-essentials'], ['Travel Checklist', '/travel-checklist'],
   ];
   for (const [name, path] of tools) {
     await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name, exact: true }).click();

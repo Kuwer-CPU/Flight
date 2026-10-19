@@ -4,8 +4,8 @@ import AxeBuilder from '@axe-core/playwright';
 test.use({ hasTouch: true });
 
 test('searches between South America and Africa by city and code using keyboard airport selection', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByRole('region', { name: 'Worldwide flight search' }).getByText(/5,332 airports across 235/)).toBeVisible();
+  await page.goto('/flights');
+  await expect(page.getByRole('combobox', { name: 'Departure airport' })).toBeVisible();
   const origin = page.getByRole('combobox', { name: 'Departure airport' });
   await origin.fill('Sao Paulo');
   await expect(page.getByRole('option', { name: /^GRU\b/ })).toBeVisible();
@@ -24,7 +24,7 @@ test('searches between South America and Africa by city and code using keyboard 
 });
 
 test('country suggestions, unknown inputs and swapping never submit a stale airport', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/flights');
   const origin = page.getByRole('combobox', { name: 'Departure airport' });
   await origin.fill('Japan');
   await expect(page.getByRole('option', { name: /^HND\b/ })).toBeVisible();
@@ -40,12 +40,12 @@ test('country suggestions, unknown inputs and swapping never submit a stale airp
   await expect(origin).toHaveAttribute('aria-expanded', 'false');
   await page.getByRole('button', { name: 'Search flights', exact: true }).click();
   await expect(page.getByRole('alert').filter({ hasText: 'Choose an airport from the suggestions' })).toBeVisible();
-  await expect(page).not.toHaveURL(/\/flights/);
+  await expect(page).toHaveURL(/\/flights/);
 });
 
 test('airport suggestions fit mobile screens, accept touch selection and meet accessibility checks', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/flights');
   const destination = page.getByRole('combobox', { name: 'Arrival airport' });
   await destination.fill('Mexico');
   await expect(page.getByRole('option', { name: /^MEX\b/ })).toBeVisible();

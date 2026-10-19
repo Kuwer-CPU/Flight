@@ -14,10 +14,10 @@ import './flyora-v2.css';
 
 export function generateMetadata(): Metadata { return {
   metadataBase: new URL(getSiteConfig().siteUrl),
-  title: { default: 'Flyora — Search flights. Compare student benefits. Travel smarter.', template: '%s | Flyora' },
-  description: 'Search flights, discover official student programs, compare your entered travel costs, plan your journey and track your manually entered airline miles.',
+  title: { default: 'Flyora — Student Luggage Calculator, Travel Essentials & Flights', template: '%s | Flyora' },
+  description: 'Calculate your luggage allowance, compare student airline benefits, explore travel essentials and search flights. Made for Indian students travelling abroad.',
   icons: { icon: '/icon.svg', apple: '/icon.svg' },
-  openGraph: { title: 'Flyora — Smarter flights for students worldwide.', description: 'Search flights. Compare student benefits. Travel smarter.', type: 'website', locale: 'en_GB', siteName: 'Flyora' },
+  openGraph: { title: 'Flyora — Pack smarter, fly better.', description: 'Compare luggage allowances, student benefits and travel essentials before flying.', type: 'website', locale: 'en_GB', siteName: 'Flyora' },
   robots: { index: canIndexSite(getFlightConfig(), getSiteConfig(), getFlightIntegration()), follow: true },
   other: {
   'mitgo-verification': '08c88822-be96-4dbc-9919-58716884be28',

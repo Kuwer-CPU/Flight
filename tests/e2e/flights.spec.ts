@@ -3,9 +3,8 @@ import { test, expect } from '@playwright/test';
 test('searches round trips, compares bags, sorts flights and hands off to the airline', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
-  await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Smarter flights for students worldwide.', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Search flights', exact: true }).click();
+  await page.goto('/flights');
+  await expect(page.getByRole('combobox', { name: 'Departure airport' })).toBeVisible();
   await expect(page).toHaveURL(/\/flights\?/);
   await expect(page.getByRole('button', { name: 'Select flight', exact: true })).toHaveCount(6);
   await expect(page.getByRole('main').getByText('Preview mode', { exact: true })).toBeVisible();
@@ -28,8 +27,7 @@ test('searches round trips, compares bags, sorts flights and hands off to the ai
 });
 
 test('saves a flight across reloads and removes it from the shortlist', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Search flights', exact: true }).click();
+  await page.goto('/flights');
   const save = page.getByRole('button', { name: 'Save Qatar Airways flight', exact: true });
   await save.click();
   await expect(page.getByRole('button', { name: 'Saved flights, 1 saved' })).toBeVisible();
@@ -41,7 +39,7 @@ test('saves a flight across reloads and removes it from the shortlist', async ({
 });
 
 test('one-way and multiple traveler searches preserve the route and group fare', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/flights');
   await page.getByRole('button', { name: 'One way', exact: true }).click();
   await expect(page.getByLabel('Return date', { exact: true })).toHaveCount(0);
   await page.getByLabel('Number of adult travelers').selectOption('3');
@@ -63,8 +61,7 @@ test('mobile navigation, search, filters and booking dialog fit the screen', asy
   await expect(page.getByRole('heading', { name: 'Check your student advantage.', exact: true })).toBeVisible();
   await page.getByLabel('Search airlines or student programs', { exact: true }).fill('Qatar');
   await expect(page.locator('.benefit-card')).toHaveCount(1);
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Search flights', exact: true }).click();
+  await page.goto('/flights');
   await page.getByRole('button', { name: 'Filters', exact: true }).click();
   await page.getByLabel('Nonstop only', { exact: true }).check();
   await expect(page.getByRole('button', { name: 'Select flight', exact: true })).toHaveCount(2);

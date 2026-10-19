@@ -1,8 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('student comparison is prominent, explains its score and persists in the itinerary dialog', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Search flights', exact: true }).click();
+  await page.goto('/flights');
   await expect(page.getByRole('button', { name: /^Student value/ })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('table')).toBeVisible();
   await expect(page.getByRole('table').locator('tbody tr')).toHaveCount(6);
@@ -34,9 +33,8 @@ test('live flights never display fictional extras or scores, even if a response 
 
 test('student comparison works on narrow screens and can be turned off for a regular traveler', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
-  await page.goto('/');
+  await page.goto('/flights');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await page.getByRole('button', { name: 'Search flights', exact: true }).click();
   await expect(page.getByRole('table').locator('tbody tr')).toHaveCount(6);
   const region = page.getByRole('region', { name: 'Scrollable student comparison table' });
   expect(await region.evaluate(e => e.scrollWidth > e.clientWidth)).toBe(true);
